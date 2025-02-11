@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Event {
     private String name, room;
     private Location building;
-    private Color color;
+    private int color;
     private LocalDateTime startTime, endTime;
 
     public String getName() {
@@ -34,11 +34,11 @@ public class Event {
         this.building = building;
     }
 
-    public Color getColor() {
+    public int getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(int color) {
         this.color = color;
     }
 
@@ -58,7 +58,7 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public Event(String name, String room, Location building, Color color, LocalDateTime startTime, LocalDateTime endTime) {
+    public Event(String name, String room, Location building, int color, LocalDateTime startTime, LocalDateTime endTime) {
         this.name = name;
         this.room = room;
         this.building = building;

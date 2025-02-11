@@ -6,11 +6,12 @@ import java.util.ArrayList;
 
 public class EventGroup {
     private final ArrayList<Event> events;
-    private boolean cascadeDelete;
-    private Color groupColor;
+    private boolean cascadeDelete, useEventColor;
+    private int groupColor;
 
-    public EventGroup(boolean cascadeDelete, Color groupColor) {
+    public EventGroup(boolean cascadeDelete, boolean useEventColor, int groupColor) {
         this.cascadeDelete = cascadeDelete;
+        this.useEventColor = useEventColor;
         this.groupColor = groupColor;
         events = new ArrayList<>();
     }
@@ -39,11 +40,11 @@ public class EventGroup {
         this.cascadeDelete = cascadeDelete;
     }
 
-    public Color getGroupColor() {
+    public int getGroupColor() {
         return groupColor;
     }
 
-    public void setGroupColor(Color groupColor) {
+    public void setGroupColor(int groupColor) {
         this.groupColor = groupColor;
     }
 }

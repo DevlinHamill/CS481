@@ -13,7 +13,7 @@ public class RepeatingEvent extends Event {
     private LocalDate startDate, endDate;
     private ArrayList<DayOfWeek> repeatDays;
 
-    public RepeatingEvent(String name, String room, Location building, Color color, LocalDateTime startTime, LocalDateTime endTime, boolean scheduleOnHoliday, boolean deleteAtQuarterEnd, LocalDate startDate, LocalDate endDate, ArrayList<DayOfWeek> repeatDays) {
+    public RepeatingEvent(String name, String room, Location building, int color, LocalDateTime startTime, LocalDateTime endTime, boolean scheduleOnHoliday, boolean deleteAtQuarterEnd, LocalDate startDate, LocalDate endDate, ArrayList<DayOfWeek> repeatDays) {
         super(name, room, building, color, startTime, endTime);
         this.scheduleOnHoliday = scheduleOnHoliday;
         this.deleteAtQuarterEnd = deleteAtQuarterEnd;
