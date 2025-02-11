@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class RepeatingEvent extends Event {
-    private ArrayList<OneTimeEvent> oneTimeEvents;
+    private final ArrayList<OneTimeEvent> oneTimeEvents;
     private boolean scheduleOnHoliday, deleteAtQuarterEnd;
     private LocalDate startDate, endDate;
     private ArrayList<DayOfWeek> repeatDays;
@@ -27,6 +27,46 @@ public class RepeatingEvent extends Event {
 
     public void generateEvents() {
         //generate a one time event for each repeat day that this event will repeat on
+    }
+
+    public boolean isScheduleOnHoliday() {
+        return scheduleOnHoliday;
+    }
+
+    public void setScheduleOnHoliday(boolean scheduleOnHoliday) {
+        this.scheduleOnHoliday = scheduleOnHoliday;
+    }
+
+    public boolean isDeleteAtQuarterEnd() {
+        return deleteAtQuarterEnd;
+    }
+
+    public void setDeleteAtQuarterEnd(boolean deleteAtQuarterEnd) {
+        this.deleteAtQuarterEnd = deleteAtQuarterEnd;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public ArrayList<DayOfWeek> getRepeatDays() {
+        return repeatDays;
+    }
+
+    public void setRepeatDays(ArrayList<DayOfWeek> repeatDays) {
+        this.repeatDays = repeatDays;
     }
 
     public ArrayList<OneTimeEvent> getOneTimeEvents() {
