@@ -18,7 +18,7 @@ public class User {
         leftHandedMode = false;
         wheelchairMode = false;
         darkMode = false;
-        schedule = new Schedule();
+        schedule = new Schedule(); //TODO figure out when to create the schedule (needs to be after the user chooses the current quarter date range
         favoriteLocations = new FavoriteLocationsManager();
     }
 
