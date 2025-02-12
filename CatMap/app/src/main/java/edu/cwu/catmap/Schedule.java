@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Schedule {
     private final ArrayList<Course> courses;
     private final ArrayList<EventGroup> eventGroups;
-    private final EventGroup ungroupedEvents;
+    private final ArrayList<Event> allEvents;
     private LocalDate quarterStartDate, quarterEndDate;
 
     public Schedule(LocalDate quarterEndDate, LocalDate quarterStartDate) {
@@ -16,7 +16,7 @@ public class Schedule {
         this.quarterStartDate = quarterStartDate;
         courses = new ArrayList<>();
         eventGroups = new ArrayList<>();
-        ungroupedEvents = new EventGroup(false, false, Color.BLACK);
+        allEvents = new ArrayList<Event>();
     }
 
     public void addCourse(Course course) {
@@ -40,9 +40,10 @@ public class Schedule {
      * @param eventGroup event group to remove
      */
     public void removeEventGroup(EventGroup eventGroup) {
-        if(!eventGroup.isCascadeDelete()) {
+        //if cascade delete, remove the events for all events arraylist (this deletes them from the schedule)
+        if(eventGroup.isCascadeDelete()) {
             for(Event event : eventGroup.getEvents()) {
-                ungroupedEvents.addEvent(event);
+                allEvents.remove(event);
             }
         }
 
@@ -65,9 +66,6 @@ public class Schedule {
             tempGroup.removeEvent(event);
         }
 
-        //remove even from the ungrouped group
-        ungroupedEvents.removeEvent(event);
-
         //add even to specified group
         group.addEvent(event);
     }
@@ -79,7 +77,6 @@ public class Schedule {
      */
     public void removeEventFromGroup(Event event, EventGroup eventGroup) {
         eventGroup.removeEvent(event);
-        ungroupedEvents.addEvent(event);
     }
 
 }
