@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -38,12 +39,28 @@ android {
 
 dependencies {
 
+    //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
+    //firebase dependencies
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.analytics)
+
+    //google sign-in dependencies
+    implementation(libs.play.services.auth)
+
+    //google Calendar API
+
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }
