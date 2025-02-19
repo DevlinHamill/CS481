@@ -1,9 +1,11 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.managers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Locations {
+import edu.cwu.catmap.core.Location;
+
+public class LocationsManager {
     private HashMap<String, Location> locationsMap;
 
     private void objectifyLocations() {
@@ -11,7 +13,7 @@ public class Locations {
         //inflate might be a better name for this process :P
     }
 
-    public Locations() {
+    public LocationsManager() {
         objectifyLocations();
     }
 

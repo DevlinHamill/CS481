@@ -1,4 +1,4 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.core;
 
 import android.graphics.Color;
 

@@ -1,11 +1,11 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.core;
 
 import java.util.HashMap;
 
-public class FavoriteLocationsManager {
+public class FavoriteLocations {
     private HashMap<String, Location> favoriteLocationsMap;
 
-    public FavoriteLocationsManager() {
+    public FavoriteLocations() {
         favoriteLocationsMap = new HashMap<>();
     }
 

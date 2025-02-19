@@ -1,25 +1,35 @@
 package edu.cwu.catmap;
 
+import java.util.Map;
+
+import edu.cwu.catmap.core.Schedule;
+import edu.cwu.catmap.core.FavoriteLocations;
+import edu.cwu.catmap.utilities.Constants;
+
 public class User {
-    private String username, email, encodedProfilePicture;
-    private boolean colorBlindMode, leftHandedMode, wheelchairMode, darkMode;
+    private String name, email, encodedProfilePicture, colorBlindMode;
+    private boolean leftHandedMode, wheelchairMode, darkMode;
     private int minutesBeforeEventToNotify;
-    private final Schedule schedule;
-    private final FavoriteLocationsManager favoriteLocations;
+    private Schedule schedule;
+    private final FavoriteLocations favoriteLocations;
 
     private static User currentUser;
 
-    public User(String username, String email) {
-        this.username = username;
+    public User(Map<String, Object> userData) {
+        //TODO: implement this constructor to take the data returned from the firebase, this will be used to construct user from login
+    }
+
+    public User(String name, String email, String encodedProfilePicture) {
+        this.name = name;
         this.email = email;
-        encodedProfilePicture = "";
-        minutesBeforeEventToNotify = 10;
-        colorBlindMode = false;
+        this.encodedProfilePicture = encodedProfilePicture;
+        minutesBeforeEventToNotify = Constants.VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY;
+        colorBlindMode = Constants.VALUE_NORMAL_VISION;
         leftHandedMode = false;
         wheelchairMode = false;
         darkMode = false;
-        schedule = new Schedule(); //TODO figure out when to create the schedule (needs to be after the user chooses the current quarter date range
-        favoriteLocations = new FavoriteLocationsManager();
+        //schedule = new Schedule(); //TODO figure out when to create the schedule (needs to be after the user chooses the current quarter date range
+        favoriteLocations = new FavoriteLocations();
     }
 
     public static void setCurrentUser(User currentUser) {
@@ -30,8 +40,8 @@ public class User {
         return currentUser;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
@@ -42,7 +52,7 @@ public class User {
         return encodedProfilePicture;
     }
 
-    public boolean isColorBlindMode() {
+    public String isColorBlindMode() {
         return colorBlindMode;
     }
 
@@ -66,12 +76,12 @@ public class User {
         return schedule;
     }
 
-    public FavoriteLocationsManager getFavoriteLocations() {
+    public FavoriteLocations getFavoriteLocations() {
         return favoriteLocations;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setEmail(String email) {
@@ -82,7 +92,7 @@ public class User {
         this.encodedProfilePicture = encodedProfilePicture;
     }
 
-    public void setColorBlindMode(boolean colorBlindMode) {
+    public void setColorBlindMode(String colorBlindMode) {
         this.colorBlindMode = colorBlindMode;
     }
 
