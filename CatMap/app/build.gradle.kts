@@ -40,6 +40,7 @@ android {
 dependencies {
 
     implementation(libs.play.services.maps)
+    implementation(libs.preference)
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

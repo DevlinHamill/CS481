@@ -1,6 +1,8 @@
 package edu.cwu.catmap;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -50,20 +52,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         hub.MiscButton.setOnClickListener( v->
                 miscclick()
         );
-        /**/
-        hub.profileButton.setOnClickListener(v ->
 
+        hub.profileButton.setOnClickListener(v ->
+                startActivity(new Intent(getApplicationContext(), ProfileGUI.class))
         );
         hub.SchedulerButton.setOnClickListener(v->
-
+                startActivity(new Intent(getApplicationContext(), SchedualerGUI.class))
         );
         hub.LocationsButton.setOnClickListener(v->
-
+                startActivity(new Intent(getApplicationContext(), LocationsGUI.class))
         );
         hub.settingsButton.setOnClickListener(v->
-
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class))
         );
-         /**/
+
 
     }
     public void miscclick(){
