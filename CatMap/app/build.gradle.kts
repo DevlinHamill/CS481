@@ -41,6 +41,7 @@ dependencies {
 
     implementation(libs.play.services.maps)
     implementation(libs.preference)
+
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -54,7 +55,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
-
     //google sign-in dependencies
     implementation(libs.play.services.auth)
 

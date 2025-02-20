@@ -17,6 +17,7 @@ playServicesAuth = "21.3.0"
 playServicesMaps = "19.0.0"
 preference = "1.2.0"
 
+
 [libraries]
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
