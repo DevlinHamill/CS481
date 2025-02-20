@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "edu.cwu.catmap"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -65,8 +65,8 @@ dependencies {
     implementation(libs.converter.gson)
 
     //google calendar API
-    implementation(libs.google.api.services.calendar)
-    implementation(libs.google.auth.library.oauth2.http)
+    //implementation(libs.google.api.services.calendar)
+    //implementation(libs.google.auth.library.oauth2.http)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
