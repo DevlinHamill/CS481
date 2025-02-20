@@ -27,4 +27,6 @@ public class Constants {
     public static final String KEY_USER_COLLECTION = "user_collection";
     public static final String KEY_EVENT_COLLECTION = "event_collection";
     public static final String KEY_EVENT_GROUP_COLLECTION = "event_group_collection";
+    public static final String KEY_FAVORITE_LOCATION_COLLECTION = "favorite_location_collection";
+
 }

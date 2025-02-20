@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -13,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.cwu.catmap.User;
+import edu.cwu.catmap.core.User;
 import edu.cwu.catmap.utilities.Constants;
 
 /**
@@ -22,12 +21,11 @@ import edu.cwu.catmap.utilities.Constants;
  * asynchronously so return must be handled asynchronously as well.
  */
 public class UserManager {
-
     private static UserManager instance;
     private static User currentUser;
     private final FirebaseAuth firebaseAuth;
     private final FirebaseFirestore db;
-    private final String defaultProfilePicture = ""; //this should be a base64 encoded default icon when the user doesn't choose one
+    private static final String defaultProfilePicture = ""; //this should be a base64 encoded default icon when the user doesn't choose one
     /**
      * Private constructor to generate the UserManager if it has not yet been instantiated
      */
@@ -85,7 +83,7 @@ public class UserManager {
                     }
                 })
                 //this will trigger if FirebaseAuth cannot make a new user
-                .addOnFailureListener(e -> Log.e("Auth", "Unable to create new user using FirebaseAuth", e));
+                .addOnFailureListener(e -> Log.e("SignUp", "Unable to create new user using FirebaseAuth", e));
     }
 
     /**
@@ -94,8 +92,19 @@ public class UserManager {
      * @param password user password
      * @param listener on complete listener used to return the state of the login result
      */
-    public void login(String email, String password, OnCompleteListener<AuthResult> listener) {
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(listener);
+    public void login(String email, String password, OnCompleteListener<DocumentSnapshot> listener) {
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+                    if(authResult.getUser() != null) {
+                        db.collection(Constants.KEY_USER_COLLECTION).document(authResult.getUser().getUid()).get()
+                                .addOnSuccessListener(userDocument -> {
+                                    setCurrentUser(new User(userDocument.getData()));
+                                })
+                                .addOnFailureListener(e -> Log.e("Login", "Unable to read user data from database", e))
+                                .addOnCompleteListener(listener);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Login", "Unable to login user with FirebaseAuth", e));
     }
 
     /**
@@ -103,6 +112,7 @@ public class UserManager {
      */
     public void logout() {
         firebaseAuth.signOut();
+        setCurrentUser(null);
     }
 
     /**
@@ -123,6 +133,10 @@ public class UserManager {
 
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    private void setCurrentUser(User user) {
+        currentUser = user;
     }
 
 }
