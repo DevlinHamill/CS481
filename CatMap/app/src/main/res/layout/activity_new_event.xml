@@ -49,6 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <TextView
+        android:id="@+id/AddEventGroupTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_to_event_group"
@@ -65,11 +66,12 @@
         android:textAlignment="center"
         android:padding="10dp"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/EventTitle"
+        app:layout_constraintTop_toBottomOf="@id/AddEventGroupTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
+        android:id="@+id/BuildingNameTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/building_name"
@@ -85,7 +87,7 @@
         android:padding="10dp"
         android:inputType="text"
         android:gravity="top"
-        app:layout_constraintTop_toBottomOf="@id/AddToEventGroupSearch"
+        app:layout_constraintTop_toBottomOf="@id/BuildingNameTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />

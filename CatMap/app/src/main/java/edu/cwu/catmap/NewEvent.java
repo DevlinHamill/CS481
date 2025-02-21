@@ -67,9 +67,12 @@ public class NewEvent extends AppCompatActivity {
      * sets listeners for buttons
      */
     private void setListeners() {
+        /*
         binding.backarrow.setOnClickListener(v ->
-                onBackPressed()
+                //onBackPressed()
         );
+        */
+
 
         binding.RepeatEventSelector.setOnClickListener(v ->
                 setWeekVisible()
@@ -127,7 +130,7 @@ public class NewEvent extends AppCompatActivity {
 
                 addMeetingToFirebase();
 
-                onBackPressed();
+                //onBackPressed();
             }
         });
     }

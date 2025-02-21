@@ -41,7 +41,6 @@ dependencies {
 
     implementation(libs.play.services.maps)
     implementation(libs.preference)
-    //implementation(libs.spectrum)
 
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
