@@ -39,34 +39,27 @@ android {
 
 dependencies {
 
+    implementation(libs.play.services.maps)
+    implementation(libs.preference)
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    //auto-generated
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    //firebase API
+    //firebase dependencies
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
 
-    //google sign-in API
+    //google sign-in dependencies
     implementation(libs.play.services.auth)
 
-    //google maps API
-    implementation(libs.play.services.maps)
+    //google Calendar API
 
-    // Google Maps Directions API (use Retrofit for API calls)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-
-    //google calendar API
-    //implementation(libs.google.api.services.calendar)
-    //implementation(libs.google.auth.library.oauth2.http)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
