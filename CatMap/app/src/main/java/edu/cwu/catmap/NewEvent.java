@@ -5,11 +5,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import edu.cwu.catmap.databinding.ActivitySchedualerBinding;
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
@@ -54,6 +57,10 @@ public class NewEvent extends AppCompatActivity {
         setContentView(binding.getRoot());
         date = getIntent().getStringExtra("SELECTED_DATE");
         setListeners();
+
+        checkbuildings(binding.BuildingSearch);
+        checkEventGroups(binding.AddToEventGroupSearch);
+
     }
 
     /**
@@ -218,6 +225,46 @@ public class NewEvent extends AppCompatActivity {
         }else{
             button.setBackgroundColor(Color.WHITE);
             button.setSelected(false);
+        }
+    }
+
+    private void checkbuildings(SearchView BuildingSearchView){
+        /*Sample building names for suggestions*/
+        String[] buildingNames = {"Library", "Recreational Center", "Rebirth"};
+
+        /*Adapter for auto suggestions*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
+
+        /*Attaches autocomplete functionality to the search view*/
+        AutoCompleteTextView searchAutoComplete = BuildingSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        if (searchAutoComplete != null) {
+            searchAutoComplete.setAdapter(adapter);
+
+            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+                String selectedItem = adapter.getItem(position);
+                searchAutoComplete.setText(selectedItem);
+                BuildingSearchView.setQuery(selectedItem, false); /*Set the autocomplete query without submitting it*/
+            });
+        }
+    }
+
+    private void checkEventGroups(SearchView EventGroupSearch){
+        /*Sample event names for suggestions*/
+        String[] EventGroups = {"Group1", "Group2"};
+
+        /*Adapter for auto suggestions*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, EventGroups);
+
+        /*Attaches autocomplete functionality to the search view*/
+        AutoCompleteTextView searchAutoComplete = EventGroupSearch.findViewById(androidx.appcompat.R.id.search_src_text);
+        if (searchAutoComplete != null) {
+            searchAutoComplete.setAdapter(adapter);
+
+            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+                String selectedItem = adapter.getItem(position);
+                searchAutoComplete.setText(selectedItem);
+                EventGroupSearch.setQuery(selectedItem, false);
+            });
         }
     }
 

@@ -8,6 +8,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        /*
+        maven{
+            url=uri("https://jitpack.io/")
+        }
+         */
+
+
     }
     dependencies {
         classpath(libs.google.services)

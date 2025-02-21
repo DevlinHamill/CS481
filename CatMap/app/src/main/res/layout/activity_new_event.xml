@@ -48,27 +48,42 @@
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    <com.google.android.material.search.SearchBar
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_to_event_group"
+        app:layout_constraintTop_toBottomOf="@id/EventTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/AddToEventGroupSearch"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="@string/add_to_event_group"
-        android:padding="5dp"
-        android:inputType="textMultiLine"
-        android:gravity="top"
+        android:textAlignment="center"
+        android:padding="10dp"
+        android:inputType="text"
         app:layout_constraintTop_toBottomOf="@id/EventTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
-    <com.google.android.material.search.SearchBar
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/building_name"
+        app:layout_constraintTop_toBottomOf="@id/AddToEventGroupSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/BuildingSearch"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="@string/building_name"
-        android:padding="5dp"
-        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:inputType="text"
         android:gravity="top"
         app:layout_constraintTop_toBottomOf="@id/AddToEventGroupSearch"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,6 +115,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 
     <LinearLayout
         android:orientation="horizontal"
