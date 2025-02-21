@@ -74,21 +74,14 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addMeeting"
+            android:id="@+id/AddMeeting"
             style="@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator"
-            android:layout_width="160dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/add_to_schedule"
             android:layout_margin="8dp"
-
             android:textColor="@color/white" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/removeMeeting"
-            style="@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
 
-            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
