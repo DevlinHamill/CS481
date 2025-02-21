@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import edu.cwu.catmap.core.User;
 import edu.cwu.catmap.utilities.Constants;
@@ -92,13 +93,13 @@ public class UserManager {
      * @param password user password
      * @param listener on complete listener used to return the state of the login result
      */
-    public void login(String email, String password, OnCompleteListener<DocumentSnapshot> listener) {
+    public void signin(String email, String password, OnCompleteListener<DocumentSnapshot> listener) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
                     if(authResult.getUser() != null) {
                         db.collection(Constants.KEY_USER_COLLECTION).document(authResult.getUser().getUid()).get()
                                 .addOnSuccessListener(userDocument -> {
-                                    setCurrentUser(new User(userDocument.getData()));
+                                    setCurrentUser(new User(Objects.requireNonNull(userDocument.getData())));
                                 })
                                 .addOnFailureListener(e -> Log.e("Login", "Unable to read user data from database", e))
                                 .addOnCompleteListener(listener);

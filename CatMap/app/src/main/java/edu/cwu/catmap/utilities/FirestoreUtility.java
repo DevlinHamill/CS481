@@ -60,4 +60,12 @@ public class FirestoreUtility {
         db.collection(Constants.KEY_FAVORITE_LOCATION_COLLECTION).document(firebaseUser.getUid()).set(eventGroups)
                 .addOnCompleteListener(listener);
     }
+
+    public void storeSchedule(FirebaseUser firebaseUser, Schedule schedule, OnCompleteListener<Void> listener) {
+        db.collection(Constants.KEY_SCHEDULE_COLLECTION).document(firebaseUser.getUid()).set(schedule);
+    }
+
+    public void getSchedule(FirebaseUser firebaseUser, OnCompleteListener<DocumentSnapshot> listener) {
+        db.collection(Constants.KEY_SCHEDULE_COLLECTION).document(firebaseUser.getUid()).get();
+    }
 }

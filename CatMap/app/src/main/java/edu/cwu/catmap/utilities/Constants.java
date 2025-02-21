@@ -20,7 +20,7 @@ public class Constants {
 
     //notification constants
     public static final String KEY_ENABLE_NOTIFICATIONS = "enable_notifications";
-    public static final String KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY = "normal_vision";
+    public static final String KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY = "minutes_before_event_to_notify";
     public static final int VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY = 10;
 
     //collection names constants
@@ -29,4 +29,5 @@ public class Constants {
     public static final String KEY_EVENT_GROUP_COLLECTION = "event_group_collection";
     public static final String KEY_FAVORITE_LOCATION_COLLECTION = "favorite_location_collection";
 
+    public static final String KEY_SCHEDULE_COLLECTION = "schedule_collection";
 }
