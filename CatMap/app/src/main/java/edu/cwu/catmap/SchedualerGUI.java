@@ -1,5 +1,6 @@
 package edu.cwu.catmap;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -28,5 +29,12 @@ public class SchedualerGUI extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        onclick();
+    }
+
+    private void onclick(){
+        schedualer.AddMeeting.setOnClickListener(v ->
+                startActivity(new Intent(getApplicationContext(), NewEvent.class))
+        );
     }
 }
