@@ -41,9 +41,9 @@ android {
 }
 
 dependencies {
-
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

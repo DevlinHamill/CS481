@@ -43,10 +43,9 @@ public class ColorPickerTest extends AppCompatActivity {
             ColorPickerDialogBuilder
                     .with(this)
                     .setTitle("Choose a color")
-                    .initialColor(backgroundColorInt)
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(12)
-                    .showAlphaSlider(false)
+                    .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                    .density(10)
+                    .noSliders()
                     .setOnColorSelectedListener(new OnColorSelectedListener() {
                         @Override
                         public void onColorSelected(int selectedColor) {
