@@ -1,6 +1,7 @@
 package edu.cwu.catmap.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -16,13 +17,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.core.Schedule;
-import edu.cwu.catmap.core.User;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
 import edu.cwu.catmap.managers.UserManager;
 import edu.cwu.catmap.utilities.FirestoreUtility;
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             ToastHelper.showToast(context, "signed in Successfully");
+                            startActivity(new Intent(context, ColorPickerTest.class));
                         }
 
                         else {
@@ -114,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+        });
+
+        binding.signinText.setOnClickListener(view -> {
+            binding.signinEmailEditText.setText("test@test.com");
+            binding.signinPasswordEditText.setText("password");
+            binding.signinButton.performClick();
         });
 
     }

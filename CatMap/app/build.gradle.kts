@@ -35,10 +35,15 @@ android {
     viewBinding {
         enable = true
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -68,8 +73,13 @@ dependencies {
     //implementation(libs.google.api.services.calendar)
     //implementation(libs.google.auth.library.oauth2.http)
 
+    //color picker
+    implementation("com.github.QuadFlask:colorpicker:0.0.15")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+
 
 }

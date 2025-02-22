@@ -2,4 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <array name="color_choices">
+        <item>#F44336</item> <!-- Red -->
+        <item>#E91E63</item> <!-- Pink -->
+        <item>#9C27B0</item> <!-- Purple -->
+        <item>#3F51B5</item> <!-- Indigo -->
+        <item>#2196F3</item> <!-- Blue -->
+        <item>#4CAF50</item> <!-- Green -->
+        <item>#FFEB3B</item> <!-- Yellow -->
+        <item>#FF9800</item> <!-- Orange -->
+        <item>#795548</item> <!-- Brown -->
+        <item>#607D8B</item> <!-- Grey -->
+    </array>
+
 </resources>
