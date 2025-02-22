@@ -1,7 +1,10 @@
 package edu.cwu.catmap;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -16,6 +19,11 @@ import androidx.appcompat.widget.SearchView;
 
 import edu.cwu.catmap.databinding.ActivitySchedualerBinding;
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
+
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -46,6 +54,8 @@ public class NewEvent extends AppCompatActivity {
      */
     private String desc;
 
+    private Context context;
+
     /**
      * creates the application
      * @param savedInstanceState the current application instance
@@ -58,6 +68,8 @@ public class NewEvent extends AppCompatActivity {
         date = getIntent().getStringExtra("SELECTED_DATE");
         setListeners();
 
+        context = this;
+
         checkbuildings(binding.BuildingSearch);
         checkEventGroups(binding.AddToEventGroupSearch);
 
@@ -67,11 +79,11 @@ public class NewEvent extends AppCompatActivity {
      * sets listeners for buttons
      */
     private void setListeners() {
-        /*
+
         binding.backarrow.setOnClickListener(v ->
-                //onBackPressed()
+                onBackPressed()
         );
-        */
+
 
 
         binding.RepeatEventSelector.setOnClickListener(v ->
@@ -106,6 +118,39 @@ public class NewEvent extends AppCompatActivity {
                 setselecteddays(binding.satbutton)
         );
 
+        binding.colorPickerButton.setOnClickListener(view -> {
+            ColorDrawable backgroundColor = (ColorDrawable) binding.createMeetingLayout.getBackground();
+            int backgroundColorInt = backgroundColor.getColor();
+
+            ColorPickerDialogBuilder
+                    .with(this)
+                    .setTitle("Choose a color")
+                    .initialColor(backgroundColorInt)
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .density(12)
+                    .showAlphaSlider(false)
+                    .setOnColorSelectedListener(new OnColorSelectedListener() {
+                        @Override
+                        public void onColorSelected(int selectedColor) {
+                            showToast(context, "selected color " + selectedColor);
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showToast(context, "Select color canceled");
+                        }
+                    })
+                    .setPositiveButton("confirm", new ColorPickerClickListener() {
+                        @Override
+                        public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
+                            binding.createMeetingLayout.setBackgroundColor(lastSelectedColor);
+                        }
+                    })
+                    .build()
+                    .show();
+        });
+
         binding.confirmEventButton.setOnClickListener(v -> {
 
             if(isValidateMeetingDetails()) {
@@ -130,7 +175,7 @@ public class NewEvent extends AppCompatActivity {
 
                 addMeetingToFirebase();
 
-                //onBackPressed();
+                onBackPressed();
             }
         });
     }
@@ -270,6 +315,12 @@ public class NewEvent extends AppCompatActivity {
             });
         }
     }
+
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
 
 }
 

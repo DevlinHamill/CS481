@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.1"
 desugar_jdk_libs = "2.1.4"
 firebaseAnalytics = "22.2.0"
 firebaseAuth = "23.2.0"
@@ -7,17 +7,23 @@ firebaseBom = "33.9.0"
 firebaseFirestore = "25.1.2"
 googleServices = "4.4.2"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-appcompat = "1.6.1"
-material = "1.10.0"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
 activity = "1.8.0"
-constraintlayout = "2.1.4"
+constraintlayout = "2.2.0"
 playServicesAuth = "21.3.0"
 playServicesMaps = "19.0.0"
-preference = "1.2.0"
+preference = "1.2.1"
 spectrum = "0.7.1"
 colorpicker = "1.1.6"
+colorpickerVersion = "1.1.6"
+colorpickerview = "ColorPickerView"
+colorpickerLibrary = "1.1.10"
+spectrumVersion = "0.7.1"
+appcompatVersion = "1.6.1"
+githubColorpicker = "0.0.13"
 
 
 [libraries]
@@ -32,11 +38,12 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitV
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+activity = { group = "androidx.activity", name = "activity", version = "1.10.0" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
