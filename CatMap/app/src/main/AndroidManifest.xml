@@ -18,8 +18,17 @@
         android:theme="@style/Theme.CatMap"
         tools:targetApi="34">
         <activity
-            android:name=".NewEvent"
-            android:exported="false"/>
+            android:name=".ChangePassword"
+            android:exported="false" />
+        <activity
+            android:name=".RecoveryInfo"
+            android:exported="false" />
+        <activity
+            android:name=".ChangeUserName"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
         <activity
             android:name=".ProfileGUI"
             android:exported="false" />
