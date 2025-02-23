@@ -144,7 +144,7 @@ public class NewEvent extends AppCompatActivity {
                     .setPositiveButton("confirm", new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
-                            binding.createMeetingLayout.setBackgroundColor(lastSelectedColor);
+                            binding.colorPickerButton.setBackgroundColor(lastSelectedColor);
                         }
                     })
                     .build()

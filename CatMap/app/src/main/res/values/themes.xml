@@ -1,8 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.CatMap" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/lightScheme_Dark</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorTertiary">@color/black</item>
+
+        <!-- Background Colors -->
+        <item name="backgroundColor">@color/lightScheme_Light</item>
+
+        <!-- Text Colors -->
+        <item name="colorOnPrimary">@color/grey</item>
+        <item name="colorOnBackground">@color/lightScheme_Light</item>
 
     </style>
 
