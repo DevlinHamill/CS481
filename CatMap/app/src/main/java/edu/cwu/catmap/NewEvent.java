@@ -151,6 +151,7 @@ public class NewEvent extends AppCompatActivity {
                     .show();
         });
 
+
         binding.confirmEventButton.setOnClickListener(v -> {
 
             if(isValidateMeetingDetails()) {
