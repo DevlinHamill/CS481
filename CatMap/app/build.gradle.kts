@@ -41,6 +41,10 @@ dependencies {
 
     implementation(libs.play.services.maps)
     implementation(libs.preference)
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.10.0")
+    implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
