@@ -9,4 +9,27 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="notification_times">
+        <item>At Event</item>
+        <item>1 min before</item>
+        <item>5 min before</item>
+        <item>10 min before</item>
+        <item>15 min before</item>
+        <item>30 min before</item>
+        <item>45 min before</item>
+        <item>60 min before</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>0</item>
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </string-array>
+
 </resources>
