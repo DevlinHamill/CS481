@@ -1,4 +1,4 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.core;
 
 public class Location {
     private final String name, address, coordinate, encodedImage, description;

@@ -1,6 +1,4 @@
-package edu.cwu.catmap;
-
-import android.graphics.Color;
+package edu.cwu.catmap.core;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -79,4 +77,11 @@ public class Schedule {
         eventGroup.removeEvent(event);
     }
 
+    public LocalDate getQuarterEndDate() {
+        return quarterEndDate;
+    }
+
+    public LocalDate getQuarterStartDate() {
+        return quarterStartDate;
+    }
 }

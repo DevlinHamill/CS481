@@ -1,4 +1,4 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
+
+import edu.cwu.catmap.R;
 
 public class Profile extends AppCompatActivity {
 

@@ -1,12 +1,10 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -17,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
-import edu.cwu.catmap.databinding.ActivitySchedualerBinding;
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
 
 import com.flask.colorpicker.ColorPickerView;

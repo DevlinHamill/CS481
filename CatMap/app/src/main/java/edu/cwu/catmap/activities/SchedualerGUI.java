@@ -1,7 +1,6 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,7 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import edu.cwu.catmap.databinding.ActivityMainBinding;
+import edu.cwu.catmap.R;
 import edu.cwu.catmap.databinding.ActivitySchedualerBinding;
 
 public class SchedualerGUI extends AppCompatActivity {

@@ -18,35 +18,35 @@
         android:theme="@style/Theme.CatMap"
         tools:targetApi="34">
         <activity
-            android:name=".ChangePassword"
+            android:name=".activities.ChangePassword"
             android:exported="false" />
         <activity
-            android:name=".RecoveryInfo"
+            android:name=".activities.RecoveryInfo"
             android:exported="false" />
         <activity
-            android:name=".ChangeUserName"
+            android:name=".activities.ChangeUserName"
             android:exported="false" />
         <activity
-            android:name=".Profile"
+            android:name=".activities.Profile"
             android:exported="false" />
         <activity
-            android:name=".NewEvent"
+            android:name=".activities.NewEvent"
             android:exported="false"/>
         <activity
-            android:name=".ProfileGUI"
+            android:name=".activities.ProfileGUI"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".LocationsGUI"
+            android:name=".activities.LocationsGUI"
             android:exported="false" />
         <activity
-            android:name=".SchedualerGUI"
+            android:name=".activities.SchedualerGUI"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

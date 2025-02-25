@@ -1,6 +1,4 @@
-package edu.cwu.catmap;
-
-import android.graphics.Color;
+package edu.cwu.catmap.core;
 
 import java.util.ArrayList;
 

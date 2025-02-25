@@ -1,6 +1,5 @@
-package edu.cwu.catmap;
+package edu.cwu.catmap.activities;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
+
+import edu.cwu.catmap.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
