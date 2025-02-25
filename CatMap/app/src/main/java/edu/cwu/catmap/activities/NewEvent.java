@@ -16,11 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
+import edu.cwu.catmap.manager.UserManager;
+import edu.cwu.catmap.utilities.FirestoreUtility;
+import edu.cwu.catmap.utilities.ToastHelper;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -189,7 +195,20 @@ public class NewEvent extends AppCompatActivity {
     /**
      * adds the meeting to the firebase
      */
-    private void addMeetingToFirebase(){
+    private void addMeetingToFirebase() {
+
+        UserManager.getInstance().signin("test@test.com", "password", new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    showToast("succeeded");
+                }else{
+                    showToast("failed");
+                }
+
+            }
+        });
+
         /**
          * contains the firebase refrence
          */
@@ -208,10 +227,18 @@ public class NewEvent extends AppCompatActivity {
         meetings.put("Meeting_Time", newtime);
         meetings.put("Meeting_Description", desc);
 
-        db.collection("Meetings").add(meetings).addOnSuccessListener( documentReference -> {
+        /*
+        db.collection("Meeting").add(meetings).addOnSuccessListener( documentReference -> {
             showToast("meeting added");
         }).addOnFailureListener(exception ->{
             showToast(exception.getMessage());
+        });
+         */
+        FirestoreUtility.getInstance().teststoreEvents(UserManager.getInstance().getCurrentFirebaseUser(), meetings, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                ToastHelper.showToast(context, "Sent Event");
+            }
         });
     }
 

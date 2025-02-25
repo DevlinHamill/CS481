@@ -1,11 +1,15 @@
 package edu.cwu.catmap.utilities;
 
+import static edu.cwu.catmap.utilities.ToastHelper.showToast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.cwu.catmap.core.Event;
 import edu.cwu.catmap.core.EventGroup;
@@ -39,6 +43,11 @@ public class FirestoreUtility {
     public void storeEvents(FirebaseUser firebaseUser, ArrayList<Event> events, OnCompleteListener<Void> listener) {
         db.collection(Constants.KEY_EVENT_COLLECTION).document(firebaseUser.getUid()).set(events)
                 .addOnCompleteListener(listener);
+    }
+    public void teststoreEvents(FirebaseUser user, HashMap<String,String> input, OnCompleteListener<Void> listener){
+        db.collection(Constants.KEY_EVENT_COLLECTION).document(user.getUid()).set(input, SetOptions.merge())
+                .addOnCompleteListener(listener);
+
     }
 
     public void getEventGroups(FirebaseUser firebaseUser, OnCompleteListener<DocumentSnapshot> listener) {
