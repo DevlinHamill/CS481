@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
+import edu.cwu.catmap.core.Event;
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
 import edu.cwu.catmap.manager.UserManager;
 import edu.cwu.catmap.utilities.FirestoreUtility;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 /**
@@ -48,7 +50,7 @@ public class NewEvent extends AppCompatActivity {
     /**
      * the name of the meeting
      */
-    private String name;
+    private String Title;
     /**
      * the time of the meeting
      */
@@ -56,7 +58,19 @@ public class NewEvent extends AppCompatActivity {
     /**
      * the description of the meeting
      */
-    private String desc;
+    private String RoomNum;
+
+    private String colorPreference;
+
+    private String Building;
+
+    private String RoomNumber;
+
+    private String EventGroup;
+
+    private int[] repeatingevents = new int[7];
+
+    private boolean repeatingCondition;
 
     private Context context;
 
@@ -149,6 +163,7 @@ public class NewEvent extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
                             binding.colorPickerButton.setBackgroundColor(lastSelectedColor);
+                            colorPreference = ""+lastSelectedColor;
                         }
                     })
                     .build()
@@ -159,8 +174,28 @@ public class NewEvent extends AppCompatActivity {
         binding.confirmEventButton.setOnClickListener(v -> {
 
             if(isValidateMeetingDetails()) {
-                name = binding.EventTitle.getText().toString();
-                desc = binding.EventRoom.getText().toString();
+                Title = binding.EventTitle.getText().toString();
+                RoomNum = binding.EventRoom.getText().toString();
+                Building = binding.BuildingSearch.getQuery().toString();
+                EventGroup = binding.AddToEventGroupSearch.getQuery().toString();
+
+                if(binding.RepeatEventSelector.isSelected()){
+                    if(binding.sunbutton.isSelected()){
+                        repeatingevents[0] = 1;
+                    }if(binding.monbutton.isSelected()){
+                        repeatingevents[1] = 1;
+                    }if(binding.tuebutton.isSelected()){
+                        repeatingevents[2] = 1;
+                    }if(binding.wenbutton.isSelected()){
+                        repeatingevents[3] = 1;
+                    }if(binding.Thurbutton.isSelected()){
+                        repeatingevents[4] = 1;
+                    }if(binding.Fributton.isSelected()){
+                        repeatingevents[5] = 1;
+                    }if(binding.satbutton.isSelected()){
+                        repeatingevents[6] = 1;
+                    }
+                }
 
                 /**
                  * get the hours from the TimePicker
@@ -223,10 +258,15 @@ public class NewEvent extends AppCompatActivity {
          */
         String newtime = convertTo12Hour(time);
 
-        meetings.put("Meeting_Name", name);
-        meetings.put("Meeting_Date", date);
-        meetings.put("Meeting_Time", newtime);
-        meetings.put("Meeting_Description", desc);
+        meetings.put("Event_Title", Title);
+        meetings.put("Event_Group", EventGroup);
+        meetings.put("Building_Name", Building);
+        meetings.put("Room_number", RoomNum);
+        meetings.put("Event_Date", date);
+        meetings.put("Event_Time", newtime);
+        meetings.put("Color_Preference", colorPreference);
+        meetings.put("Repeated_Events", Arrays.toString(repeatingevents));
+
 
         /*
         db.collection("Meeting").add(meetings).addOnSuccessListener( documentReference -> {
@@ -286,8 +326,10 @@ public class NewEvent extends AppCompatActivity {
 
         if(binding.Weeklayout.getVisibility() == View.INVISIBLE){
             binding.Weeklayout.setVisibility(View.VISIBLE);
+            binding.RepeatEventSelector.setSelected(true);
         }else{
             binding.Weeklayout.setVisibility(View.INVISIBLE);
+            binding.RepeatEventSelector.setSelected(false);
         }
 
     }
