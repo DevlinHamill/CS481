@@ -26,6 +26,7 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -234,9 +235,9 @@ public class NewEvent extends AppCompatActivity {
             showToast(exception.getMessage());
         });
          */
-        FirestoreUtility.getInstance().teststoreEvents(UserManager.getInstance().getCurrentFirebaseUser(), meetings, new OnCompleteListener<Void>() {
+        FirestoreUtility.getInstance().teststoreEvents(UserManager.getInstance().getCurrentFirebaseUser(), meetings, new OnCompleteListener<DocumentReference>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onComplete(@NonNull Task<DocumentReference> task) {
                 ToastHelper.showToast(context, "Sent Event");
             }
         });
