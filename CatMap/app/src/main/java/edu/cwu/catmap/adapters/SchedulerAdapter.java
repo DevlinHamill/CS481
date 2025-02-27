@@ -1,4 +1,10 @@
 package edu.cwu.catmap.adapters;
 
-public class SchedulerAdapter {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class SchedulerAdapter extends AppCompatActivity {
+
+
+
 }

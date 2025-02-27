@@ -35,4 +35,5 @@
     <string name="add_to_event_group">Add to Event Group</string>
     <string name="pick_a_color">Pick a Color</string>
     <string name="open_color_picker">Open color picker</string>
+    <string name="test">test</string>
 </resources>
