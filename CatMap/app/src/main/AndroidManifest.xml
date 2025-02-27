@@ -20,9 +20,12 @@
         android:theme="@style/Theme.CatMap"
         tools:targetApi="34">
         <activity
+            android:name=".activities.LocationInformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.LocationsActivity"
             android:exported="false"
-            android:theme="@style/Theme.CatMap"/>
+            android:theme="@style/Theme.CatMap" />
         <activity
             android:name=".activities.ColorPickerTest"
             android:exported="false"

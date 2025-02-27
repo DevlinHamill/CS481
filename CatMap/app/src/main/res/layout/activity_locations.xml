@@ -6,15 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.LocationsActivity"
-    android:background="?attr/backgroundColor">
+    android:background="@drawable/activity_background">
 
-    <View
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="64dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
