@@ -22,7 +22,7 @@ public class SchedualerGUI extends AppCompatActivity {
         EdgeToEdge.enable(this);
         schedualer = edu.cwu.catmap.databinding.ActivitySchedualerBinding.inflate(getLayoutInflater());
         setContentView(schedualer.getRoot());
-        schedualer.calendarView.setLabelFor(R.id.calendarView);
+        //schedualer.calendarView.setLabelFor(R.id.calendarView);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

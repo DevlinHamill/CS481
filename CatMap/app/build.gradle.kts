@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.play.services.auth)
 
     //google Calendar API
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
