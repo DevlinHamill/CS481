@@ -46,8 +46,8 @@ public class SchedualerGUI extends AppCompatActivity {
         populateEvents();
 
         adapter = new SchedulerAdapter(EventList);
-        //schedualer.eventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //schedualer.eventRecyclerView.setAdapter(adapter);
+        schedualer.eventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        schedualer.eventRecyclerView.setAdapter(adapter);
 
     }
 

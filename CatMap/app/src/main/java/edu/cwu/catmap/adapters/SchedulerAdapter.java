@@ -136,7 +136,7 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         SectionHeaderViewHolder(View itemView) {
             super(itemView);
-            sectionTitle = itemView.findViewById(R.id.headerText);
+            sectionTitle = itemView.findViewById(R.id.itemheader);
         }
 
         void bind(ScheduleListItem.SectionHeader item) {
