@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@id/calendarView">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/meetingRecyclerView"
+            android:id="@+id/eventRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
