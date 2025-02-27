@@ -122,6 +122,11 @@ public class MainActivity extends AppCompatActivity {
             binding.signinButton.performClick();
         });
 
+        binding.locationButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), LocationsActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void hideKeyboard() {

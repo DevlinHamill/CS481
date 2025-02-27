@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainActivity"
+    android:background="?attr/backgroundColor">
 
     <TextView
         android:id="@+id/loginText"
@@ -54,6 +55,7 @@
         android:layout_width="250sp"
         android:layout_height="60sp"
         android:text="Sign-up"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signupNameEditText"
@@ -103,12 +105,22 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/storeScheduleButton"
-        android:layout_width="250sp"
-        android:layout_height="60sp"
-        android:text="store schedule"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:text="Store schedule"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/locationButton"
         app:layout_constraintTop_toBottomOf="@id/signinButton"
         android:layout_marginTop="20dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locationButton"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:text="Locations"
+        app:layout_constraintStart_toEndOf="@id/storeScheduleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signinButton"
+        android:layout_marginTop="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
