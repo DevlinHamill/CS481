@@ -53,8 +53,9 @@ public class SchedualerGUI extends AppCompatActivity {
 
     private void populateEvents() {
         EventList.add(new ScheduleListItem.SectionHeader("2/27/2025"));
-        EventList.add(new ScheduleListItem.Event("Samuelson Hall", "12:05"));
-
+        EventList.add(new ScheduleListItem.Event("Meeting", "12:05 PM"));
+        EventList.add(new ScheduleListItem.Event("CS 470", "2:00 PM"));
+        EventList.add(new ScheduleListItem.Event("CS 481", "4:00 PM"));
     }
 
     private void onclick(){
