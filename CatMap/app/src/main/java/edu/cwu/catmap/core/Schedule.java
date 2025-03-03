@@ -77,4 +77,11 @@ public class Schedule {
         eventGroup.removeEvent(event);
     }
 
+    public LocalDate getQuarterEndDate() {
+        return quarterEndDate;
+    }
+
+    public LocalDate getQuarterStartDate() {
+        return quarterStartDate;
+    }
 }

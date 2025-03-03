@@ -5,15 +5,533 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context="activities.MainActivity">
 
-    <TextView
+    <fragment
+        android:id="@+id/id_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/MiscButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_dialog_dialer"
+        android:layout_marginBottom="160dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="184dp"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:srcCompat="@drawable/ic_settings"
+        android:visibility="invisible"/>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/profileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@id/misc"
+        app:layout_constraintEnd_toStartOf="@id/settingsButton"
+        app:srcCompat="@drawable/ic_profile"
+        android:visibility="invisible"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/SchedulerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="76dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@id/misc"
+        app:layout_constraintEnd_toStartOf="@id/settingsButton"
+        app:srcCompat="@drawable/ic_callender"
+        android:visibility="invisible"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/LocationsButton"
+        android:layout_width="69dp"
+        android:layout_height="57dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@id/settingsButton"
+        app:layout_constraintEnd_toEndOf="@id/misc"
+        app:srcCompat="@drawable/ic_location"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/misc"
+        android:layout_width="152dp"
+        android:layout_height="148dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/background_misc"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/MiscButton"
+        app:layout_constraintEnd_toStartOf="@+id/MiscButton"
+        app:tint="@color/black" />
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/white"
+        app:fabAlignmentMode="end"
+        tools:ignore="BottomAppBar">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:background="@color/white"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/timeline_7am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_7am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7 AM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_7am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_8am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_8am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8 AM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_8am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BIO 101"
+                        android:visibility="visible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_9am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_9am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9 AM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_9am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LIT 105"
+                        android:visibility="visible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_10am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_10am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 AM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_10am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_11am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_11am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11 AM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_11am"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_12pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_12pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_12pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MATH 172"
+                        android:visibility="visible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_1pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_1pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_1pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_2pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_2pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_2pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CS 311"
+                        android:visibility="visible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_3pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_3pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_3pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_4pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_4pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_4pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_5pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_5pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_5pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_6pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_6pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_6pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_7pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_7pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_7pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_8pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_8pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_8pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_9pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_9pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_9pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeline_10pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/timeLabel_10pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 PM"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/eventButton_10pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:visibility="invisible"/> <!-- Hidden by default -->
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

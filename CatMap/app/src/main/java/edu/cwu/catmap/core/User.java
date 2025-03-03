@@ -1,8 +1,10 @@
 package edu.cwu.catmap.core;
 
+import java.time.LocalDate;
+import java.time.temporal.TemporalAmount;
 import java.util.Map;
 
-import edu.cwu.catmap.managers.UserManager;
+import edu.cwu.catmap.manager.UserManager;
 import edu.cwu.catmap.utilities.Constants;
 import edu.cwu.catmap.utilities.FirestoreUtility;
 
@@ -29,7 +31,7 @@ public class User {
         this.wheelchairMode = (boolean) userData.get(Constants.KEY_PREF_WHEEL_CHAIR_MODE);
         this.darkMode = (boolean) userData.get(Constants.KEY_PREF_DARK_MODE);
         this.enableNotifications = (boolean) userData.get(Constants.KEY_ENABLE_NOTIFICATIONS);
-        this.minutesBeforeEventToNotify = (int) userData.get(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY);
+        this.minutesBeforeEventToNotify = Long.valueOf((long) userData.get(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY)).intValue();
 
         //TODO: figure out how to attach schedule (events and groups) and favorites to the user asynchronously
         //schedule = FirestoreUtility.get;
@@ -94,6 +96,10 @@ public class User {
 
     public int getMinutesBeforeEventToNotify() {
         return minutesBeforeEventToNotify;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     public Schedule getSchedule() {

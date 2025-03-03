@@ -1,0 +1,259 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createMeetingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Header with back arrow -->
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backarrow"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="back"
+            android:src="@drawable/icon_back_arrow"
+            android:layout_marginTop="5dp"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/event_edit"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Input fields -->
+    <EditText
+        android:id="@+id/EventTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/event_title"
+        android:padding="12dp"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/AddEventGroupTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_to_event_group"
+        app:layout_constraintTop_toBottomOf="@id/EventTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/AddToEventGroupSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="@string/add_to_event_group"
+        android:textAlignment="center"
+        android:padding="10dp"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/AddEventGroupTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/BuildingNameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/building_name"
+        app:layout_constraintTop_toBottomOf="@id/AddToEventGroupSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/BuildingSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/building_name"
+        android:padding="10dp"
+        android:inputType="text"
+        android:gravity="top"
+        app:layout_constraintTop_toBottomOf="@id/BuildingNameTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <EditText
+        android:id="@+id/EventRoom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/room_number"
+        android:padding="12dp"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        app:layout_constraintTop_toBottomOf="@id/BuildingSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <Switch
+        android:textAlignment="center"
+        android:id="@+id/RepeatEventSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/repeating_event"
+        app:layout_constraintTop_toBottomOf="@id/EventRoom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/Weeklayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/repeating_event"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/RepeatEventSelector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible">
+
+        <TextView
+            android:textAlignment="inherit"
+            android:id="@+id/sunbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/sun"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:textAlignment="inherit"
+            android:id="@+id/monbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/mon"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/tuebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/tue"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/wenbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/wen"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:textAlignment="inherit"
+            android:id="@+id/Thurbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/thur"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:textAlignment="inherit"
+            android:id="@+id/Fributton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/fri"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:textAlignment="inherit"
+            android:id="@+id/satbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/sat"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/EventRoom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </LinearLayout>
+
+    <TimePicker
+        android:id="@+id/EventTime"
+        android:layout_width="380dp"
+        android:layout_height="155dp"
+        android:layout_margin="10dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Weeklayout" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/EventTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    <!-- Confirm button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirmEventButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/confirm_event"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/colorPickerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textSize="14sp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"
+            android:text="@string/open_color_picker"
+            android:backgroundTint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/Weeklayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

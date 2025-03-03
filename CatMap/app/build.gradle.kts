@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "edu.cwu.catmap"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "edu.cwu.catmap"
@@ -35,41 +35,42 @@ android {
     viewBinding {
         enable = true
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
+    implementation(libs.play.services.maps)
+    implementation(libs.preference)
+
+    implementation(libs.androidx.appcompat)
+
+
     //desugaring to use Java.time module
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    //auto-generated
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    //firebase API
+    //firebase dependencies
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
-
-    //google sign-in API
+    //google sign-in dependencies
     implementation(libs.play.services.auth)
 
-    //google maps API
-    implementation(libs.play.services.maps)
-
-    // Google Maps Directions API (use Retrofit for API calls)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-
-    //google calendar API
-    //implementation(libs.google.api.services.calendar)
-    //implementation(libs.google.auth.library.oauth2.http)
-
+    //google Calendar API
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("com.github.QuadFlask:colorpicker:0.0.15")
+
 
 }

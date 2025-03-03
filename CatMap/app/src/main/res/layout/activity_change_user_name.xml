@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context=".activities.ChangeUserName">
+
+    <!-- Title Text -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Change Username"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Username Input Field -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:hint="Enter New Username"
+        android:textColorHint="?attr/colorOnBackground"
+        app:boxBackgroundMode="none"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="textPersonName"
+            android:paddingBottom="8dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textAlignment="center"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Underline Below Input Field -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/usernameInputLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <!-- Confirm Username Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirmUsernameButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:text="Confirm New Username"
+        android:textAllCaps="false"
+        android:textAppearance="?attr/textAppearanceButton"
+        android:textColor="?attr/colorOnPrimary"
+        app:cornerRadius="16dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+</androidx.constraintlayout.widget.ConstraintLayout>
