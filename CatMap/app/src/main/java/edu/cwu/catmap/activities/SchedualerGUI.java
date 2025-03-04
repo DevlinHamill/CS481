@@ -60,7 +60,15 @@ public class SchedualerGUI extends AppCompatActivity {
 
     private void onclick(){
         schedualer.AddMeeting.setOnClickListener(v ->
-                startActivity(new Intent(getApplicationContext(), NewEvent.class))
+                adding()
         );
     }
+
+    private void adding(){
+        Intent intent = new Intent(getApplicationContext(), SchedulerOptions.class);
+        intent.putExtra("SELECTED_DATE", schedualer.calendarView.getDate());
+        startActivity(intent);
+    }
+
+
 }

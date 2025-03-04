@@ -1,7 +1,10 @@
 package edu.cwu.catmap.activities;
 
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -83,7 +86,9 @@ public class NewEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = edu.cwu.catmap.databinding.ActivityNewEventBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        String str = getIntent().getStringExtra("header");
         date = getIntent().getStringExtra("SELECTED_DATE");
+        addtitle(str);
         setListeners();
 
         context = this;
@@ -98,8 +103,10 @@ public class NewEvent extends AppCompatActivity {
      */
     private void setListeners() {
 
-        binding.backarrow.setOnClickListener(v ->
-                onBackPressed()
+        binding.backarrow.setOnClickListener(v ->{
+                onBackPressed();
+                onBackPressed();
+                }
         );
 
 
@@ -215,7 +222,8 @@ public class NewEvent extends AppCompatActivity {
 
                 addMeetingToFirebase();
 
-                onBackPressed();
+                finish();
+                startActivity(new Intent(getApplicationContext(), SchedualerGUI.class));
             }
         });
     }
@@ -325,7 +333,7 @@ public class NewEvent extends AppCompatActivity {
     private void setWeekVisible(){
 
         if(binding.Weeklayout.getVisibility() == View.INVISIBLE){
-            binding.Weeklayout.setVisibility(View.VISIBLE);
+            binding.Weeklayout.setVisibility(VISIBLE);
             binding.RepeatEventSelector.setSelected(true);
         }else{
             binding.Weeklayout.setVisibility(View.INVISIBLE);
@@ -389,6 +397,13 @@ public class NewEvent extends AppCompatActivity {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+
+    public void addtitle(String str){
+
+        binding.neweventheader.setText(str);
+        binding.neweventheader.setVisibility(VISIBLE);
+        showToast(binding.neweventheader.getText().toString());
+    }
 
 }
 
