@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:gravity="top"
+    android:background="#D6DEE7"
+    android:padding="50dp"
+    tools:context=".activities.Login">
+
+    <!-- pfp icon -->
+    <ImageView
+        android:id="@+id/pfpIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_profile"
+        app:tint="#555555"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- sign in text -->
+    <TextView
+        android:id="@+id/signinText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#444444"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/pfpIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- email box -->
+    <EditText
+        android:id="@+id/emailInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter E-mail"
+        android:textColorHint="#999999"
+        android:background="@android:color/transparent"
+        android:padding="10dp"
+        android:textColor="#333333"
+        app:layout_constraintTop_toBottomOf="@id/signinText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- password box -->
+    <EditText
+        android:id="@+id/passwordInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Password"
+        android:textColorHint="#999999"
+        android:background="@android:color/transparent"
+        android:padding="10dp"
+        android:textColor="#333333"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/emailInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- create new account -->
+    <TextView
+        android:id="@+id/newAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="create new account"
+        android:textSize="14sp"
+        android:textColor="#888888"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="left"
+        app:layout_constraintTop_toBottomOf="@id/passwordInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- login with google button -->
+    <TextView
+        android:id="@+id/googleSignin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log in with google"
+        android:textSize="16sp"
+        android:textColor="#888888"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/newAccount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- login button -->
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log In"
+        style="?attr/materialButtonOutlinedStyle"
+        android:backgroundTint="#D6DEE7"
+        android:layout_marginTop="40dp"
+        android:textColor="#444444"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/googleSignin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- forgot password -->
+    <TextView
+        android:id="@+id/forgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="forgot password?"
+        android:textSize="14sp"
+        android:textColor="#888888"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/loginButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
