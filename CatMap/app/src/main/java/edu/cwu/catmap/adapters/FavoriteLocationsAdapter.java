@@ -183,7 +183,7 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
 
         LocationViewHolder(View itemView) {
             super(itemView);
-            locationName = itemView.findViewById(R.id.locationName);
+            locationName = itemView.findViewById(R.id.location_name);
         }
 
         void bind(FavoriteLocationsListItem.Location item) {
