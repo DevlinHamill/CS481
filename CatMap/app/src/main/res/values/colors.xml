@@ -5,9 +5,9 @@
     <color name="grey">#FF929292</color>
 
     <color name="lightScheme_Dark">#FF555FFF</color>
-    <color name="lightScheme_MidDark">#FF9597A0</color>
-    <color name="lightScheme_Mid">#FFB8BCCCF</color>
-    <color name="lightScheme_MidLight">#FFCAD2DE</color>
+    <color name="lightScheme_MidDark">#FF97a0ff</color>
+    <color name="lightScheme_Mid">#FFbcccff</color>
+    <color name="lightScheme_MidLight">#FFd2deff</color>
     <color name="lightScheme_Light">#FFd9e3ff</color>
 
     <color name="darkScheme_Dark">#FF080852</color>
@@ -16,4 +16,5 @@
     <color name="darkScheme_MidLight">#FF4A4AB4</color>
     <color name="darkScheme_Light">#FF899BE0</color>
     <color name="darkScheme_primary">#FFDD6C6C</color>
+
 </resources>
