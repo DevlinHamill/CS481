@@ -2,7 +2,6 @@ package edu.cwu.catmap.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +15,9 @@ import java.util.List;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.adapters.FavoriteLocationsAdapter;
-import edu.cwu.catmap.core.FavoriteLocationsListItem;
+import edu.cwu.catmap.adapters.FavoriteLocationsListItem;
 import edu.cwu.catmap.databinding.ActivityLocationsBinding;
+import edu.cwu.catmap.managers.LocationsManager;
 
 public class LocationsActivity extends AppCompatActivity {
     private ActivityLocationsBinding binding;
@@ -66,10 +66,17 @@ public class LocationsActivity extends AppCompatActivity {
         locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Student Union Recreation Center", Color.RED));
         locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Brooks Library", Color.YELLOW));
         locationsList.add(new FavoriteLocationsListItem.SectionHeader("All Locations"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Barge Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Black Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Bouillon Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Dean Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Discovery Hall"));
+
+        LocationsManager locationsManager = LocationsManager.getInstance(this);
+
+        for (String location : locationsManager.getLocationNames()) {
+            locationsList.add(new FavoriteLocationsListItem.Location(location));
+        }
+
+//        locationsList.add(new FavoriteLocationsListItem.Location("Barge Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Black Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Bouillon Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Dean Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Discovery Hall"));
     }
 }
