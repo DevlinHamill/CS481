@@ -1,5 +1,16 @@
 package edu.cwu.catmap.managers;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,13 +19,50 @@ import edu.cwu.catmap.core.Location;
 public class LocationsManager {
     private HashMap<String, Location> locationsMap;
 
-    private void objectifyLocations() {
-        //read location data from file and inflate into location objects, run this in constructor
-        //inflate might be a better name for this process :P
+    public LocationsManager(Context context, String fileName) {
+        locationsMap = new HashMap<>();
+        inflateLocations(context, fileName);
     }
 
-    public LocationsManager() {
-        objectifyLocations();
+    /**
+     * Given a specific filename, return the json stored at that location
+     * as a string so it can be used by a JsonParser
+     * @param context current app context
+     * @param fileName name of locations json
+     * @return
+     */
+    private String loadJsonFromAssets(Context context, String fileName) {
+        String returnString = null;
+
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open(fileName);
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+
+            inputStream.read(buffer);
+            inputStream.close();
+            returnString = new String(buffer, StandardCharsets.UTF_8);
+
+        } catch (IOException e) {
+            Log.e("LocationManager", "Cannot find or open json file");
+        }
+
+        return returnString;
+    }
+
+    private void inflateLocations(Context context, String fileName) {
+        String jsonString = loadJsonFromAssets(context, fileName);
+
+        if(jsonString == null) {
+            Log.e("LocationManager", "jsonString is null");
+            return;
+        }
+
+        Gson gson = new Gson();
+        JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+
+
     }
 
     public HashMap<String, Location> getLocations() {

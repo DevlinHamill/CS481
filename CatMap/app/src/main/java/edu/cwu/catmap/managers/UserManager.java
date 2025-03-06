@@ -116,6 +116,8 @@ public class UserManager {
         setCurrentUser(null);
     }
 
+    public void sendPasswordResetEmail()
+
     /**
      * Get the current user as a FirebaseUser object
      * @return user as FirebaseUser
