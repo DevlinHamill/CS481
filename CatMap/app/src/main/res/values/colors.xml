@@ -2,19 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="grey">#929292</color>
+    <color name="grey">#FF929292</color>
 
-    <color name="lightScheme_Dark">#555FFF</color>
-    <color name="lightScheme_MidDark">#9597a0ff</color>
-    <color name="lightScheme_Mid">#b8bcccff</color>
-    <color name="lightScheme_MidLight">#cad2deff</color>
-    <color name="lightScheme_Light">#d0d9e3ff</color>
+    <color name="lightScheme_Dark">#FF555FFF</color>
+    <color name="lightScheme_MidDark">#FF9597A0</color>
+    <color name="lightScheme_Mid">#FFB8BCCCF</color>
+    <color name="lightScheme_MidLight">#FFCAD2DE</color>
+    <color name="lightScheme_Light">#FFd9e3ff</color>
 
-    <color name="darkScheme_Dark">#080852</color>
-    <color name="darkScheme_MidDark">#163087</color>
-    <color name="darkScheme_Mid">#3763C3</color>
-    <color name="darkScheme_MidLight">#4A4AB4</color>
-    <color name="darkScheme_Light">#899BE0</color>
-    <color name="darkScheme_primary">#DD6C6C</color>
-
+    <color name="darkScheme_Dark">#FF080852</color>
+    <color name="darkScheme_MidDark">#FF163087</color>
+    <color name="darkScheme_Mid">#FF3763C3</color>
+    <color name="darkScheme_MidLight">#FF4A4AB4</color>
+    <color name="darkScheme_Light">#FF899BE0</color>
+    <color name="darkScheme_primary">#FFDD6C6C</color>
 </resources>
