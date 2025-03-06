@@ -20,6 +20,16 @@
         android:theme="@style/Theme.CatMap"
         tools:targetApi="34">
         <activity
+            android:name=".activities.LocationInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LocationsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CatMap" />
+        <activity
+            android:name=".activities.ScheduleDetails"
+            android:exported="false" />
+        <activity
             android:name=".activities.SchedulerOptions"
             android:exported="false" />
         <activity
@@ -45,20 +55,28 @@
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".activities.LocationsGUI"
-            android:exported="false" />
-        <activity
             android:name=".activities.SchedualerGUI"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.Register"
+            android:exported="true" />
+        <activity
+            android:name=".activities.ForgotPassword"
+            android:exported="true" />
+        <activity
+            android:name=".activities.Login"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="true"/>
+
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -1,4 +1,4 @@
-package edu.cwu.catmap.core;
+package edu.cwu.catmap.adapters;
 
 public class FavoriteLocationsListItem {
     public static class SectionHeader extends FavoriteLocationsListItem {

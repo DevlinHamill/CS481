@@ -1,5 +1,7 @@
 package edu.cwu.catmap.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.cwu.catmap.R;
-import edu.cwu.catmap.core.FavoriteLocationsListItem;
+import edu.cwu.catmap.activities.ScheduleDetails;
+import edu.cwu.catmap.activities.SettingsActivity;
 import edu.cwu.catmap.core.Schedule;
 import edu.cwu.catmap.core.ScheduleListItem;
+
+import static androidx.core.content.ContextCompat.startActivity;
 
 public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private static final int TYPE_SECTION_HEADER = 0;
@@ -78,11 +83,21 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((SchedulerAdapter.SectionHeaderViewHolder) holder).bind((ScheduleListItem.SectionHeader) item);
         }
         else if (holder instanceof EventViewHolder) {
-            ((EventViewHolder) holder).bind((ScheduleListItem.Event) item);
+            EventViewHolder eventHolder = (EventViewHolder) holder;
+            eventHolder.bind((ScheduleListItem.Event) item);
+
+            eventHolder.itemView.setOnClickListener(v -> {
+                Context context = v.getContext();
+
+                Intent intent = new Intent(context, ScheduleDetails.class);
+                intent.putExtra( "Map",((ScheduleListItem.Event) item).getMap());
+                intent.putExtra("Event_Title", ((ScheduleListItem.Event) item).getMap().get("Event_Title"));
+                context.startActivity(intent);
+            });
         }
 
         else {
-            Log.e("FavoriteLocationsAdapter", "holder type cannot be determined. type of " + holder.getClass());
+            Log.e("SchedulerAdapter", "holder type cannot be determined. type of " + holder.getClass());
         }
     }
 

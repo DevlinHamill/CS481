@@ -1,4 +1,6 @@
 package edu.cwu.catmap.adapters;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.cwu.catmap.R;
-import edu.cwu.catmap.core.FavoriteLocationsListItem;
+import edu.cwu.catmap.activities.LocationInformationActivity;
+import edu.cwu.catmap.utilities.Constants;
 
 
 public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
@@ -174,6 +177,14 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
             // Set color dynamically
             GradientDrawable bgShape = (GradientDrawable) colorIndicator.getBackground();
             bgShape.setColor(item.getColor());
+
+            //set on click listener to open up location info page with this location name
+            super.itemView.setOnClickListener(view -> {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, LocationInformationActivity.class);
+                intent.putExtra(Constants.KEY_LOCATION_NAME, item.getName());
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -183,11 +194,19 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
 
         LocationViewHolder(View itemView) {
             super(itemView);
-            locationName = itemView.findViewById(R.id.locationName);
+            locationName = itemView.findViewById(R.id.location_name);
         }
 
         void bind(FavoriteLocationsListItem.Location item) {
             locationName.setText(item.getName());
+
+            //set on click listener to open up location info page with this location name
+            super.itemView.setOnClickListener(view -> {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, LocationInformationActivity.class);
+                intent.putExtra(Constants.KEY_LOCATION_NAME, item.getName());
+                context.startActivity(intent);
+            });
         }
     }
 }

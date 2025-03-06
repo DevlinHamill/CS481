@@ -50,11 +50,13 @@ public class SchedulerOptions extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), NewEvent.class);
             intent.putExtra("header", "Event");
+            intent.putExtra("SELECTED_DATE", getIntent().getStringExtra("SELECTED_DATE"));
             startActivity(intent);
 
         }else{
             Intent intent = new Intent(getApplicationContext(), NewEvent.class);
             intent.putExtra("header", "Class");
+            intent.putExtra("SELECTED_DATE", getIntent().getStringExtra("SELECTED_DATE"));
             startActivity(intent);
         }
     }

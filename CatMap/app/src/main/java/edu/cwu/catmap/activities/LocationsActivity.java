@@ -2,7 +2,6 @@ package edu.cwu.catmap.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +15,12 @@ import java.util.List;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.adapters.FavoriteLocationsAdapter;
-import edu.cwu.catmap.core.FavoriteLocationsListItem;
-import edu.cwu.catmap.databinding.ActivityLocationsGuiBinding;
+import edu.cwu.catmap.adapters.FavoriteLocationsListItem;
+import edu.cwu.catmap.databinding.ActivityLocationsBinding;
+import edu.cwu.catmap.manager.LocationsManager;
 
-public class LocationsGUI extends AppCompatActivity {
-    private ActivityLocationsGuiBinding binding;
+public class LocationsActivity extends AppCompatActivity {
+    private ActivityLocationsBinding binding;
     private FavoriteLocationsAdapter adapter;
     private List<FavoriteLocationsListItem> locationsList;
 
@@ -28,14 +28,15 @@ public class LocationsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_locations_gui);
+        setContentView(R.layout.activity_locations);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        binding = ActivityLocationsGuiBinding.inflate(getLayoutInflater());
+        binding = ActivityLocationsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         locationsList = new ArrayList<>();
@@ -66,10 +67,17 @@ public class LocationsGUI extends AppCompatActivity {
         locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Student Union Recreation Center", Color.RED));
         locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Brooks Library", Color.YELLOW));
         locationsList.add(new FavoriteLocationsListItem.SectionHeader("All Locations"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Barge Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Black Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Bouillon Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Dean Hall"));
-        locationsList.add(new FavoriteLocationsListItem.Location("Discovery Hall"));
+
+        LocationsManager locationsManager = LocationsManager.getInstance(this);
+
+        for (String location : locationsManager.getLocationNames()) {
+            locationsList.add(new FavoriteLocationsListItem.Location(location));
+        }
+
+//        locationsList.add(new FavoriteLocationsListItem.Location("Barge Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Black Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Bouillon Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Dean Hall"));
+//        locationsList.add(new FavoriteLocationsListItem.Location("Discovery Hall"));
     }
 }

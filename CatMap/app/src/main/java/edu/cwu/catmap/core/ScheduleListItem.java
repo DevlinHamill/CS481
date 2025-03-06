@@ -1,5 +1,7 @@
 package edu.cwu.catmap.core;
 
+import java.util.HashMap;
+
 public class ScheduleListItem {
     public static class SectionHeader extends ScheduleListItem {
         private final String date;
@@ -18,9 +20,15 @@ public class ScheduleListItem {
 
         private final String time;
 
-        public Event(String title, String time) {
+        private HashMap<String, String> map;
+
+
+
+        public Event(String title, String time, HashMap<String, String> map) {
             this.title = title;
             this.time = time;
+            this.map = map;
+
         }
 
         public String getTitle() {
@@ -30,5 +38,7 @@ public class ScheduleListItem {
         public String getTime() {
             return time;
         }
+
+        public HashMap<String, String> getMap(){return map;}
     }
 }

@@ -24,9 +24,14 @@ colorpickerLibrary = "1.1.10"
 spectrumVersion = "0.7.1"
 appcompatVersion = "1.6.1"
 githubColorpicker = "0.0.13"
-
+gson = "Gson"
+gsonVersion = "JsonObject"
+googleGson = "JsonParser"
+googleGsonVersion = "2.12.1"
+retrofit = "2.9.0"
 
 [libraries]
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
@@ -44,6 +49,7 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

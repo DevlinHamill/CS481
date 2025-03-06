@@ -1,0 +1,28 @@
+{
+  "locations": [
+    {
+      "name": "Library",
+      "address": "123 Main St, Cityville",
+      "mainEntranceCoordinate": "40.7128,-74.0060",
+      "wheelchairEntranceCoordinate": "40.7130,-74.0055",
+      "encodedImage": "iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+      "description": "A public library with a wide selection of books and study areas."
+    },
+    {
+      "name": "Community Center",
+      "address": "456 Oak Rd, Townsville",
+      "mainEntranceCoordinate": "41.1234,-75.5678",
+      "wheelchairEntranceCoordinate": "41.1235,-75.5675",
+      "encodedImage": "iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+      "description": "A community center offering various programs and events."
+    },
+    {
+      "name": "Park",
+      "address": "789 Pine Ln, Green City",
+      "mainEntranceCoordinate": "42.1234,-73.9876",
+      "wheelchairEntranceCoordinate": "42.1236,-73.9874",
+      "encodedImage": "iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+      "description": "A large park with walking trails, playgrounds, and picnic areas."
+    }
+  ]
+}

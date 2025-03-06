@@ -5,16 +5,17 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LocationsGUI"
-    android:background="?attr/backgroundColor">
+    tools:context=".activities.LocationsActivity"
+    android:background="@drawable/activity_background">
 
-    <View
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="48dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
@@ -24,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="@id/header"
         app:layout_constraintTop_toTopOf="@id/header"
         app:layout_constraintBottom_toBottomOf="@id/header"
-        android:text="Locations"
+        android:text="@string/locations"
         android:textColor="?attr/colorOnPrimary"
         android:textSize="20sp"
         />

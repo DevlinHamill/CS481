@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(getApplicationContext(), SchedualerGUI.class))
         );
         hub.LocationsButton.setOnClickListener(v->
-                startActivity(new Intent(getApplicationContext(), LocationsGUI.class))
+                startActivity(new Intent(getApplicationContext(), LocationsActivity.class))
         );
         hub.settingsButton.setOnClickListener(v->
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class))

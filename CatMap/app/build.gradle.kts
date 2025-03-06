@@ -72,5 +72,10 @@ dependencies {
 
     implementation("com.github.QuadFlask:colorpicker:0.0.15")
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+
+
 
 }

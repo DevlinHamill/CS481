@@ -90,7 +90,6 @@ public class NewEvent extends AppCompatActivity {
         date = getIntent().getStringExtra("SELECTED_DATE");
         addtitle(str);
         setListeners();
-
         context = this;
 
         checkbuildings(binding.BuildingSearch);
@@ -296,12 +295,26 @@ public class NewEvent extends AppCompatActivity {
      * @return a boolean value that tells if the input is valid
      */
     private boolean isValidateMeetingDetails() {
-        if (binding.EventRoom.getText().toString().trim().isEmpty()){
-            showToast("Please enter a description for the meeting");
+        if(binding.EventRoom.getText().toString().trim().isEmpty()){
+            showToast("Please enter a room number");
             return false;
+
         }else if(binding.EventTitle.getText().toString().trim().isEmpty()) {
-            showToast("Please enter a meeting title");
+            showToast("Please enter a Event title");
             return false;
+
+        }else if(binding.BuildingSearch.getQuery().toString().trim().isEmpty()) {
+            showToast("Please enter a valid building name");
+            return false;
+
+        }else if(binding.AddToEventGroupSearch.getQuery().toString().trim().isEmpty()) {
+            showToast("Please a group name");
+            return false;
+
+        }else if(colorPreference.isEmpty()){
+            showToast("Please pick a valid color");
+            return false;
+
         }else{
             return true;
         }
