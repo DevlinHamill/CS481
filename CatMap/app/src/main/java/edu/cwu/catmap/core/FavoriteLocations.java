@@ -2,6 +2,7 @@ package edu.cwu.catmap.core;
 
 import java.util.HashMap;
 
+//UNUSED
 public class FavoriteLocations {
     private HashMap<String, Location> favoriteLocationsMap;
 

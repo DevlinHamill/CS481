@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        UserManager.getInstance().signOut();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Context context = this;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 hideKeyboard();
-                UserManager.getInstance().signin(email, password, new OnCompleteListener<DocumentSnapshot>() {
+                UserManager.getInstance().signIn(email, password, new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {

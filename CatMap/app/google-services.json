@@ -12,7 +12,20 @@
           "package_name": "edu.cwu.catmap"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "259536456281-dpg47457q44ur76o709hs2dlvpars3rd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.cwu.catmap",
+            "certificate_hash": "332b49b618956528b524b58a71c7ebd9a7fdb096"
+          }
+        },
+        {
+          "client_id": "259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDm04WoUSLNCogwlGqHW9oW-fIjz3fB6vU"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -74,8 +75,11 @@ public class LocationsManager {
         return new HashMap<>(locationsMap);
     }
 
-    public Set<String> getLocationNames() {
-        return getLocations().keySet();
+    public List<String> getLocationNames() {
+        List locationNamesList = new ArrayList<>(getLocations().keySet());
+        Collections.sort(locationNamesList);
+
+        return locationNamesList;
     }
 
     public Location getLocation(String locationName) {

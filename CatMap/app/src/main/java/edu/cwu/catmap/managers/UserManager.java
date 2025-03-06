@@ -93,12 +93,13 @@ public class UserManager {
      * @param password user password
      * @param listener on complete listener used to return the state of the login result
      */
-    public void signin(String email, String password, OnCompleteListener<DocumentSnapshot> listener) {
+    public void signIn(String email, String password, OnCompleteListener<DocumentSnapshot> listener) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
                     if(authResult.getUser() != null) {
                         db.collection(Constants.KEY_USER_COLLECTION).document(authResult.getUser().getUid()).get()
                                 .addOnSuccessListener(userDocument -> {
+                                    Log.i("User info", "email = " + email + ", password = " + password);
                                     setCurrentUser(new User(Objects.requireNonNull(userDocument.getData())));
                                 })
                                 .addOnFailureListener(e -> Log.e("Login", "Unable to read user data from database", e))
@@ -111,7 +112,7 @@ public class UserManager {
     /**
      * Log the current user out of the app.
      */
-    public void logout() {
+    public void signOut() {
         firebaseAuth.signOut();
         setCurrentUser(null);
     }

@@ -22,6 +22,8 @@ import com.google.common.base.MoreObjects;
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.databinding.ActivityColorPickerTestBinding;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
+import edu.cwu.catmap.utilities.ColorPickerHelper;
+import edu.cwu.catmap.utilities.ColorPickerTraceback;
 import edu.cwu.catmap.utilities.ToastHelper;
 
 public class ColorPickerTest extends AppCompatActivity {
@@ -39,6 +41,23 @@ public class ColorPickerTest extends AppCompatActivity {
         binding.colorPickerButton.setOnClickListener(view -> {
             ColorDrawable backgroundColor = (ColorDrawable) binding.main.getBackground();
             int backgroundColorInt = backgroundColor.getColor();
+
+            ColorPickerHelper.getColor(this, new ColorPickerTraceback() {
+                @Override
+                public void selectColor(int color) {
+                    ToastHelper.showToast(context, "selected color " + color);
+                }
+
+                @Override
+                public void confirm(int color) {
+                    binding.main.setBackgroundColor(color);
+                }
+
+                @Override
+                public void cancel() {
+                    ToastHelper.showToast(context, "Select color canceled");
+                }
+            });
 
             ColorPickerDialogBuilder
                     .with(this)
