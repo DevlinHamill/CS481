@@ -9,6 +9,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 
 import edu.cwu.catmap.R;
@@ -44,10 +48,43 @@ public class ScheduleDetails extends AppCompatActivity {
         binding.colorResult.setText(map.get("Color_Preference"));
         binding.RepeatingResult.setText(map.get("Repeated_Events"));
 
+        onclick();
+
     }
 
     private void showToast(String message){
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
+
+    private void onclick(){
+        binding.RemoveButton.setOnClickListener(v->
+                remove()
+        );
+
+        binding.editButton.setOnClickListener(v->
+                edit()
+        );
+    }
+
+    private void remove(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("event_collection")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("Events")
+                .document(binding.idresult.getText().toString())
+                .delete();
+        onBackPressed();
+    }
+
+    private void edit(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("event_collection")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("Events")
+                .document(binding.idresult.getText().toString());
+
+    }
+
 
 }

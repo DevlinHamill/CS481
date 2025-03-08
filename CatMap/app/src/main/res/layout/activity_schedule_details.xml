@@ -21,19 +21,23 @@
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
 
         <TextView
             android:id="@+id/EventID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/id" />
+            android:text="@string/id"
+            android:textSize="20sp"
+            android:paddingRight="10dp"/>
 
         <TextView
             android:id="@+id/idresult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,18 +45,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout1">
+            app:layout_constraintTop_toBottomOf="@id/linearLayout1"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/EventName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/event_title1" />
+                android:text="@string/event_title1"
+                android:textSize="20sp"
+                android:paddingRight="10dp"/>
 
             <TextView
                 android:id="@+id/nameresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 />
         </LinearLayout>
 
@@ -61,127 +69,155 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout2">
+            app:layout_constraintTop_toBottomOf="@id/linearLayout2"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/EventDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/event_date1" />
+                android:text="@string/event_date1"
+                android:textSize="20sp"
+                android:paddingRight="10dp"/>
 
             <TextView
                 android:id="@+id/DateResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/timedisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/time" />
+                android:text="@string/time"
+                android:textSize="20sp"
+                android:paddingRight="10dp"/>
 
             <TextView
                 android:id="@+id/timeresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/buildingdisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/building" />
+                android:text="@string/building"
+                android:textSize="20sp"
+                android:paddingRight="10dp"/>
 
             <TextView
                 android:id="@+id/buildingresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/roomdisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/room_number1" />
+                android:text="@string/room_number1"
+                android:textSize="20sp"
+                android:paddingRight="10dp"/>
 
             <TextView
                 android:id="@+id/roomresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/groupdisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/event_group" />
+                android:text="@string/event_group"
+                android:paddingRight="10dp"
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/groupresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
          <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+             android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/ColorDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/color_preference" />
+                android:text="@string/color_preference"
+                android:paddingRight="10dp"
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/colorResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/RepeatingDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/repeating_event" />
+                android:text="@string/repeating_event"
+                android:textSize="20sp"
+                android:paddingRight="10dp"/>
 
             <TextView
                 android:id="@+id/RepeatingResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="20sp"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -204,13 +240,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/edit" />
+            android:text="@string/edit"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/RemoveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/remove" />
+            android:text="@string/remove"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
