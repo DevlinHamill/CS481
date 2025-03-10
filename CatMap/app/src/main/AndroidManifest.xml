@@ -28,6 +28,7 @@
         <activity
             android:name=".activities.ChangeUserName"
             android:exported="false" />
+
         <activity
             android:name=".activities.Profile"
             android:exported="false" />
