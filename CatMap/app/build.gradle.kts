@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.preference)
 
     implementation(libs.androidx.appcompat)
+    implementation(libs.roundedimageview)
+    implementation(libs.google.material)
 
 
     //desugaring to use Java.time module
