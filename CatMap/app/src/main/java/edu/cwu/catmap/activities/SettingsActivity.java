@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Initialize UI components
         switchDarkMode = findViewById(R.id.switch_dark_mode);
         switchHighContrast = findViewById(R.id.switch_high_contrast_mode);
-        switchLeftHand = findViewById(R.id.switch_left_hand);
+        //switchLeftHand = findViewById(R.id.switch_left_hand);
         switchAdaAccessible = findViewById(R.id.switch_ada_accessible);
         switchNotifications = findViewById(R.id.switch_notifications);
 
@@ -89,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
                 // Disable High Contrast Mode if Dark Mode is enabled
                 switchHighContrast.setChecked(false);
                 editor.putBoolean("high_contrast", false);
+
             }
         } else if (buttonView.getId() == R.id.switch_high_contrast_mode) {
             editor.putBoolean("high_contrast", isChecked);
@@ -97,9 +98,10 @@ public class SettingsActivity extends AppCompatActivity {
                 switchDarkMode.setChecked(false);
                 editor.putBoolean("dark_mode", false);
             }
-        } else if (buttonView.getId() == R.id.switch_left_hand) {
-            editor.putBoolean("left_hand", isChecked);
-        } else if (buttonView.getId() == R.id.switch_ada_accessible) {
+        }// else if (buttonView.getId() == R.id.switch_left_hand) {
+//            editor.putBoolean("left_hand", isChecked);
+//        }
+          else if (buttonView.getId() == R.id.switch_ada_accessible) {
             editor.putBoolean("ada_accessible", isChecked);
         } else if (buttonView.getId() == R.id.switch_notifications) {
             editor.putBoolean("notifications", isChecked);
@@ -139,10 +141,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public void toggleLeftHandMode(View view) {
-        MaterialSwitch switchLeftHand = findViewById(R.id.switch_left_hand);
-        switchLeftHand.toggle();
-    }
+//    public void toggleLeftHandMode(View view) {
+//        MaterialSwitch switchLeftHand = findViewById(R.id.switch_left_hand);
+//        switchLeftHand.toggle();
+//    }
 
     public void toggleAdaAccessible(View view) {
         MaterialSwitch switchAda = findViewById(R.id.switch_ada_accessible);
