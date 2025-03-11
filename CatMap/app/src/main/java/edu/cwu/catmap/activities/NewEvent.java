@@ -268,7 +268,7 @@ public class NewEvent extends AppCompatActivity {
         meetings.put("Event_Title", Title);
         meetings.put("Event_Group", EventGroup);
         meetings.put("Building_Name", Building);
-        meetings.put("Room_number", RoomNum);
+        meetings.put("Room_Number", RoomNum);
         meetings.put("Event_Date", date);
         meetings.put("Event_Time", newtime);
         meetings.put("Color_Preference", colorPreference);

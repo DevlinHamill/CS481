@@ -56,11 +56,12 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/nameresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:text="TextView"
                 />
         </LinearLayout>
 
@@ -80,7 +81,7 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/DateResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -102,7 +103,7 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/timeresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,7 +125,7 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/buildingresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -146,7 +147,7 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/roomresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,7 +169,7 @@
                 android:paddingRight="10dp"
                 android:textSize="20sp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/groupresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
