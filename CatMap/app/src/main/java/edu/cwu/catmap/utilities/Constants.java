@@ -21,7 +21,7 @@ public class Constants {
     public static final int VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY = 10;
 
     //collection names constants
-    public static final String KEY_USER_COLLECTION = "event_collection"; //TODO: CHANGE TO CORRECT COLLECTION NAME IN DATABASE, THEN HERE
+    public static final String KEY_USER_COLLECTION = "user_collection"; //TODO: CHANGE TO CORRECT COLLECTION NAME IN DATABASE, THEN HERE
     public static final String KEY_EVENT_COLLECTION = "event_collection";
     public static final String KEY_EVENT_GROUP_COLLECTION = "event_group_collection";
     public static final String KEY_FAVORITE_LOCATIONS_COLLECTION = "favorite_locations_collection";
