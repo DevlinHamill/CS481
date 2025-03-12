@@ -86,7 +86,7 @@ public class SchedualerGUI extends AppCompatActivity {
         String formattedDate = sdf.format(calendar.getTime());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("event_collection")
+        CollectionReference eventsRef = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events");
 
@@ -221,7 +221,7 @@ public class SchedualerGUI extends AppCompatActivity {
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("event_collection")
+        CollectionReference eventsRef = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events");
 
@@ -345,11 +345,12 @@ public class SchedualerGUI extends AppCompatActivity {
         String endOfWeek = sdf.format(new Date(endOfWeekMillis));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("event_collection")
+        CollectionReference eventsRef = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events");
 
-        eventsRef.get()
+        eventsRef.whereGreaterThanOrEqualTo("End_Date", startOfWeek)
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         Map<String, List<ScheduleListItem.Event>> eventsByDate = new HashMap<>();

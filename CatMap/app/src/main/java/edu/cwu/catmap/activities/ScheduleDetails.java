@@ -269,7 +269,7 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private void remove(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("event_collection")
+        db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events")
                 .document(binding.idresult.getText().toString())
@@ -281,7 +281,7 @@ public class ScheduleDetails extends AppCompatActivity {
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference ref = db.collection("event_collection")
+        DocumentReference ref = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events")
                 .document(binding.idresult.getText().toString());
