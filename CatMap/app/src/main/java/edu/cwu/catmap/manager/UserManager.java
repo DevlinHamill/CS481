@@ -87,6 +87,29 @@ public class UserManager {
                 .addOnFailureListener(e -> Log.e("SignUp", "Unable to create new user using FirebaseAuth", e));
     }
 
+    public void signUpWithGoogle(String userId, String email, String name, String encodedProfilePicture, OnCompleteListener<DocumentSnapshot> listener) {
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put(Constants.KEY_ENCODED_PROFILE_PICTURE, (TextUtils.isEmpty(encodedProfilePicture) ? defaultProfilePicture : encodedProfilePicture));
+        userData.put(Constants.KEY_NAME, name);
+        userData.put(Constants.KEY_PREF_LEFT_HANDED_MODE, false);
+        userData.put(Constants.KEY_PREF_WHEEL_CHAIR_MODE, false);
+        userData.put(Constants.KEY_PREF_DARK_MODE, false);
+        userData.put(Constants.KEY_PREF_COLOR_BLIND_MODE, Constants.VALUE_NORMAL_VISION);
+        userData.put(Constants.KEY_ENABLE_NOTIFICATIONS, true);
+        userData.put(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY, Constants.VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY);
+
+        //add user data to the users collection
+        db.collection(Constants.KEY_USER_COLLECTION).document(userId).set(userData)
+                .addOnSuccessListener(setResult -> {
+                    //return feedback of completion to the calling activity
+                    currentUser = new User(name, email, encodedProfilePicture);
+                    db.collection(Constants.KEY_USER_COLLECTION).document(userId).get().addOnCompleteListener(listener);
+                })
+                //this will trigger if the user document cannot be created
+                .addOnFailureListener(e -> Log.e("SignUp", "Unable to create new user document in users collection", e));
+    }
+
     /**
      * Attempt to log th user in with their provided email address and password.
      * @param email user email address
@@ -106,6 +129,10 @@ public class UserManager {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Login", "Unable to login user with FirebaseAuth", e));
+    }
+
+    public void signInWithGoogle(String idToken) {
+
     }
 
     /**
