@@ -81,7 +81,7 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/DateResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                 android:paddingRight="10dp"
                 android:textSize="20sp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/typeresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

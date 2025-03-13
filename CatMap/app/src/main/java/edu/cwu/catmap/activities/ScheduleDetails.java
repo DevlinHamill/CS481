@@ -44,6 +44,22 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private String colorPreference;
 
+    private String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
+            "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
+            "Brooks library", "Button Hall", "Carmody-Munro Hall", "Cat Trax East", "Cat Trax West & Cats Market",
+            "Central Marketplace", "Coach's Coffee House", "Davies Hall", "Dean Hall", "Discovery Hall", "Dougmore Hall",
+            "Early Childhood Learning Center", "Farrell Hall", "Flight Instructor Office Building", "Flight Training Center",
+            "Getz-Shortz Apartments", "Green Hall", "Greenhouse", "Grupe Faculty Center", "Health Sciences Building", "Hebeler Hall",
+            "Hitchcock Hall", "Hogue Technology Building", "Holmes Dining Room", "Jimmy B's Caf", "Jongeward Building",
+            "Kamola Hall", "Kennedy Hall", "Lind Hall", "McConnell Hall", "Mcintyre Music Building", "Meisner Hall",
+            "Michaelsen Hall", "Mitchell Hall", "Moore Hall", "Munson Hall", "Naneum Building", "Nicholson Pavilion", "North Hall",
+            "Northside Commons", "Old Heating Plant", "Psychology Building", "Public Saftey Building", "Quigley Hall",
+            "Randall Hall", "Residence Life", "Samuelson Building", "Science Building", "Shaw-Smyser hall", "Sparks Hall",
+            "Stephens-Whitney Hall", "Student Health Services", "Student Union and Recreation Center", "Student Village",
+            "Sue Lombard Dining Room", "Sue Lombard Hall", "Surplus Property Warehouse", "The Bistro", "The Village Coffee, Market, Grill",
+            "Tomlinson Stadium", "Wahle Apartment Complex", "Wendell Hill Hall A", "Wendell Hill Hall B", "Wildcat Printing", "Wilson Hall"};
+
+
     private Context context;
 
     ActivityScheduleDetailsBinding binding;
@@ -130,22 +146,44 @@ public class ScheduleDetails extends AppCompatActivity {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * checks if the input is valid
+     * @return a boolean value that tells if the input is valid
+     */
+    private boolean isValidateMeetingDetails() {
+        if(binding.roomresult.getText().toString().trim().isEmpty()){
+            showToast("Please enter a room number");
+            return false;
+
+        }else if(binding.nameresult.getText().toString().trim().isEmpty()) {
+            showToast("Please enter a Event title");
+            return false;
+
+        }else if(binding.buildingresult.getQuery().toString().trim().isEmpty()) {
+            showToast("Please enter a valid building name");
+            return false;
+
+        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getQuery().toString())){
+            showToast("Please enter an existing building name");
+            return false;
+
+        }else if(binding.endresult.getText().toString().trim().isEmpty()) {
+            showToast("Please select an end date");
+            return false;
+
+        }else if(binding.timeresult.getText().toString().trim().isEmpty()){
+            showToast("Please select a time");
+            return false;
+        }else if(colorPreference == null){
+            showToast("Please pick a valid color");
+            return false;
+
+        }else{
+            return true;
+        }
+    }
+
     private void checkbuildings(SearchView BuildingSearchView){
-        /*Sample building names for suggestions*/
-        String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
-                "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
-                "Brooks library", "Button Hall", "Carmody-Munro Hall", "Cat Trax East", "Cat Trax West & Cats Market",
-                "Central Marketplace", "Coach's Coffee House", "Davies Hall", "Dean Hall", "Discovery Hall", "Dougmore Hall",
-                "Early Childhood Learning Center", "Farrell Hall", "Flight Instructor Office Building", "Flight Training Center",
-                "Getz-Shortz Apartments", "Green Hall", "Greenhouse", "Grupe Faculty Center", "Health Sciences Building", "Hebeler Hall",
-                "Hitchcock Hall", "Hogue Technology Building", "Holmes Dining Room", "Jimmy B's Caf", "Jongeward Building",
-                "Kamola Hall", "Kennedy Hall", "Lind Hall", "McConnell Hall", "Mcintyre Music Building", "Meisner Hall",
-                "Michaelsen Hall", "Mitchell Hall", "Moore Hall", "Munson Hall", "Naneum Building", "Nicholson Pavilion", "North Hall",
-                "Northside Commons", "Old Heating Plant", "Psychology Building", "Public Saftey Building", "Quigley Hall",
-                "Randall Hall", "Residence Life", "Samuelson Building", "Science Building", "Shaw-Smyser hall", "Sparks Hall",
-                "Stephens-Whitney Hall", "Student Health Services", "Student Union and Recreation Center", "Student Village",
-                "Sue Lombard Dining Room", "Sue Lombard Hall", "Surplus Property Warehouse", "The Bistro", "The Village Coffee, Market, Grill",
-                "Tomlinson Stadium", "Wahle Apartment Complex", "Wendell Hill Hall A", "Wendell Hill Hall B", "Wildcat Printing", "Wilson Hall"};
 
         /*Adapter for auto suggestions*/
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
@@ -317,81 +355,81 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private void edit() {
 
+        if(isValidateMeetingDetails()) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference ref = db.collection("user_collection")
+                    .document(FirebaseAuth.getInstance().getUid())
+                    .collection("Events")
+                    .document(binding.idresult.getText().toString());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference ref = db.collection("user_collection")
-                .document(FirebaseAuth.getInstance().getUid())
-                .collection("Events")
-                .document(binding.idresult.getText().toString());
-
-        HashMap<String, Object> tempmap = new HashMap<String, Object>();
-
-
-        tempmap.put("Event_Title", binding.nameresult.getText().toString());
-        tempmap.put("Event_Date", binding.DateResult.getText().toString());
-        tempmap.put("Event_Time", binding.timeresult.getText().toString());
-        tempmap.put("Building_Name", binding.buildingresult.getQuery().toString());
-        tempmap.put("Room_Number", binding.roomresult.getText().toString());
-        tempmap.put("Event_Type", binding.typeresult.getText().toString());
-        tempmap.put("Color_Preference", colorPreference);
-        tempmap.put("End_Date", binding.endresult.getText().toString());
+            HashMap<String, Object> tempmap = new HashMap<String, Object>();
 
 
-        if(binding.RepeatEventSelector.isSelected()){
-            if(binding.sunbutton.isSelected()){
-                repeatingevents[0] = 1;
-            }else {
+            tempmap.put("Event_Title", binding.nameresult.getText().toString());
+            tempmap.put("Event_Date", binding.DateResult.getText().toString());
+            tempmap.put("Event_Time", binding.timeresult.getText().toString());
+            tempmap.put("Building_Name", binding.buildingresult.getQuery().toString());
+            tempmap.put("Room_Number", binding.roomresult.getText().toString());
+            tempmap.put("Event_Type", binding.typeresult.getText().toString());
+            tempmap.put("Color_Preference", colorPreference);
+            tempmap.put("End_Date", binding.endresult.getText().toString());
+
+
+            if (binding.RepeatEventSelector.isSelected()) {
+                if (binding.sunbutton.isSelected()) {
+                    repeatingevents[0] = 1;
+                } else {
+                    repeatingevents[0] = 0;
+                }
+                if (binding.monbutton.isSelected()) {
+                    repeatingevents[1] = 1;
+                } else {
+                    repeatingevents[1] = 0;
+                }
+                if (binding.tuebutton.isSelected()) {
+                    repeatingevents[2] = 1;
+                } else {
+                    repeatingevents[2] = 0;
+                }
+                if (binding.wenbutton.isSelected()) {
+                    repeatingevents[3] = 1;
+                } else {
+                    repeatingevents[3] = 0;
+                }
+                if (binding.Thurbutton.isSelected()) {
+                    repeatingevents[4] = 1;
+                } else {
+                    repeatingevents[4] = 0;
+                }
+                if (binding.Fributton.isSelected()) {
+                    repeatingevents[5] = 1;
+                } else {
+                    repeatingevents[5] = 0;
+                }
+                if (binding.satbutton.isSelected()) {
+                    repeatingevents[6] = 1;
+                } else {
+                    repeatingevents[6] = 0;
+                }
+                repeatingCondition = true;
+            } else {
                 repeatingevents[0] = 0;
-            }
-            if(binding.monbutton.isSelected()){
-                repeatingevents[1] = 1;
-            }else{
                 repeatingevents[1] = 0;
-            }
-            if(binding.tuebutton.isSelected()){
-                repeatingevents[2] = 1;
-            }else {
                 repeatingevents[2] = 0;
-            }
-            if(binding.wenbutton.isSelected()){
-                repeatingevents[3] = 1;
-            }else{
                 repeatingevents[3] = 0;
-            }
-            if(binding.Thurbutton.isSelected()){
-                repeatingevents[4] = 1;
-            }else{
                 repeatingevents[4] = 0;
-            }
-            if(binding.Fributton.isSelected()){
-                repeatingevents[5] = 1;
-            }else{
                 repeatingevents[5] = 0;
-            }
-            if(binding.satbutton.isSelected()){
-                repeatingevents[6] = 1;
-            }else{
                 repeatingevents[6] = 0;
+                repeatingCondition = false;
             }
-            repeatingCondition = true;
-        }else{
-            repeatingevents[0] = 0;
-            repeatingevents[1] = 0;
-            repeatingevents[2] = 0;
-            repeatingevents[3] = 0;
-            repeatingevents[4] = 0;
-            repeatingevents[5] = 0;
-            repeatingevents[6] = 0;
-            repeatingCondition = false;
+
+            tempmap.put("Repeated_Events", Arrays.toString(repeatingevents));
+            tempmap.put("Repeating_Condition", repeatingCondition + "");
+
+            ref.update(tempmap)
+                    .addOnSuccessListener(v -> showToast("Updated Sucessfully"))
+                    .addOnFailureListener(v -> showToast("Unable to update firebase"));
         }
-
-        tempmap.put("Repeated_Events", Arrays.toString(repeatingevents));
-        tempmap.put("Repeating_Condition", repeatingCondition+"");
-
-        ref.update(tempmap)
-                .addOnSuccessListener(v -> showToast("Updated Sucessfully"))
-                .addOnFailureListener(v -> showToast("Unable to update firebase"));
-
     }
 
 }
