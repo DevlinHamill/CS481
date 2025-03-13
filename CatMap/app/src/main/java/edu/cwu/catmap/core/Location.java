@@ -1,13 +1,14 @@
 package edu.cwu.catmap.core;
 
 public class Location {
-    private final String name, address, coordinate, encodedImage, description;
+    private final String name, address, mainEntranceCoordinate, wheelchairEntranceCoordinate, imagePath, description;
 
-    public Location(String name, String address, String coordinate, String encodedImage, String description) {
+    public Location(String name, String address, String mainEntranceCoordinate, String wheelchairEntranceCoordinate, String imagePath, String description) {
         this.name = name;
         this.address = address;
-        this.coordinate = coordinate;
-        this.encodedImage = encodedImage;
+        this.mainEntranceCoordinate = mainEntranceCoordinate;
+        this.wheelchairEntranceCoordinate = wheelchairEntranceCoordinate;
+        this.imagePath = imagePath;
         this.description = description;
     }
 
@@ -19,12 +20,16 @@ public class Location {
         return address;
     }
 
-    public String getCoordinate() {
-        return coordinate;
+    public String getMainEntranceCoordinate() {
+        return mainEntranceCoordinate;
     }
 
-    public String getEncodedImage() {
-        return encodedImage;
+    public String getWheelchairEntranceCoordinate() {
+        return wheelchairEntranceCoordinate;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
     public String getDescription() {

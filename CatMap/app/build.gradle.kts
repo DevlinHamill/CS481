@@ -47,6 +47,9 @@ dependencies {
     implementation(libs.preference)
 
     implementation(libs.androidx.appcompat)
+    implementation(libs.roundedimageview)
+    implementation(libs.google.material)
+    implementation(libs.volley)
 
 
     //desugaring to use Java.time module
@@ -66,12 +69,16 @@ dependencies {
     implementation(libs.play.services.auth)
 
     //google Calendar API
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
     implementation("com.github.QuadFlask:colorpicker:0.0.15")
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+
 
 
 }

@@ -46,7 +46,7 @@ public class FirestoreUtility {
                 .addOnCompleteListener(listener);
     }
     public void teststoreEvents(FirebaseUser user, HashMap<String,String> input, OnCompleteListener<DocumentReference> listener){
-        db.collection(Constants.KEY_EVENT_COLLECTION).document(user.getUid()).collection("Events")
+        db.collection(Constants.KEY_USER_COLLECTION).document(user.getUid()).collection("Events")
                 .add(input)
                 .addOnCompleteListener(listener);
     }

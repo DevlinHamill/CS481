@@ -1,14 +1,21 @@
 package edu.cwu.catmap.activities;
 
+import static android.view.View.VISIBLE;
+
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +39,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 /**
@@ -64,15 +72,31 @@ public class NewEvent extends AppCompatActivity {
 
     private String Building;
 
-    private String RoomNumber;
+    private String Event_Type;
 
-    private String EventGroup;
+    private String EndDate;
 
     private int[] repeatingevents = new int[7];
 
-    private boolean repeatingCondition;
+    private  String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
+            "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
+            "Brooks library", "Button Hall", "Carmody-Munro Hall", "Cat Trax East", "Cat Trax West & Cats Market",
+            "Central Marketplace", "Coach's Coffee House", "Davies Hall", "Dean Hall", "Discovery Hall", "Dougmore Hall",
+            "Early Childhood Learning Center", "Farrell Hall", "Flight Instructor Office Building", "Flight Training Center",
+            "Getz-Shortz Apartments", "Green Hall", "Greenhouse", "Grupe Faculty Center", "Health Sciences Building", "Hebeler Hall",
+            "Hitchcock Hall", "Hogue Technology Building", "Holmes Dining Room", "Jimmy B's Caf", "Jongeward Building",
+            "Kamola Hall", "Kennedy Hall", "Lind Hall", "McConnell Hall", "Mcintyre Music Building", "Meisner Hall",
+            "Michaelsen Hall", "Mitchell Hall", "Moore Hall", "Munson Hall", "Naneum Building", "Nicholson Pavilion", "North Hall",
+            "Northside Commons", "Old Heating Plant", "Psychology Building", "Public Saftey Building", "Quigley Hall",
+            "Randall Hall", "Residence Life", "Samuelson Building", "Science Building", "Shaw-Smyser hall", "Sparks Hall",
+            "Stephens-Whitney Hall", "Student Health Services", "Student Union and Recreation Center", "Student Village",
+            "Sue Lombard Dining Room", "Sue Lombard Hall", "Surplus Property Warehouse", "The Bistro", "The Village Coffee, Market, Grill",
+            "Tomlinson Stadium", "Wahle Apartment Complex", "Wendell Hill Hall A", "Wendell Hill Hall B", "Wildcat Printing", "Wilson Hall"};
+
 
     private Context context;
+
+    private boolean repeatingcondtion;
 
     /**
      * creates the application
@@ -83,13 +107,14 @@ public class NewEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = edu.cwu.catmap.databinding.ActivityNewEventBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Event_Type = getIntent().getStringExtra("header");
         date = getIntent().getStringExtra("SELECTED_DATE");
+        binding.EndResult.setText(date);
+        addtitle(Event_Type);
         setListeners();
-
         context = this;
-
+        repeatingcondtion = false;
         checkbuildings(binding.BuildingSearch);
-        checkEventGroups(binding.AddToEventGroupSearch);
 
     }
 
@@ -98,11 +123,16 @@ public class NewEvent extends AppCompatActivity {
      */
     private void setListeners() {
 
-        binding.backarrow.setOnClickListener(v ->
-                onBackPressed()
+        binding.backarrow.setOnClickListener(v ->{
+                onBackPressed();
+                onBackPressed();
+                }
         );
 
 
+        binding.EndResult.setOnClickListener(v->
+                showDatePicker()
+        );
 
         binding.RepeatEventSelector.setOnClickListener(v ->
                 setWeekVisible()
@@ -170,6 +200,10 @@ public class NewEvent extends AppCompatActivity {
                     .show();
         });
 
+        binding.EventTime.setOnClickListener(v->
+                showTimePicker()
+        );
+
 
         binding.confirmEventButton.setOnClickListener(v -> {
 
@@ -177,7 +211,7 @@ public class NewEvent extends AppCompatActivity {
                 Title = binding.EventTitle.getText().toString();
                 RoomNum = binding.EventRoom.getText().toString();
                 Building = binding.BuildingSearch.getQuery().toString();
-                EventGroup = binding.AddToEventGroupSearch.getQuery().toString();
+                EndDate = binding.EndResult.getText().toString();
 
                 if(binding.RepeatEventSelector.isSelected()){
                     if(binding.sunbutton.isSelected()){
@@ -195,29 +229,54 @@ public class NewEvent extends AppCompatActivity {
                     }if(binding.satbutton.isSelected()){
                         repeatingevents[6] = 1;
                     }
+                    repeatingcondtion = !repeatingcondtion;
                 }
 
-                /**
-                 * get the hours from the TimePicker
-                 */
-                int hour = binding.EventTime.getHour(); // 24-hour format
-                /**
-                 * get the hours from the TimePicker
-                 */
-                int minute = binding.EventTime.getMinute();
-                // Convert 24-hour format to 12-hour format with AM/PM
-                String period = (hour >= 12) ? "PM" : "AM";
-                /**
-                 *  since hour is still in military time, we change it back with modulo math
-                 */
-                int hour12Format = (hour == 0 || hour == 12) ? 12 : hour % 12;
-                time = hour + ":" + minute + " " + period;
+                time = binding.EventTime.getText().toString();
 
                 addMeetingToFirebase();
 
-                onBackPressed();
+                finish();
+                startActivity(new Intent(getApplicationContext(), SchedualerGUI.class));
             }
         });
+    }
+
+
+    private void showDatePicker() {
+
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (DatePicker view, int selectedYear, int selectedMonth, int selectedDay) -> {
+                    String formattedDate = String.format("%02d/%02d/%d", selectedMonth + 1, selectedDay, selectedYear);
+                    binding.EndResult.setText(formattedDate);
+                }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void showTimePicker() {
+
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                (TimePicker view, int selectedHour, int selectedMinute) -> {
+
+                    String propertime = (selectedHour >= 12) ? "PM" : "AM";
+                    int hour12 = (selectedHour == 0) ? 12 : (selectedHour > 12 ? selectedHour - 12 : selectedHour);
+                    String formattedTime = String.format("%d:%02d %s", hour12, selectedMinute, propertime);
+                    binding.EventTime.setText(formattedTime);
+
+                }, hour, minute, false);
+
+        timePickerDialog.show();
     }
 
     /**
@@ -233,17 +292,6 @@ public class NewEvent extends AppCompatActivity {
      */
     private void addMeetingToFirebase() {
 
-        UserManager.getInstance().signin("test@test.com", "password", new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    showToast("succeeded");
-                }else{
-                    showToast("failed");
-                }
-
-            }
-        });
 
         /**
          * contains the firebase refrence
@@ -253,28 +301,18 @@ public class NewEvent extends AppCompatActivity {
          * stores all meeting data
          */
         HashMap<String, String> meetings = new HashMap<>();
-        /**
-         * updates the new time with the converter
-         */
-        String newtime = convertTo12Hour(time);
 
         meetings.put("Event_Title", Title);
-        meetings.put("Event_Group", EventGroup);
+        meetings.put("Event_Type", Event_Type);
         meetings.put("Building_Name", Building);
-        meetings.put("Room_number", RoomNum);
+        meetings.put("Room_Number", RoomNum);
         meetings.put("Event_Date", date);
-        meetings.put("Event_Time", newtime);
+        meetings.put("Event_Time", time);
         meetings.put("Color_Preference", colorPreference);
         meetings.put("Repeated_Events", Arrays.toString(repeatingevents));
+        meetings.put("Repeating_Condition", repeatingcondtion+"");
+        meetings.put("End_Date", EndDate);
 
-
-        /*
-        db.collection("Meeting").add(meetings).addOnSuccessListener( documentReference -> {
-            showToast("meeting added");
-        }).addOnFailureListener(exception ->{
-            showToast(exception.getMessage());
-        });
-         */
         FirestoreUtility.getInstance().teststoreEvents(UserManager.getInstance().getCurrentFirebaseUser(), meetings, new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -288,44 +326,44 @@ public class NewEvent extends AppCompatActivity {
      * @return a boolean value that tells if the input is valid
      */
     private boolean isValidateMeetingDetails() {
-        if (binding.EventRoom.getText().toString().trim().isEmpty()){
-            showToast("Please enter a description for the meeting");
+        if(binding.EventRoom.getText().toString().trim().isEmpty()){
+            showToast("Please enter a room number");
             return false;
+
         }else if(binding.EventTitle.getText().toString().trim().isEmpty()) {
-            showToast("Please enter a meeting title");
+            showToast("Please enter a Event title");
             return false;
+
+        }else if(binding.BuildingSearch.getQuery().toString().trim().isEmpty()) {
+            showToast("Please enter a valid building name");
+            return false;
+
+        }else if(!Arrays.asList(buildingNames).contains(binding.BuildingSearch.getQuery().toString())){
+            showToast("Please enter an existing building name");
+            return false;
+
+        }else if(binding.EndResult.getText().toString().trim().isEmpty()) {
+            showToast("Please select an end date");
+            return false;
+
+        }else if(binding.EventTime.getText().toString().trim().isEmpty()){
+            showToast("Please select a time");
+            return false;
+        }else if(colorPreference == null){
+            showToast("Please pick a valid color");
+            return false;
+
         }else{
             return true;
         }
     }
 
-    /**
-     * converts military time to 12 hour based time
-     * @param time24 takes in a
-     * @return the new time
-     */
-    private String convertTo12Hour(String time24){
-        /**
-         * tokenizes the time string without the :
-         */
-        StringTokenizer tokenizer = new StringTokenizer(time24, ":");
-        /**
-         * stores the current hour based on the string
-         */
-        int hour = 0;
-        hour = Integer.parseInt(tokenizer.nextToken());
-        /**
-         * converts the string to a 12 hour time
-         */
-        int hour12 = (hour == 0 || hour == 12) ? 12 : hour % 12;
 
-        return hour12 +":"+ tokenizer.nextToken();
-    }
 
     private void setWeekVisible(){
 
         if(binding.Weeklayout.getVisibility() == View.INVISIBLE){
-            binding.Weeklayout.setVisibility(View.VISIBLE);
+            binding.Weeklayout.setVisibility(VISIBLE);
             binding.RepeatEventSelector.setSelected(true);
         }else{
             binding.Weeklayout.setVisibility(View.INVISIBLE);
@@ -345,8 +383,6 @@ public class NewEvent extends AppCompatActivity {
     }
 
     private void checkbuildings(SearchView BuildingSearchView){
-        /*Sample building names for suggestions*/
-        String[] buildingNames = {"Library", "Recreational Center", "Rebirth"};
 
         /*Adapter for auto suggestions*/
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
@@ -364,31 +400,17 @@ public class NewEvent extends AppCompatActivity {
         }
     }
 
-    private void checkEventGroups(SearchView EventGroupSearch){
-        /*Sample event names for suggestions*/
-        String[] EventGroups = {"Group1", "Group2"};
-
-        /*Adapter for auto suggestions*/
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, EventGroups);
-
-        /*Attaches autocomplete functionality to the search view*/
-        AutoCompleteTextView searchAutoComplete = EventGroupSearch.findViewById(androidx.appcompat.R.id.search_src_text);
-        if (searchAutoComplete != null) {
-            searchAutoComplete.setAdapter(adapter);
-
-            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                String selectedItem = adapter.getItem(position);
-                searchAutoComplete.setText(selectedItem);
-                EventGroupSearch.setQuery(selectedItem, false);
-            });
-        }
-    }
-
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+
+    public void addtitle(String str){
+
+        binding.neweventheader.setText(str);
+        binding.neweventheader.setVisibility(VISIBLE);
+    }
 
 }
 

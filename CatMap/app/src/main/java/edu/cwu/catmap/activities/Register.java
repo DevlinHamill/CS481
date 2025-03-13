@@ -6,40 +6,40 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import edu.cwu.catmap.databinding.ActivityRegisterBinding;
 import edu.cwu.catmap.manager.UserManager;
+import edu.cwu.catmap.utilities.Constants;
 
+/**
+ * Handles user registration, including form validation, Firebase authentication,
+ * profile image selection, and user data storage.
+ */
 public class Register extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
-
     private UserManager userManager;
-    private String encodeImage;
+    private String encodedProfilePicture;
 
     /**
-     * This is called on app creation and orientation changes to bind Views and call listeners
-     * Uses view binding to automatically associate with Views
+     * Initializes the Register activity, setting up UI components and user registration logic.
      *
-     * @param savedInstanceState param for orientation changes
+     * @param savedInstanceState Previous saved state, if available.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +51,22 @@ public class Register extends AppCompatActivity {
     }
 
     /**
-     * Sets listeners for when user clicks on the "Sign up" button
-     * on the sign up page
-     * If the user clicks the sign in button, they are redirected to sign in activity
-     * If the user clicks on the "add image" button, they are directed to a System dialog used to
-     * output an image to the app
-     * If the user clicks on sign up, the sign up detail validation function is called
+     * Sets up click listeners for sign-in, back navigation, and user registration.
      */
     private void setListeners() {
-        binding.textSignIn.setOnClickListener(v -> onBackPressed());
+        binding.logOut.setOnClickListener(v -> onBackPressed());
+        binding.textSignIn.setOnClickListener(v -> {
+            Intent intent = new Intent(Register.this, Login.class);
+            startActivity(intent);
+        });
 
-        binding.buttonSignUp.setOnClickListener(v -> {
+        binding.registerButton.setOnClickListener(v -> {
             if (isValidateSignUpDetails()) {
                 userManager.signUp(
                         binding.inputEmail.getText().toString(),
                         binding.inputPassword.getText().toString(),
                         binding.inputName.getText().toString(),
-                        encodeImage,
+                        encodedProfilePicture,  // Save Base64 image
                         task -> {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot userDocument = task.getResult();
@@ -85,121 +84,186 @@ public class Register extends AppCompatActivity {
                         });
             }
         });
-        binding.layoutImage.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            pickImage.launch(intent);
-        });
+        // Open gallery for profile image selection
+        binding.imageProfile.setOnClickListener(v -> openGallery());
     }
 
     /**
-     * Helper function to display toasts
+     * Displays a short toast message.
      *
-     * @param message a string to display as a Toast
+     * @param message The message to display.
      */
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     /**
-     * Function used to encode an image into Base 64 string
-     * Encoding algorithm is not implemented here
-     * The image is also scaled appropiately and compressed
-     * as a JPEG before being encoded to ensure standardization of avatars
-     * The image is converted to raw bytes and then encoded using Base64.encodeToString()
-     *
-     * @param bitmap The avatar the user uploads
-     * @return A string representing the Base 64 encoding of the original bitmap
+     * Opens the gallery for selecting an image.
      */
-    private String encodeImage(Bitmap bitmap) {
-        int previewWidth = 150;
-        int previewHeight = bitmap.getHeight() * previewWidth / bitmap.getWidth();
-
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false);
-
-        ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream();
-
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayInputStream);
-
-        byte[] bytes = byteArrayInputStream.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        pickImage.launch(intent);
     }
 
     /**
-     * This function is used to call the system to access the Android device's gallery
-     * in order to choose an image.
-     * After an image is chosen, it is displayed on the imageProfile View on the sign up page
-     * and also removes the "add image" text in the middle of imageProfile
+     * Handles the result of image selection.
      */
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK) {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri imageUri = result.getData().getData();
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-                        binding.imageProfile.setImageBitmap(bitmap);
-                        binding.textAddImage.setVisibility(View.GONE);
-                        encodeImage = encodeImage(bitmap);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                    Bitmap scaledBitmap = scaleImage(imageUri);
+                    if (scaledBitmap != null) {
+                        binding.imageProfile.setImageBitmap(scaledBitmap);
+                        encodedProfilePicture = encodeImage(scaledBitmap);
+                    } else {
+                        showToast("Failed to load image.");
                     }
                 }
             }
     );
 
     /**
-     * This function ensures every sign up detail is inputted by the user
-     * It also uses a pattern checker if the e-mail is a valid format.
-     * Password confirmation is also checked here
-     *
-     * @return Signals if the sign up details are valid
+     * Encodes a Bitmap image into a Base64 string with optimized quality.
      */
-    private Boolean isValidateSignUpDetails() {
-        if (encodeImage == null) {
-            showToast("Please choose an avatar");
-            return false;
-        } else if (binding.inputName.getText().toString().trim().isEmpty()) {
-            showToast("Please enter your name");
-            return false;
-        } else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
-            showToast("Please enter your e-mail");
-            return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            showToast("Please enter a valid e-mail");
-            return false;
-        } else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
-            showToast("Please enter your password");
-            return false;
-        } else if (binding.inputConFirmPassword.getText().toString().trim().isEmpty()) {
-            showToast("Please confirm your password");
-            return false;
-        } else if (!binding.inputPassword.getText().toString().equals(binding.inputConFirmPassword.getText().toString())) {
-            showToast("Password does not match password confirmation");
-            return false;
-        } else {
-            return true;
-        }
-
-
+    private String encodeImage(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream); // Compression for storage efficiency
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
     /**
-     * Helper function used to hide or display the sign in button and progress bar
-     *
-     * @param isLoading signals if it's a state where the user clicks the button or the UI finished
-     *                  loading
+     * Decodes a Base64-encoded string back into a Bitmap.
      */
-    private void loading(Boolean isLoading) {
-        if (isLoading) {
-            binding.buttonSignUp.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.VISIBLE);
-        } else {
-            binding.buttonSignUp.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
+    private Bitmap decodeImage(String encodedString) {
+        byte[] bytes = Base64.decode(encodedString, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    /**
+     * Scales an image efficiently while maintaining clarity.
+     */
+    private Bitmap scaleImage(Uri imageUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+
+            // Decode the image size without loading the full bitmap into memory
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            // Calculate optimal inSampleSize
+            int targetWidth = 150; // Target size
+            int targetHeight = 150;
+            options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
+
+            // Decode with inSampleSize to get a scaled-down version
+            options.inJustDecodeBounds = false;
+            inputStream = getContentResolver().openInputStream(imageUri);
+            Bitmap scaledBitmap = BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            return scaledBitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+    }
+
+    /**
+     * Calculates the best inSampleSize for efficient downscaling.
+     */
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        int height = options.outHeight;
+        int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            int halfHeight = height / 2;
+            int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * Validates user input before registration with inline error messages.
+     */
+    private Boolean isValidateSignUpDetails() {
+        String name = binding.inputName.getText().toString().trim();
+        String email = binding.inputEmail.getText().toString().trim();
+        String password = binding.inputPassword.getText().toString();
+        String confirmPassword = binding.inputConFirmPassword.getText().toString();
+
+        // Validate Profile Picture Selection
+//        if (encodedProfilePicture == null) {
+//            showToast("Please choose an avatar");
+//            return false;
+//        }
+
+        // Validate Name
+        if (TextUtils.isEmpty(name)) {
+            binding.inputNameLayout.setError("Please enter your name");
+            binding.inputName.requestFocus();
+            return false;
+        } else {
+            binding.inputNameLayout.setError(null);
+        }
+
+        // Validate Email
+        if (TextUtils.isEmpty(email)) {
+            binding.inputEmailLayout.setError("Please enter your e-mail");
+            binding.inputEmail.requestFocus();
+            return false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.inputEmailLayout.setError("Please enter a valid e-mail");
+            binding.inputEmail.requestFocus();
+            return false;
+        } else {
+            binding.inputEmailLayout.setError(null);
+        }
+
+        // Validate Password Strength
+        if (TextUtils.isEmpty(password)) {
+            binding.inputPasswordLayout.setError("Please enter your password");
+            binding.inputPassword.requestFocus();
+            return false;
+        } else if (!isStrongPassword(password)) {
+            binding.inputPasswordLayout.setError("Must be 8+ letters, include a number, uppercase & special character.");
+            binding.inputPassword.requestFocus();
+            return false;
+        } else {
+            binding.inputPasswordLayout.setError(null);
+        }
+
+        // Validate Confirm Password
+        if (TextUtils.isEmpty(confirmPassword)) {
+            binding.inputConFirmPasswordLayout.setError("Please confirm your password");
+            binding.inputConFirmPassword.requestFocus();
+            return false;
+        } else if (!password.equals(confirmPassword)) {
+            binding.inputConFirmPasswordLayout.setError("Passwords do not match");
+            binding.inputConFirmPassword.requestFocus();
+            return false;
+        } else {
+            binding.inputConFirmPasswordLayout.setError(null);
+        }
+
+        return true;
+    }
+
+    private boolean isStrongPassword(String password) {
+        return password.length() >= 6 &&
+                password.matches(".*\\d.*") &&
+                password.matches(".*[A-Z].*") &&
+                password.matches(".*[!@#$%^&*()_+=<>?/].*");
     }
 }

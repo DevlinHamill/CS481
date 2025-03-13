@@ -1,112 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="16dp"
     tools:context=".activities.Profile">
 
-    <!-- Title Text -->
+    <!-- Profile Title at the Top-Left -->
     <TextView
-        android:id="@+id/titleText"
-        android:layout_width="match_parent"
+        android:id="@+id/profileTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
         android:text="Profile"
-        android:textSize="25sp"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="?attr/colorOnBackground"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Profile Image -->
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="50dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_profile_placeholder"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
-
-    <!-- Change Username Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/changeUserName"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:textColor="?attr/colorOnSurface"
         android:layout_marginTop="32dp"
-        android:text="Change Username"
-        android:textColor="?attr/colorOnPrimary"
-        android:backgroundTint="?attr/colorPrimary"
-        app:cornerRadius="16dp"
-        android:textAppearance="?attr/textAppearanceButton"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileImage"
-        app:layout_constraintWidth_percent="0.8" />
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Update Password Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/changePassword"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="5dp"
-        android:text="Update Password"
-        android:textColor="?attr/colorOnPrimary"
-        android:backgroundTint="?attr/colorPrimary"
-        app:cornerRadius="16dp"
-        android:textAppearance="?attr/textAppearanceButton"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/changeUserName"
-        app:layout_constraintWidth_percent="0.8" />
+    <!-- Scrollable Profile Content -->
+    <ScrollView
+        android:id="@+id/profileScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/profileTitle"
+        app:layout_constraintBottom_toTopOf="@id/logOut">
 
-    <!-- Recover Account Info Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/recoverAccount"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="5dp"
-        android:text="Recover Info"
-        android:textColor="?attr/colorOnPrimary"
-        android:backgroundTint="?attr/colorPrimary"
-        app:cornerRadius="16dp"
-        android:textAppearance="?attr/textAppearanceButton"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/changePassword"
-        app:layout_constraintWidth_percent="0.8" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-    <!-- Logout Button -->
-    <com.google.android.material.button.MaterialButton
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="212dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <!-- Profile Picture Container -->
+                <FrameLayout
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="24dp"
+                    android:clipChildren="false">
+
+                    <!-- Circular Profile Image -->
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_profile_placeholder"
+                        android:contentDescription="Profile Picture"
+                        app:riv_corner_radius="90dp"
+                        app:riv_border_width="3dp"
+                        app:riv_border_color="?attr/colorPrimary"
+                        app:riv_oval="true" />
+
+                    <!-- Floating Edit Profile Button  -->
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/editProfileImage"
+                        android:layout_width="50dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:src="@drawable/baseline_camera_alt_24"
+                        android:contentDescription="Edit Profile Picture"
+                        app:maxImageSize="35dp"
+                        app:backgroundTint="?attr/colorPrimary"
+                        android:tint="@android:color/black"
+                        android:elevation="4dp"
+                        android:stateListAnimator="@null"/>
+
+
+
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+            <!-- User Info (Name & Email) -->
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:id="@+id/profileEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="johndoe@example.com"
+                android:textSize="14sp"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Account Settings Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Settings"
+                android:paddingVertical="6dp"
+                android:paddingHorizontal="12dp"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    android:divider="?attr/colorOnSurface"
+                    android:dividerPadding="12dp">
+
+                    <!-- Update Username -->
+                    <LinearLayout
+                        android:id="@+id/changeUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Update Username"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"/>
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/baseline_edit_24"
+                            app:tint="?attr/colorOnSurface"/>
+                    </LinearLayout>
+
+                    <!-- Update Password -->
+                    <LinearLayout
+                        android:id="@+id/changePassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Update Password"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"/>
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/baseline_lock_24"
+                            app:tint="?attr/colorOnSurface"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Log Out Text at the Bottom Center -->
+    <TextView
         android:id="@+id/logOut"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Log Out"
-        android:textAllCaps="false"
-        android:textColor="?attr/colorOnPrimary"
-        android:backgroundTint="?attr/colorPrimary"
-        app:cornerRadius="16dp"
-        android:textAppearance="?attr/textAppearanceButton"
+        android:textSize="20sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintWidth_percent="0.8"/>
+        android:layout_marginBottom="32dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,4 +35,41 @@
     <string name="add_to_event_group">Add to Event Group</string>
     <string name="pick_a_color">Pick a Color</string>
     <string name="open_color_picker">Open color picker</string>
+    <string name="test">test</string>
+    <string name="add_to_class">Add to class?</string>
+    <string name="add_to_event">Add to event?</string>
+    <string name="week_view">Week View</string>
+    <string name="id">ID:</string>
+    <string name="event_date">Event Date</string>
+    <string name="event_date1">Event Date:</string>
+    <string name="event_title1">Event Title:</string>
+    <string name="building">Building:</string>
+    <string name="time">Time:</string>
+    <string name="room_number1">Room Number:</string>
+    <string name="event_group">Event Group:</string>
+    <string name="color_preference">Color Preference:</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="locations">Locations</string>
+    <string name="loading_location_information">Loading Location Information</string>
+    <string name="location_details">Location Details</string>
+    <string name="loading_location_coord">Loading location coord</string>
+    <string name="loading_location_address">Loading location address</string>
+    <string name="loading_location_name">Loading location Name</string>
+    <string name="navigate_here">Navigate Here</string>
+    <string name="navigate_to_location">Navigate to Location</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="all_locations">All Locations</string>
+    <string name="set_time">Set Time</string>
+    <string name="event_type">Event Type:</string>
+    <string name="daily_view">Daily View</string>
+    <string name="month">Month</string>
+    <string name="week">Week</string>
+    <string name="end_date">End Date:</string>
+
 </resources>

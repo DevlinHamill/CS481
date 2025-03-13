@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context="activities.MainActivity">
 
     <fragment
         android:id="@+id/id_map"
@@ -94,7 +94,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         android:backgroundTint="@color/white"
-        app:fabAlignmentMode="end">
+        app:fabAlignmentMode="end"
+        tools:ignore="BottomAppBar">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
