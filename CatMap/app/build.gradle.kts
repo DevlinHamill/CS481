@@ -73,6 +73,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation("com.github.QuadFlask:colorpicker:0.0.15")
+    implementation("com.google.android.material:material:1.9.0")
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

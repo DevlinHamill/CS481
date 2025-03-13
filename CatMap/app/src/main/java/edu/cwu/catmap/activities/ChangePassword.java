@@ -22,6 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import edu.cwu.catmap.R;
 
+/**
+ * Handles password change functionality, including validation,
+ * re-authentication, and updating the password in Firebase.
+ */
 public class ChangePassword extends AppCompatActivity {
 
     private TextInputEditText oldPasswordInput, newPasswordInput, confirmPasswordInput;
@@ -30,6 +34,12 @@ public class ChangePassword extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
 
+    /**
+     * Initializes the ChangePassword activity, setting up UI components
+     * and authentication logic.
+     *
+     * @param savedInstanceState Previous saved state, if available.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +79,10 @@ public class ChangePassword extends AppCompatActivity {
         updatePasswordButton.setOnClickListener(v -> updatePassword());
     }
 
+    /**
+     * Handles password update process, including validation,
+     * re-authentication, and updating the password in Firebase.
+     */
     private void updatePassword() {
         String oldPassword = oldPasswordInput.getText().toString().trim();
         String newPassword = newPasswordInput.getText().toString().trim();
@@ -87,6 +101,10 @@ public class ChangePassword extends AppCompatActivity {
             newPasswordLayout.setError("New password is required");
             newPasswordInput.requestFocus();
             return;
+        } else if (!isStrongPassword(newPassword)) {
+            newPasswordLayout.setError("Must be 6+ characters, include a number, uppercase letter & special character.");
+            newPasswordInput.requestFocus();
+            return;
         } else {
             newPasswordLayout.setError(null);
         }
@@ -95,15 +113,12 @@ public class ChangePassword extends AppCompatActivity {
             confirmPasswordLayout.setError("Please confirm your new password");
             confirmPasswordInput.requestFocus();
             return;
-        } else {
-            confirmPasswordLayout.setError(null);
-        }
-
-        // Check if new passwords match
-        if (!newPassword.equals(confirmPassword)) {
+        } else if (!newPassword.equals(confirmPassword)) {
             confirmPasswordLayout.setError("Passwords do not match");
             confirmPasswordInput.requestFocus();
             return;
+        } else {
+            confirmPasswordLayout.setError(null);
         }
 
         // Ensure the new password is different from the old password
@@ -145,5 +160,19 @@ public class ChangePassword extends AppCompatActivity {
                 Toast.makeText(ChangePassword.this, "Authentication failed. Please check your current password.", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+    }
+
+    /**
+     * Function to check password strength.
+     * A strong password must be at least 8 characters long,
+     * include at least one digit, one uppercase letter, and one special character.
+     */
+    private boolean isStrongPassword(String password) {
+        return password.length() >= 6 &&
+                password.matches(".*\\d.*") &&
+                password.matches(".*[A-Z].*") &&
+                password.matches(".*[!@#$%^&*()_+=<>?/].*");
     }
 }
