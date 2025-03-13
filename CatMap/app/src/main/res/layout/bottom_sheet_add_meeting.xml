@@ -255,7 +255,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="12dp"
-                android:visibility="gone"
+
                 >
 
                 <!-- Days Selection -->
@@ -368,7 +368,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.4dp"
                     android:background="?attr/colorOnSurface"/>
 
                 <!-- End Date Selection -->
