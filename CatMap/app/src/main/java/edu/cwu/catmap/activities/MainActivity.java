@@ -1,33 +1,29 @@
 package edu.cwu.catmap.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -39,10 +35,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.FirebaseApp;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 
 import java.util.ArrayList;
@@ -50,49 +48,77 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+import android.Manifest;
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.core.ScheduleListItem;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
+import edu.cwu.catmap.adapters.DailyEventAdapter;
+import edu.cwu.catmap.utilities.LocationPermissionHelper;
+import edu.cwu.catmap.utils.EventUtils;
+import com.google.android.gms.location.FusedLocationProviderClient;
+
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap gMap;
     private ActivityMainBinding hub;
+    private RecyclerView eventRecyclerView;
+    private DailyEventAdapter dailyEventAdapter;
+
+    private FusedLocationProviderClient fusedLocationClient; // Declare the variable
+    private Marker userMarker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        */
+        FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
         hub = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(hub.getRoot());
+
+        // Initialize the FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Request location permissions on startup using the utility class
+        if (!LocationPermissionHelper.hasLocationPermissions(this)) {
+            LocationPermissionHelper.requestLocationPermissions(this);
+        } else {
+            // Permissions are already granted, start location updates
+            startLocationUpdates();
+        }
+
+        eventRecyclerView = findViewById(R.id.eventRecyclerView);
+
         onclick();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
+    // Handle the result of the permission request
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (LocationPermissionHelper.handlePermissionResult(requestCode, grantResults)) {
+            // Permissions granted, start location updates
+            startLocationUpdates();
+        } else {
+            // Permissions denied, show a message to the user
+            Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
         gMap = googleMap;
         LatLng location = new LatLng(47.0076653, -120.5366559);
-        googleMap.addMarker(new MarkerOptions()
-                .position(location)
-                .title("CWU")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
         gMap.setMinZoomPreference(15);
 
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(47.0066653, -120.5366559))
-                .title("you")
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapUtils.getBitmapFromDrawable(this,R.drawable.logo_pin)))
-                );
 
-        getDirections(location,new LatLng(46.999784885243926, -120.5448810745124));
-        getDirections(new LatLng(47.01407056573746, -120.51994167974972),location);
+        //getDirections(location,new LatLng(46.999784885243926, -120.5448810745124));
+        //getDirections(new LatLng(47.01407056573746, -120.51994167974972),location);
 
         //outer bound of polygon (whole globe)
         LatLng[] outerBounds = {
@@ -181,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Polygon campusHighlight = gMap.addPolygon(polygonOptions);
 
+        setupEventRecyclerView();
     }
 
     public void onclick(){
@@ -222,10 +249,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void getDirections(LatLng origin, LatLng destination) {
         String apiUrl = "https://routes.googleapis.com/directions/v2:computeRoutes";
 
-        //JSON request body
+        // Create JSON request body
         JSONObject data = new JSONObject();
         try {
-            //origin
+            // Add origin
             JSONObject originJson = new JSONObject();
             JSONObject originLocation = new JSONObject();
             JSONObject originLatLng = new JSONObject();
@@ -235,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             originJson.put("location", originLocation);
             data.put("origin", originJson);
 
-            //destination
+            // Add destination
             JSONObject destinationJson = new JSONObject();
             JSONObject destinationLocation = new JSONObject();
             JSONObject destinationLatLng = new JSONObject();
@@ -245,13 +272,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             destinationJson.put("location", destinationLocation);
             data.put("destination", destinationJson);
 
-            //travel mode
+            // Add travel mode
             data.put("travelMode", "WALK");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //Send request
+        // Send the HTTP request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, apiUrl,
                 new Response.Listener<String>() {
                     @Override
@@ -261,46 +288,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             JSONArray routes = jsonResponse.getJSONArray("routes");
                             JSONObject route = routes.getJSONObject(0);
 
-                            //get polyline
+                            // Extract polyline
                             JSONObject polyline = route.getJSONObject("polyline");
                             String encodedPolyline = polyline.getString("encodedPolyline");
 
-                            //Decode and draw the route
+                            // Decode and draw the route
                             List<LatLng> decodedPath = decodePolyline(encodedPolyline);
                             PolylineOptions polylineOptions = new PolylineOptions()
                                     .addAll(decodedPath)
                                     .width(10)
-                                    .color(Color.GREEN);
+                                    .color(Color.BLUE);
                             gMap.addPolyline(polylineOptions);
 
-                            //get duration
+                            // Extract duration
                             String duration = route.getString("duration");
 
-                            //find midpoint of the polyline
-                            LatLng midpoint = decodedPath.get(decodedPath.size() / 2);
+                            // Convert duration to minutes
+                            String durationInMinutes = convertDurationToMinutes(duration);
 
-                            //make TextView to display the travel time
-                            TextView travelTimeView = new TextView(MainActivity.this);
-                            travelTimeView.setText("Travel Time: " + duration);
-                            travelTimeView.setTextSize(16);
-                            travelTimeView.setTextColor(Color.BLACK);
-                            travelTimeView.setBackgroundColor(Color.WHITE);
-                            travelTimeView.setPadding(16, 8, 16, 8);
+                            // Add a visible marker at the destination
+                            MarkerOptions markerOptions = new MarkerOptions()
+                                    .position(destination) // Place the marker at the destination
+                                    .title("Travel Time")
+                                    .snippet("Duration: " + durationInMinutes)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)); // Customize marker icon if needed
+                            Marker destinationMarker = gMap.addMarker(markerOptions);
 
-                            //add TextView to the map
-                            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                                    FrameLayout.LayoutParams.WRAP_CONTENT
-                            );
-                            addContentView(travelTimeView, params);
-
-                            //position TextView at midpoint
-                            updateTextViewPosition(travelTimeView, midpoint);
-
-                            //update TextView's position when the map is moved
-                            gMap.setOnCameraMoveListener(() -> {
-                                updateTextViewPosition(travelTimeView, midpoint);
-                            });
+                            // Show the InfoWindow by default
+                            destinationMarker.showInfoWindow();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -333,6 +348,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         };
 
         Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    // Helper method to convert duration to minutes
+    private String convertDurationToMinutes(String duration) {
+        try {
+            // Remove the "s" from the duration string (e.g., "900s" -> "900")
+            String durationValue = duration.replace("s", "");
+
+            // Convert the duration to seconds
+            long seconds = Long.parseLong(durationValue);
+
+            // Convert seconds to minutes
+            long minutes = seconds / 60;
+
+            // Format the duration as "X mins"
+            return minutes + " mins";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "N/A"; // Return a default value if parsing fails
+        }
     }
 
     //method to update TextView position
@@ -379,7 +414,43 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         PolylineOptions polylineOptions = new PolylineOptions().addAll(decodedPath).width(10).color(Color.GREEN);
         gMap.addPolyline(polylineOptions);
     }
+
+    // Method to set up the RecyclerView
+    private void setupEventRecyclerView() {
+        // Set up the layout manager for horizontal scrolling
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        eventRecyclerView.setLayoutManager(layoutManager);
+
+        // Use EventUtils to populate the RecyclerView
+        long currentDateMillis = System.currentTimeMillis(); // Use the current date or any selected date
+        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis);
+    }
+    private void startLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Request location updates
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            // Add or update the user's location marker
+                            updateUserLocationMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                        }
+                    });
+        }
+    }
+    private void updateUserLocationMarker(LatLng location) {
+        if (userMarker == null) {
+            // Add a new marker for the user's location
+            userMarker = gMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .title("you")
+                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapUtils.getBitmapFromDrawable(this,R.drawable.logo_pin)))
+            );
+        } else {
+            // Update the existing marker's position
+            userMarker.setPosition(location);
+        }
+        // Move the camera to the user's location
+        //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+    }
+
 }
-
-
-
