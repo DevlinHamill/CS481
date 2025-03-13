@@ -22,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.utilities.Constants;
 
+/**
+ * Handles updating the user's username in Firebase Firestore.
+ */
 public class ChangeUserName extends AppCompatActivity {
 
     private TextInputEditText usernameInput;
@@ -31,6 +34,11 @@ public class ChangeUserName extends AppCompatActivity {
     private FirebaseUser currentUser;
     private FirebaseFirestore database;
 
+    /**
+     * Initializes the ChangeUserName activity, setting up UI components and authentication logic.
+     *
+     * @param savedInstanceState Previous saved state, if available.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

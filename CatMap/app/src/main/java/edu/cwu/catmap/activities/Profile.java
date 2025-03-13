@@ -23,19 +23,24 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.manager.UserManager;
 import edu.cwu.catmap.utilities.Constants;
 
+/**
+ * Handles user profile functionality, including displaying profile details,
+ * updating profile pictures, and logging out.
+ */
 public class Profile extends AppCompatActivity {
 
     private RoundedImageView profileImage;
@@ -44,9 +49,16 @@ public class Profile extends AppCompatActivity {
     private String encodedProfilePicture;
     private FirebaseAuth auth;
     private FirebaseFirestore database;
-    private FirebaseUser currentUser;
-    private static final String DEFAULT_PROFILE_PIC = ""; // Default Base64 image if needed
+    private UserManager userManager;
+    private ListenerRegistration profileListener;
 
+
+    /**
+     * Initializes the Profile activity, setting up UI components
+     * and retrieving user profile data from Firestore.
+     *
+     * @param savedInstanceState Previous saved state, if available.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +67,7 @@ public class Profile extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
+        userManager = UserManager.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.profileScrollView), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -71,6 +84,8 @@ public class Profile extends AppCompatActivity {
         LinearLayout changePasswordButton = findViewById(R.id.changePassword);
         TextView logOutButton = findViewById(R.id.logOut);
 
+        // Load user details when profile page opens
+        listenForProfileUpdates();
 
         editProfileImageButton.setOnClickListener(v -> openGallery());
         changeUsernameButton.setOnClickListener(v -> startActivity(new Intent(Profile.this, ChangeUserName.class)));
@@ -78,65 +93,42 @@ public class Profile extends AppCompatActivity {
 
         logOutButton.setOnClickListener(v -> {
             auth.signOut();
-            startActivity(new Intent(Profile.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            userManager.logout();
+            startActivity(new Intent(Profile.this, Login.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
         });
     }
 
-
     /**
-     * Checks if the user's profile exists in Firestore. If not, it creates one.
+     * Listens for real-time updates to the user's profile.
      */
-    private void checkAndCreateUserProfile() {
-        if (currentUser == null) return;
+    private void listenForProfileUpdates() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = database.collection(Constants.KEY_USER_COLLECTION).document(userId);
 
-        database.collection(Constants.KEY_USER_COLLECTION)
-                .document(currentUser.getUid())
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (!documentSnapshot.exists()) {
-                        createUserProfile();
-                    } else {
-                        loadUserProfile(documentSnapshot);
+            profileListener = userDocRef.addSnapshotListener((documentSnapshot, error) -> {
+                if (error != null) {
+                    Log.e("Profile", "Error listening to profile updates", error);
+                    return;
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    String name = documentSnapshot.getString(Constants.KEY_NAME);
+                    String email = currentUser.getEmail();
+                    encodedProfilePicture = documentSnapshot.getString(Constants.KEY_ENCODED_PROFILE_PICTURE);
+
+                    profileName.setText(name);
+                    profileEmail.setText(email);
+
+                    // Decode and set the profile image if available
+                    if (encodedProfilePicture != null && !encodedProfilePicture.isEmpty()) {
+                        profileImage.setImageBitmap(decodeImage(encodedProfilePicture));
                     }
-                })
-                .addOnFailureListener(e -> Log.e("Profile", "Error checking user profile", e));
-    }
-
-    /**
-     * Creates a new user document in Firestore and updates the UI.
-     */
-    private void createUserProfile() {
-        if (currentUser == null) return;
-
-        Map<String, Object> userData = new HashMap<>();
-        userData.put(Constants.KEY_NAME, "Chakar Baloch");
-        userData.put(Constants.KEY_ENCODED_PROFILE_PICTURE, DEFAULT_PROFILE_PIC);
-
-        database.collection(Constants.KEY_USER_COLLECTION)
-                .document(currentUser.getUid())
-                .set(userData)
-                .addOnSuccessListener(aVoid -> {
-                    showToast(getApplicationContext(), "User profile created.");
-                    profileName.setText("Chakar Baloch");
-                    profileEmail.setText(currentUser.getEmail());
-
-                    // Decode and set default profile picture
-                    profileImage.setImageBitmap(decodeImage(DEFAULT_PROFILE_PIC));
-                })
-                .addOnFailureListener(e -> Log.e("Profile", "Failed to create user profile", e));
-    }
-
-    /**
-     * Loads user data (name and profile picture) from Firestore and updates UI.
-     */
-    private void loadUserProfile(DocumentSnapshot documentSnapshot) {
-        profileName.setText(documentSnapshot.getString(Constants.KEY_NAME));
-        profileEmail.setText(currentUser.getEmail());
-
-        String storedProfilePic = documentSnapshot.getString(Constants.KEY_ENCODED_PROFILE_PICTURE);
-        if (storedProfilePic != null && !storedProfilePic.isEmpty()) {
-            profileImage.setImageBitmap(decodeImage(storedProfilePic));
+                }
+            });
         }
     }
 
@@ -149,60 +141,128 @@ public class Profile extends AppCompatActivity {
         pickImage.launch(intent);
     }
 
-    /**
-     * Handles image selection and uploads the new profile picture.
-     */
+
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri imageUri = result.getData().getData();
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                        profileImage.setImageBitmap(bitmap);
 
-                        // Corrected: Store encoded string in Firestore
-                        encodedProfilePicture = encodeImage(bitmap);
-                        saveProfilePictureToFirestore();
+                    Bitmap scaledBitmap = scaleImage(imageUri);
+                    if (scaledBitmap != null) {
+                        profileImage.setImageBitmap(scaledBitmap);
 
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                        // Encode and update Firestore
+                        encodedProfilePicture = encodeImage(scaledBitmap);
+                        updateProfilePicture(encodedProfilePicture);
+                    } else {
+                        showToast(this, "Failed to load image.");
                     }
                 }
             }
     );
 
     /**
-     * Saves the updated profile picture to Firestore.
+     * Updates the user's profile picture in Firestore.
+     *
+     * @param encodedImage Base64-encoded image string.
      */
-    private void saveProfilePictureToFirestore() {
-        if (currentUser == null || encodedProfilePicture == null) return;
-
-        Map<String, Object> updates = new HashMap<>();
-        updates.put(Constants.KEY_ENCODED_PROFILE_PICTURE, encodedProfilePicture);
-
-        database.collection(Constants.KEY_USER_COLLECTION)
-                .document(currentUser.getUid())
-                .update(updates)
-                .addOnSuccessListener(aVoid -> showToast(getApplicationContext(), "Profile picture updated successfully"))
-                .addOnFailureListener(e -> Log.e("Profile", "Failed to update profile picture", e));
+    private void updateProfilePicture(String encodedImage) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            database.collection(Constants.KEY_USER_COLLECTION).document(userId)
+                    .update(Constants.KEY_ENCODED_PROFILE_PICTURE, encodedImage)
+                    .addOnSuccessListener(aVoid -> showToast(this, "Profile picture updated successfully!"))
+                    .addOnFailureListener(e -> Log.e("Profile", "Failed to update profile picture", e));
+        }
     }
 
     /**
      * Encodes a Bitmap image into a Base64 string.
+     *
+     * @param bitmap The image to be encoded.
+     * @return Base64 string of the image.
      */
     private String encodeImage(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream); // Higher quality
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
+
+
     /**
-     * Decodes a Base64-encoded string back into a Bitmap.
+     * Decodes a Base64-encoded image string back into a Bitmap.
+     *
+     * @param encodedString The Base64 string representing the image.
+     * @return Decoded Bitmap image.
      */
     private Bitmap decodeImage(String encodedString) {
         byte[] bytes = Base64.decode(encodedString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    /**
+     * Scales an image to fit within specified dimensions while maintaining quality.
+     *
+     * @param imageUri The URI of the image to be scaled.
+     * @return The scaled Bitmap image.
+     */
+    private Bitmap scaleImage(Uri imageUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+
+            // Decode the image size without loading the full bitmap into memory
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            // Calculate optimal inSampleSize
+            int targetWidth = 150; // Target size
+            int targetHeight = 150;
+            options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
+
+            // Decode with inSampleSize to get a scaled-down version
+            options.inJustDecodeBounds = false;
+            inputStream = getContentResolver().openInputStream(imageUri);
+            Bitmap scaledBitmap = BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            return scaledBitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * Calculates the best sample size for efficient image downscaling.
+     */
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        int height = options.outHeight;
+        int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            int halfHeight = height / 2;
+            int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (profileListener != null) {
+            profileListener.remove();
+        }
     }
 }
