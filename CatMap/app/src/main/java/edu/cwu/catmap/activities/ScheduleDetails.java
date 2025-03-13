@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -69,7 +72,9 @@ public class ScheduleDetails extends AppCompatActivity {
         binding.nameresult.setText(map.get("Event_Title"));
         binding.DateResult.setText(map.get("Event_Date"));
         binding.timeresult.setText(map.get("Event_Time"));
-        binding.buildingresult.setText(map.get("Building_Name"));
+        binding.buildingresult.setIconifiedByDefault(false);
+        binding.buildingresult.setIconified(false);
+        binding.buildingresult.setQuery(map.get("Building_Name"), false);
         binding.roomresult.setText(map.get("Room_Number"));
         binding.typeresult.setText(map.get("Event_Type"));
         binding.colorResult.setBackgroundColor(Integer.parseInt(map.get("Color_Preference")));
@@ -77,7 +82,7 @@ public class ScheduleDetails extends AppCompatActivity {
         colorPreference = map.get("Color_Preference");
         repeatingCondition = Boolean.parseBoolean(map.get("Repeating_Condition"));
 
-
+        checkbuildings(binding.buildingresult);
 
         if(repeatingCondition){
             showToast(repeatingCondition+"");
@@ -123,6 +128,39 @@ public class ScheduleDetails extends AppCompatActivity {
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkbuildings(SearchView BuildingSearchView){
+        /*Sample building names for suggestions*/
+        String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
+                "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
+                "Brooks library", "Button Hall", "Carmody-Munro Hall", "Cat Trax East", "Cat Trax West & Cats Market",
+                "Central Marketplace", "Coach's Coffee House", "Davies Hall", "Dean Hall", "Discovery Hall", "Dougmore Hall",
+                "Early Childhood Learning Center", "Farrell Hall", "Flight Instructor Office Building", "Flight Training Center",
+                "Getz-Shortz Apartments", "Green Hall", "Greenhouse", "Grupe Faculty Center", "Health Sciences Building", "Hebeler Hall",
+                "Hitchcock Hall", "Hogue Technology Building", "Holmes Dining Room", "Jimmy B's Caf", "Jongeward Building",
+                "Kamola Hall", "Kennedy Hall", "Lind Hall", "McConnell Hall", "Mcintyre Music Building", "Meisner Hall",
+                "Michaelsen Hall", "Mitchell Hall", "Moore Hall", "Munson Hall", "Naneum Building", "Nicholson Pavilion", "North Hall",
+                "Northside Commons", "Old Heating Plant", "Psychology Building", "Public Saftey Building", "Quigley Hall",
+                "Randall Hall", "Residence Life", "Samuelson Building", "Science Building", "Shaw-Smyser hall", "Sparks Hall",
+                "Stephens-Whitney Hall", "Student Health Services", "Student Union and Recreation Center", "Student Village",
+                "Sue Lombard Dining Room", "Sue Lombard Hall", "Surplus Property Warehouse", "The Bistro", "The Village Coffee, Market, Grill",
+                "Tomlinson Stadium", "Wahle Apartment Complex", "Wendell Hill Hall A", "Wendell Hill Hall B", "Wildcat Printing", "Wilson Hall"};
+
+        /*Adapter for auto suggestions*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
+
+        /*Attaches autocomplete functionality to the search view*/
+        AutoCompleteTextView searchAutoComplete = BuildingSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        if (searchAutoComplete != null) {
+            searchAutoComplete.setAdapter(adapter);
+
+            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+                String selectedItem = adapter.getItem(position);
+                searchAutoComplete.setText(selectedItem);
+                BuildingSearchView.setQuery(selectedItem, false); /*Set the autocomplete query without submitting it*/
+            });
+        }
     }
 
     private void onclick(){
@@ -292,7 +330,7 @@ public class ScheduleDetails extends AppCompatActivity {
         tempmap.put("Event_Title", binding.nameresult.getText().toString());
         tempmap.put("Event_Date", binding.DateResult.getText().toString());
         tempmap.put("Event_Time", binding.timeresult.getText().toString());
-        tempmap.put("Building_Name", binding.buildingresult.getText().toString());
+        tempmap.put("Building_Name", binding.buildingresult.getQuery().toString());
         tempmap.put("Room_Number", binding.roomresult.getText().toString());
         tempmap.put("Event_Type", binding.typeresult.getText().toString());
         tempmap.put("Color_Preference", colorPreference);

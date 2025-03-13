@@ -147,7 +147,7 @@
                 android:textSize="20sp"
                 android:paddingRight="10dp"/>
 
-            <EditText
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/buildingresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
