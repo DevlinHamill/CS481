@@ -31,6 +31,7 @@ googleGsonVersion = "2.12.1"
 retrofit = "2.9.0"
 roundedimageview = "2.3.0"
 materialVersion = "1.8.0"
+volley = "1.2.1"
 
 [libraries]
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
@@ -54,6 +55,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 roundedimageview = { group = "com.makeramen", name = "roundedimageview", version.ref = "roundedimageview" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.roundedimageview)
     implementation(libs.google.material)
+    implementation(libs.volley)
 
 
     //desugaring to use Java.time module
