@@ -1,7 +1,8 @@
 package edu.cwu.catmap.activities;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,19 +12,24 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.adapters.FavoriteLocationsAdapter;
 import edu.cwu.catmap.adapters.FavoriteLocationsListItem;
 import edu.cwu.catmap.databinding.ActivityLocationsBinding;
 import edu.cwu.catmap.manager.LocationsManager;
+import edu.cwu.catmap.utilities.Constants;
+import edu.cwu.catmap.utilities.FirestoreTraceback;
+import edu.cwu.catmap.utilities.FirestoreUtility;
+import edu.cwu.catmap.utilities.ToastHelper;
 
 public class LocationsActivity extends AppCompatActivity {
     private ActivityLocationsBinding binding;
     private FavoriteLocationsAdapter adapter;
-    private List<FavoriteLocationsListItem> locationsList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +45,8 @@ public class LocationsActivity extends AppCompatActivity {
         binding = ActivityLocationsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        locationsList = new ArrayList<>();
-        populateLocations();
+        ArrayList<FavoriteLocationsListItem> locationsList = new ArrayList<>();
+        populateLocations(locationsList);
 
         adapter = new FavoriteLocationsAdapter(locationsList);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -61,23 +67,57 @@ public class LocationsActivity extends AppCompatActivity {
         });
     }
 
-    private void populateLocations() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ArrayList<FavoriteLocationsListItem> locationsList = new ArrayList<>();
+        populateLocations(locationsList);
+
+        updateAdapterInfo(locationsList);
+    }
+
+    private void updateAdapterInfo(List<FavoriteLocationsListItem> locationsList) {
+        adapter.updateData(locationsList);
+    }
+
+    private void populateLocations(List<FavoriteLocationsListItem> locationsList) {
         locationsList.add(new FavoriteLocationsListItem.SectionHeader("Favorite Locations"));
-        locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Samuelson Hall", Color.GREEN));
-        locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Student Union Recreation Center", Color.RED));
-        locationsList.add(new FavoriteLocationsListItem.FavoriteLocation("Brooks Library", Color.YELLOW));
-        locationsList.add(new FavoriteLocationsListItem.SectionHeader("All Locations"));
 
-        LocationsManager locationsManager = LocationsManager.getInstance(this);
+        Context context = this;
+        FirestoreUtility.getInstance().getFavoriteLocations(new FirestoreTraceback() {
+            @Override
+            public void success(String message) {
+                // No action needed here
+            }
 
-        for (String location : locationsManager.getLocationNames()) {
-            locationsList.add(new FavoriteLocationsListItem.Location(location));
-        }
+            @Override
+            public void success(String message, Object data) {
+                List<HashMap<String, String>> favoriteLocationsList = (ArrayList<HashMap<String, String>>) data;
 
-//        locationsList.add(new FavoriteLocationsListItem.Location("Barge Hall"));
-//        locationsList.add(new FavoriteLocationsListItem.Location("Black Hall"));
-//        locationsList.add(new FavoriteLocationsListItem.Location("Bouillon Hall"));
-//        locationsList.add(new FavoriteLocationsListItem.Location("Dean Hall"));
-//        locationsList.add(new FavoriteLocationsListItem.Location("Discovery Hall"));
+                for (HashMap<String, String> favoriteLocationMap : favoriteLocationsList) {
+                    Log.i("Locations Activity", "location_name: " + favoriteLocationMap.get(Constants.KEY_LOCATION_NAME) + " color: " + favoriteLocationMap.get(Constants.KEY_COLOR) + " color int: " + Integer.parseInt(Objects.requireNonNull(favoriteLocationMap.get(Constants.KEY_COLOR))));
+                    locationsList.add(new FavoriteLocationsListItem.FavoriteLocation(favoriteLocationMap.get(Constants.KEY_LOCATION_NAME), Integer.parseInt(favoriteLocationMap.get(Constants.KEY_COLOR))));
+                }
+
+                locationsList.add(new FavoriteLocationsListItem.SectionHeader("All Locations"));
+                LocationsManager locationsManager = LocationsManager.getInstance(context);
+
+                ArrayList<String> sortedLocations = new ArrayList<>(locationsManager.getLocationNames());
+                Collections.sort(sortedLocations);
+
+                for (String location : sortedLocations) {
+                    locationsList.add(new FavoriteLocationsListItem.Location(location));
+                }
+
+                // Once Firestore has finished loading, update RecyclerView
+                runOnUiThread(() -> updateAdapterInfo(locationsList));
+            }
+
+            @Override
+            public void failure(String message) {
+                ToastHelper.showToast(context, "Failed to retrieve favorite location data");
+            }
+        });
     }
 }

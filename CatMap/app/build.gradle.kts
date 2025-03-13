@@ -74,6 +74,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation("com.github.QuadFlask:colorpicker:0.0.15")
+    implementation("com.google.android.gms:play-services-location:21.1.0")
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

@@ -27,11 +27,12 @@ public class Constants {
     public static final String KEY_USER_COLLECTION = "user_collection";
     public static final String KEY_EVENT_COLLECTION = "event_collection";
     public static final String KEY_EVENT_GROUP_COLLECTION = "event_group_collection";
-    public static final String KEY_FAVORITE_LOCATION_COLLECTION = "favorite_location_collection";
+    public static final String KEY_FAVORITE_LOCATIONS_COLLECTION = "favorite_locations_collection";
     public static final String KEY_SCHEDULE_COLLECTION = "schedule_collection";
 
     //intent extra keys
     public static final String KEY_LOCATION_NAME = "location_name";
+    public static final String KEY_COLOR = "color";
 
     //location json filename
     public static final String KEY_LOCATION_JSON_NAME = "json/locations.json";

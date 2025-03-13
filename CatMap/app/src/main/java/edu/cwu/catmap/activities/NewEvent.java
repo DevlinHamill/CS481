@@ -24,6 +24,7 @@ import androidx.appcompat.widget.SearchView;
 
 import edu.cwu.catmap.core.Event;
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
+import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.manager.UserManager;
 import edu.cwu.catmap.utilities.FirestoreUtility;
 import edu.cwu.catmap.utilities.ToastHelper;
@@ -78,21 +79,6 @@ public class NewEvent extends AppCompatActivity {
 
     private int[] repeatingevents = new int[7];
 
-    private  String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
-            "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
-            "Brooks library", "Button Hall", "Carmody-Munro Hall", "Cat Trax East", "Cat Trax West & Cats Market",
-            "Central Marketplace", "Coach's Coffee House", "Davies Hall", "Dean Hall", "Discovery Hall", "Dougmore Hall",
-            "Early Childhood Learning Center", "Farrell Hall", "Flight Instructor Office Building", "Flight Training Center",
-            "Getz-Shortz Apartments", "Green Hall", "Greenhouse", "Grupe Faculty Center", "Health Sciences Building", "Hebeler Hall",
-            "Hitchcock Hall", "Hogue Technology Building", "Holmes Dining Room", "Jimmy B's Caf", "Jongeward Building",
-            "Kamola Hall", "Kennedy Hall", "Lind Hall", "McConnell Hall", "Mcintyre Music Building", "Meisner Hall",
-            "Michaelsen Hall", "Mitchell Hall", "Moore Hall", "Munson Hall", "Naneum Building", "Nicholson Pavilion", "North Hall",
-            "Northside Commons", "Old Heating Plant", "Psychology Building", "Public Saftey Building", "Quigley Hall",
-            "Randall Hall", "Residence Life", "Samuelson Building", "Science Building", "Shaw-Smyser hall", "Sparks Hall",
-            "Stephens-Whitney Hall", "Student Health Services", "Student Union and Recreation Center", "Student Village",
-            "Sue Lombard Dining Room", "Sue Lombard Hall", "Surplus Property Warehouse", "The Bistro", "The Village Coffee, Market, Grill",
-            "Tomlinson Stadium", "Wahle Apartment Complex", "Wendell Hill Hall A", "Wendell Hill Hall B", "Wildcat Printing", "Wilson Hall"};
-
 
     private Context context;
 
@@ -105,11 +91,10 @@ public class NewEvent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = edu.cwu.catmap.databinding.ActivityNewEventBinding.inflate(getLayoutInflater());
+        binding = ActivityNewEventBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Event_Type = getIntent().getStringExtra("header");
         date = getIntent().getStringExtra("SELECTED_DATE");
-        binding.EndResult.setText(date);
         addtitle(Event_Type);
         setListeners();
         context = this;
@@ -330,30 +315,32 @@ public class NewEvent extends AppCompatActivity {
             showToast("Please enter a room number");
             return false;
 
-        }else if(binding.EventTitle.getText().toString().trim().isEmpty()) {
+        }
+        else if(binding.EventTitle.getText().toString().trim().isEmpty()) {
             showToast("Please enter a Event title");
             return false;
 
-        }else if(binding.BuildingSearch.getQuery().toString().trim().isEmpty()) {
+        }
+        else if(!LocationsManager.getInstance(this).hasLocation(binding.BuildingSearch.getQuery().toString().trim())) {
             showToast("Please enter a valid building name");
             return false;
 
-        }else if(!Arrays.asList(buildingNames).contains(binding.BuildingSearch.getQuery().toString())){
-            showToast("Please enter an existing building name");
-            return false;
-
-        }else if(binding.EndResult.getText().toString().trim().isEmpty()) {
+        }
+        else if(binding.EndResult.getText().toString().trim().isEmpty()) {
             showToast("Please select an end date");
             return false;
 
-        }else if(binding.EventTime.getText().toString().trim().isEmpty()){
+        }
+        else if(binding.EventTime.getText().toString().trim().isEmpty()){
             showToast("Please select a time");
             return false;
-        }else if(colorPreference == null){
+        }
+        else if(colorPreference.isEmpty()){
             showToast("Please pick a valid color");
             return false;
 
-        }else{
+        }
+        else{
             return true;
         }
     }
@@ -383,12 +370,12 @@ public class NewEvent extends AppCompatActivity {
     }
 
     private void checkbuildings(SearchView BuildingSearchView){
-
         /*Adapter for auto suggestions*/
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, LocationsManager.getInstance(this).getLocationNames().toArray(new String[0]));
 
         /*Attaches autocomplete functionality to the search view*/
         AutoCompleteTextView searchAutoComplete = BuildingSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
+
         if (searchAutoComplete != null) {
             searchAutoComplete.setAdapter(adapter);
 
@@ -407,9 +394,9 @@ public class NewEvent extends AppCompatActivity {
 
 
     public void addtitle(String str){
-
         binding.neweventheader.setText(str);
         binding.neweventheader.setVisibility(VISIBLE);
+        showToast(binding.neweventheader.getText().toString());
     }
 
 }

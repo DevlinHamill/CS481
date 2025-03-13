@@ -37,6 +37,7 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
     public int getItemViewType(int position) {
         FavoriteLocationsListItem item = filteredItems.get(position);
         int type = -1;
+
         if(item instanceof FavoriteLocationsListItem.SectionHeader) {
             type = TYPE_SECTION_HEADER;
         }
@@ -51,6 +52,15 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         return type;
+    }
+
+    public void updateData(List<FavoriteLocationsListItem> locationsList) {
+        Log.i("Favorite Locations Adapter", "updateData called");
+        items.clear();
+        items.addAll(locationsList);
+        filteredItems.clear();
+        filteredItems.addAll(items);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -94,7 +104,7 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
             ((LocationViewHolder) holder).bind((FavoriteLocationsListItem.Location) item);
         }
         else {
-            Log.e("FavoriteLocationsAdapter", "holder type cannot be determined. type of " + holder.getClass());
+            Log.e("Favorite Locations Adapter", "holder type cannot be determined. type of " + holder.getClass());
         }
     }
 

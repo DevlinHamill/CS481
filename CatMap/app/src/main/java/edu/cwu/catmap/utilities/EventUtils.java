@@ -1,4 +1,4 @@
-package edu.cwu.catmap.utils;
+package edu.cwu.catmap.utilities;
 
 import android.content.Context;
 import android.widget.Toast;

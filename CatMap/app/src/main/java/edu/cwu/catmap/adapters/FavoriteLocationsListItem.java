@@ -11,6 +11,10 @@ public class FavoriteLocationsListItem {
         public String getTitle() {
             return title;
         }
+
+        public String toString() {
+            return "title: " + title;
+        }
     }
 
     public static class FavoriteLocation extends FavoriteLocationsListItem {
@@ -29,6 +33,10 @@ public class FavoriteLocationsListItem {
         public int getColor() {
             return color;
         }
+
+        public String toString() {
+            return "name: " + name + " color: " + color;
+        }
     }
 
     public static class Location extends FavoriteLocationsListItem {
@@ -40,6 +48,10 @@ public class FavoriteLocationsListItem {
 
         public String getName() {
             return name;
+        }
+
+        public String toString() {
+            return "name: " + name;
         }
     }
 }

@@ -135,6 +135,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/navigate_to_location"
             android:textSize="18sp"
+            android:textColor="?attr/colorOnPrimary"
             />
 
         <com.google.android.material.button.MaterialButton
