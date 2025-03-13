@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+
 
     implementation(libs.play.services.maps)
     implementation(libs.preference)
