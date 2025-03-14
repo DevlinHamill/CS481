@@ -184,7 +184,8 @@ public class Login extends AppCompatActivity {
                                             }
                                         });
                                 if (imageUri != null) {
-                                    new ImageDownloader(user.getUid(), userManager, imageUri).execute();
+                                    ImageDownloader imageDownloader = new ImageDownloader(user.getUid(), userManager, imageUri);
+                                    imageDownloader.downloadAndProcessImage();
                                 } else {
                                     showToast("Failed to retrieve Google Accounts profile picture.");
                                 }
