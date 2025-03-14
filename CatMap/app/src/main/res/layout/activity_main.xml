@@ -97,22 +97,13 @@
         app:fabAlignmentMode="end"
         tools:ignore="BottomAppBar">
 
-        <HorizontalScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/eventRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true"
-            android:background="@color/white"
-            android:padding="8dp">
-
-            <!-- Replace the LinearLayout with a RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/eventRecyclerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/daily_event" />
-        </HorizontalScrollView>
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/daily_event" />
     </com.google.android.material.bottomappbar.BottomAppBar>
 
 

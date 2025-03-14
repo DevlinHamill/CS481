@@ -335,7 +335,7 @@ public class NewEvent extends AppCompatActivity {
             showToast("Please select a time");
             return false;
         }
-        else if(colorPreference.isEmpty()){
+        else if(colorPreference == null){
             showToast("Please pick a valid color");
             return false;
 
