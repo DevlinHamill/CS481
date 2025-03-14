@@ -2,6 +2,7 @@ package edu.cwu.catmap.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,21 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             timeLabel.setText(item.getTime());
             eventButton.setText(item.getTitle());
 
-            // Hide the button if there's no event
+            //extract the colorPreference
+            String colorPreference = item.getMap().get("Color_Preference");
+
+            //set background color
+            if (colorPreference != null && !colorPreference.isEmpty()) {
+                try {
+                    int color = Integer.parseInt(colorPreference);
+                    eventButton.setBackgroundColor(color);
+                } catch (IllegalArgumentException e) {
+                    eventButton.setBackgroundColor(Color.GRAY);
+                }
+            } else {
+                eventButton.setBackgroundColor(Color.GRAY);
+            }
+
             if (item.getTitle().isEmpty()) {
                 eventButton.setVisibility(View.INVISIBLE);
             } else {
