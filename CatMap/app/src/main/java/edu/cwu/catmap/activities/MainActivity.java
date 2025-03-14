@@ -55,9 +55,11 @@ import java.util.Map;
 
 import android.Manifest;
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.core.Location;
 import edu.cwu.catmap.core.ScheduleListItem;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
 import edu.cwu.catmap.adapters.DailyEventAdapter;
+import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.utilities.LocationPermissionHelper;
 import edu.cwu.catmap.utils.EventUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
         gMap.setMinZoomPreference(15);
 
-
+        navigateToNextEvent();
         getNextUpcomingEvent(new OnNextUpcomingEventListener() {
             @Override
             public void onNextUpcomingEvent(Map<String, String> eventDetails) {
@@ -571,6 +573,55 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         listener.onNextUpcomingEvent(null); // Notify the listener of the failure
                     }
                 });
+    }
+
+    public void navigateToNextEvent() {
+        getNextUpcomingEvent(new OnNextUpcomingEventListener() {
+            @Override
+            public void onNextUpcomingEvent(Map<String, String> eventDetails) {
+                if (eventDetails != null) {
+                    String buildingName = eventDetails.get("Building_Name");
+
+                    //load locations from JSON
+                    LocationsManager locationsManager = LocationsManager.getInstance(MainActivity.this);
+                    Location eventLocation = locationsManager.getLocation(buildingName);
+
+                    if (eventLocation != null) {
+                        String mainEntranceCoordinate = eventLocation.getMainEntranceCoordinate();
+                        if (mainEntranceCoordinate != null && !mainEntranceCoordinate.isEmpty()) {
+                            //parse the mainEntranceCoordinate into a LatLng object
+                            String[] latLngParts = mainEntranceCoordinate.split(",");
+                            double lat = Double.parseDouble(latLngParts[0]);
+                            double lng = Double.parseDouble(latLngParts[1]);
+                            LatLng destination = new LatLng(lat, lng);
+
+                            //get user's current location
+                            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                fusedLocationClient.getLastLocation()
+                                        .addOnSuccessListener(MainActivity.this, location -> {
+                                            if (location != null) {
+                                                LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                                                //call getDirections() with the user's location and the destination
+                                                getDirections(userLocation, destination);
+                                            } else {
+                                                Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } else {
+                                Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }
