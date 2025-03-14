@@ -3,12 +3,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#FF929292</color>
+    <color name="red">#FFFF0000</color>
 
     <color name="lightScheme_Dark">#FF555FFF</color>
     <color name="lightScheme_MidDark">#FF97a0ff</color>
     <color name="lightScheme_Mid">#FFbcccff</color>
     <color name="lightScheme_MidLight">#FFd2deff</color>
     <color name="lightScheme_Light">#FFd9e3ff</color>
+    <color name="lightScheme_Light_Semitransparent">#4DD9E3FF</color>
+
 
     <color name="darkScheme_Dark">#FF080852</color>
     <color name="darkScheme_MidDark">#FF163087</color>
