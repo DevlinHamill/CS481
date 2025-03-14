@@ -111,7 +111,7 @@ public class LocationsManager {
         //"47.002299,-120.541750"
         String[] storedLatLng = getLocation(destinationName).getMainEntranceCoordinate().split(",");
         double latitude = Double.parseDouble(storedLatLng[0]);
-        double longitude = Double.parseDouble(storedLatLng[0]);
+        double longitude = Double.parseDouble(storedLatLng[1]);
 
         return new LatLng(latitude, longitude);
     }
