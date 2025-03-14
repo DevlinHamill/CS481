@@ -32,6 +32,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.MoreObjects;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -50,6 +51,7 @@ import java.net.URL;
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.databinding.ActivityLoginBinding;
 import edu.cwu.catmap.manager.UserManager;
+import edu.cwu.catmap.utilities.ToastHelper;
 
 /**
  * Handles user login authentication, including validation, error handling,
@@ -77,6 +79,13 @@ public class Login extends AppCompatActivity {
         userManager = UserManager.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setListeners();
+
+        if(UserManager.getInstance().isLoggedIn()) {
+            ToastHelper.showToast(this, "User session still valid");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override
