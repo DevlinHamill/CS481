@@ -1,5 +1,6 @@
 package edu.cwu.catmap.activities;
 
+import static android.content.ContentValues.TAG;
 import static edu.cwu.catmap.utilities.ToastHelper.showToast;
 
 import android.content.Intent;
@@ -9,17 +10,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,7 +50,7 @@ public class Profile extends AppCompatActivity {
 
     private RoundedImageView profileImage;
     private FloatingActionButton editProfileImageButton;
-    private TextView profileName, profileEmail;
+    private TextView profileName, profileEmail, profileHeader;
     private String encodedProfilePicture;
     private FirebaseAuth auth;
     private FirebaseFirestore database;
@@ -80,12 +85,37 @@ public class Profile extends AppCompatActivity {
         editProfileImageButton = findViewById(R.id.editProfileImage);
         profileName = findViewById(R.id.profileName);
         profileEmail = findViewById(R.id.profileEmail);
+        profileHeader = findViewById(R.id.profileHeader);
         LinearLayout changeUsernameButton = findViewById(R.id.changeUserName);
         LinearLayout changePasswordButton = findViewById(R.id.changePassword);
         TextView logOutButton = findViewById(R.id.logOut);
 
         // Load user details when profile page opens
         listenForProfileUpdates();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        DocumentReference docRef = database.collection("user_collection").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        if (document.getString("account_type").equals(Constants.VALUE_ACCOUNT_GOOGLE)) {
+                            editProfileImageButton.setVisibility(View.GONE);
+                            changeUsernameButton.setVisibility(View.GONE);
+                            changePasswordButton.setVisibility(View.GONE);
+                            profileHeader.setText("Google Account");
+                        }
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getString("account_type"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
         editProfileImageButton.setOnClickListener(v -> openGallery());
         changeUsernameButton.setOnClickListener(v -> startActivity(new Intent(Profile.this, ChangeUserName.class)));

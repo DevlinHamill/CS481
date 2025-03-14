@@ -71,6 +71,7 @@ public class UserManager {
                         userData.put(Constants.KEY_PREF_COLOR_BLIND_MODE, Constants.VALUE_NORMAL_VISION);
                         userData.put(Constants.KEY_ENABLE_NOTIFICATIONS, true);
                         userData.put(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY, Constants.VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY);
+                        userData.put(Constants.KEY_ACCOUNT_TYPE, Constants.VALUE_ACCOUNT_EMAIL);
 
                         //add user data to the users collection
                         db.collection(Constants.KEY_USER_COLLECTION).document(userId).set(userData)
@@ -98,6 +99,7 @@ public class UserManager {
         userData.put(Constants.KEY_PREF_COLOR_BLIND_MODE, Constants.VALUE_NORMAL_VISION);
         userData.put(Constants.KEY_ENABLE_NOTIFICATIONS, true);
         userData.put(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY, Constants.VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY);
+        userData.put(Constants.KEY_ACCOUNT_TYPE, Constants.VALUE_ACCOUNT_GOOGLE);
 
         //add user data to the users collection
         db.collection(Constants.KEY_USER_COLLECTION).document(userId).set(userData)
