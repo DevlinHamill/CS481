@@ -252,7 +252,6 @@ public class NewEvent extends AppCompatActivity {
 
     private void addTitle(String str) {
         binding.layoutHeader.setTitle(str);
-        showToast(str);
     }
 
     private void showToast(String message) {
