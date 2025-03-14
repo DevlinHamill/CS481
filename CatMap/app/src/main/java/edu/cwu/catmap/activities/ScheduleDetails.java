@@ -101,7 +101,7 @@ public class ScheduleDetails extends AppCompatActivity {
         checkbuildings(binding.buildingresult);
 
         if(repeatingCondition){
-            showToast(repeatingCondition+"");
+
             binding.RepeatEventSelector.setChecked(true);
             binding.Weeklayout.setVisibility(View.VISIBLE);
             binding.RepeatEventSelector.setSelected(true);
