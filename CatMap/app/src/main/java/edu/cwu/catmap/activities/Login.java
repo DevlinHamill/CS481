@@ -52,6 +52,7 @@ import edu.cwu.catmap.R;
 import edu.cwu.catmap.databinding.ActivityLoginBinding;
 import edu.cwu.catmap.manager.UserManager;
 import edu.cwu.catmap.utilities.ToastHelper;
+import edu.cwu.catmap.utilities.ImageDownloader;
 
 /**
  * Handles user login authentication, including validation, error handling,
@@ -166,14 +167,7 @@ public class Login extends AppCompatActivity {
                             if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 Uri imageUri = user.getPhotoUrl();
                                 Log.d("Login", "imageUri: " + imageUri);
-                                Bitmap scaledBitmap = scaleImage(imageUri);
-                                String encodedProfilePicture = "";
-                                if (scaledBitmap != null) {
-                                    encodedProfilePicture = encodeImage(scaledBitmap);
-                                } else {
-                                    showToast("Failed to retrieve Google Accounts profile picture.");
-                                }
-                                userManager.signUpWithGoogle(user.getUid(), user.getEmail(), user.getDisplayName(), encodedProfilePicture,  // Save Base64 image
+                                userManager.signUpWithGoogle(user.getUid(), user.getEmail(), user.getDisplayName(), "",  // Save Base64 image
                                         signuptask -> {
                                             if (signuptask.isSuccessful()) {
                                                 DocumentSnapshot userDocument = signuptask.getResult();
@@ -189,6 +183,11 @@ public class Login extends AppCompatActivity {
                                                 showToast("Google sign in registration failed");
                                             }
                                         });
+                                if (imageUri != null) {
+                                    new ImageDownloader(user.getUid(), userManager, imageUri).execute();
+                                } else {
+                                    showToast("Failed to retrieve Google Accounts profile picture.");
+                                }
                             }
                         }
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

@@ -110,6 +110,19 @@ public class UserManager {
                 .addOnFailureListener(e -> Log.e("SignUp", "Unable to create new user document in users collection", e));
     }
 
+    public void updateGooglePhoto(String userId, String encodedProfilePicture, OnCompleteListener<Void> listener) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(Constants.KEY_ENCODED_PROFILE_PICTURE, encodedProfilePicture);
+
+        db.collection(Constants.KEY_USER_COLLECTION).document(userId)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("UpdateProfilePic", "Profile picture updated successfully");
+                })
+                .addOnFailureListener(e -> Log.e("UpdateProfilePic", "Failed to update profile picture", e));
+        }
+
+
     /**
      * Attempt to log th user in with their provided email address and password.
      * @param email user email address
