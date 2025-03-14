@@ -45,6 +45,7 @@ dependencies {
 
     implementation(libs.play.services.maps)
     implementation(libs.preference)
+    implementation("com.google.android.material:material:1.11.0")
 
     implementation(libs.androidx.appcompat)
     implementation(libs.roundedimageview)

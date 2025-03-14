@@ -17,6 +17,16 @@
     <color name="darkScheme_Light">#FF899BE0</color>
     <color name="darkScheme_primary">#FFDD6C6C</color>
 
+    <!-- Light Theme Colors -->
+    <color name="blue_600">#1976D2</color> <!-- Vibrant blue for primary -->
+    <color name="gray_100">#F5F5F5</color> <!-- Soft background -->
+
+    <!-- Dark Theme Colors -->
+    <color name="blue_300">#90CAF9</color> <!-- Muted blue for dark mode -->
+    <color name="gray_900">#121212</color>
+    <color name="gray_800">#1E1E1E</color>
+    <color name="gray_700">#E0E0E0</color>
+
 
 
 </resources>
