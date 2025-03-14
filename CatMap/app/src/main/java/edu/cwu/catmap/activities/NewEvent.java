@@ -96,6 +96,7 @@ public class NewEvent extends AppCompatActivity {
         Event_Type = getIntent().getStringExtra("header");
         date = getIntent().getStringExtra("SELECTED_DATE");
         addtitle(Event_Type);
+        binding.EndResult.setText(date);
         setListeners();
         context = this;
         repeatingcondtion = false;
