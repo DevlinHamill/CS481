@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Initialize UI components
         switchDarkMode = findViewById(R.id.switch_dark_mode);
         switchHighContrast = findViewById(R.id.switch_high_contrast_mode);
-        switchLeftHand = findViewById(R.id.switch_left_hand);
+        //switchLeftHand = findViewById(R.id.switch_left_hand);
         switchAdaAccessible = findViewById(R.id.switch_ada_accessible);
         switchNotifications = findViewById(R.id.switch_notifications);
 
@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Assign event listeners
         switchDarkMode.setOnCheckedChangeListener(this::onSwitchToggled);
         switchHighContrast.setOnCheckedChangeListener(this::onSwitchToggled);
-        switchLeftHand.setOnCheckedChangeListener(this::onSwitchToggled);
+        //switchLeftHand.setOnCheckedChangeListener(this::onSwitchToggled);
         switchAdaAccessible.setOnCheckedChangeListener(this::onSwitchToggled);
         switchNotifications.setOnCheckedChangeListener(this::onSwitchToggled);
     }
@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         switchDarkMode.setChecked(preferences.getBoolean("dark_mode", false));
         switchHighContrast.setChecked(preferences.getBoolean("high_contrast", false));
-        switchLeftHand.setChecked(preferences.getBoolean("left_hand", false));
+        //switchLeftHand.setChecked(preferences.getBoolean("left_hand", false));
         switchAdaAccessible.setChecked(preferences.getBoolean("ada_accessible", false));
         switchNotifications.setChecked(preferences.getBoolean("notifications", true));
 
