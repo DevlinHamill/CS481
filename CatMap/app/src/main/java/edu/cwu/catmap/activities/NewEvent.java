@@ -112,7 +112,9 @@ public class NewEvent extends AppCompatActivity {
         binding.confirmEventButton.setOnClickListener(v -> {
             if (validateEventDetails()) {
                 saveEventDetails();
-                startActivity(new Intent(getApplicationContext(), SchedualerGUI.class));
+                Intent intent = new Intent(getApplicationContext(), SchedualerGUI.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
