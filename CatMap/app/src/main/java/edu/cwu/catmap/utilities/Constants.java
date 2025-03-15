@@ -5,6 +5,10 @@ public class Constants {
     //user details constants
     public static final String KEY_NAME = "name";
     public static final String KEY_ENCODED_PROFILE_PICTURE = "encoded_profile_picture";
+    public static final String KEY_ACCOUNT_TYPE = "account_type";
+    public static final String VALUE_ACCOUNT_GOOGLE = "google";
+    public static final String VALUE_ACCOUNT_EMAIL = "email";
+
 
     //user preferences constants
     public static final String KEY_PREF_LEFT_HANDED_MODE = "left_handed_mode";

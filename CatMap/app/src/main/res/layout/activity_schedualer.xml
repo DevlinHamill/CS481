@@ -53,23 +53,19 @@
         android:background="@drawable/background_rectangle"/>
 
     <!-- RecyclerView for meetings -->
-    <ScrollView
-        android:id="@+id/scrollableTextBox"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/eventRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="visible"
+        app:layout_constraintHeight_max="700dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/layoutFooter"
-        app:layout_constraintTop_toBottomOf="@id/calendarView">
+        app:layout_constraintTop_toBottomOf="@id/calendarView"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/eventRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-    </ScrollView>
     <!-- Bottom Buttons -->
     <LinearLayout
         android:id="@+id/layoutFooter"
