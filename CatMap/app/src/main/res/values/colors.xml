@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="grey">#FF929292</color>
+
+    <color name="lightScheme_Dark">#FF555FFF</color>
+    <color name="lightScheme_MidDark">#FF97a0ff</color>
+    <color name="lightScheme_Mid">#FFbcccff</color>
+    <color name="lightScheme_MidLight">#FFd2deff</color>
+    <color name="lightScheme_Light">#FFd9e3ff</color>
+
+    <color name="darkScheme_Dark">#FF080852</color>
+    <color name="darkScheme_MidDark">#FF163087</color>
+    <color name="darkScheme_Mid">#FF3763C3</color>
+    <color name="darkScheme_MidLight">#FF4A4AB4</color>
+    <color name="darkScheme_Light">#FF899BE0</color>
+    <color name="darkScheme_primary">#FFDD6C6C</color>
+
+
+
+</resources>

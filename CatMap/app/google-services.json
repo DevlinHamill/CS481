@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259536456281",
+    "project_id": "cs481-2b252",
+    "storage_bucket": "cs481-2b252.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259536456281:android:b3a0d4bd6f4fd4aa7c7f48",
+        "android_client_info": {
+          "package_name": "edu.cwu.catmap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm04WoUSLNCogwlGqHW9oW-fIjz3fB6vU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

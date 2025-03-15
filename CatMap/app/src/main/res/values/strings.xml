@@ -1,0 +1,78 @@
+<resources>
+    <string name="default_web_client_id">259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com</string>
+
+    <string name="app_name">CatMap</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="add_to_schedule">Add to Schedule</string>
+    <string name="confirm_event">Confirm Event</string>
+    <string name="event_description">Event Description</string>
+    <string name="meeting_title">Meeting Title</string>
+    <string name="event_title">Event Title</string>
+    <string name="event_edit">Event Edit</string>
+    <string name="building_name">Building Name</string>
+    <string name="room_number">Room Number</string>
+    <string name="repeating_event">Repeating Event</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wen">Wen</string>
+    <string name="thur">Thur</string>
+    <string name="fri">Fri</string>
+    <string name="sun">Sun</string>
+    <string name="sat">Sat</string>
+    <string name="add_to_event_group">Add to Event Group</string>
+    <string name="pick_a_color">Pick a Color</string>
+    <string name="open_color_picker">Open color picker</string>
+    <string name="test">test</string>
+    <string name="add_to_class">Add to class?</string>
+    <string name="add_to_event">Add to event?</string>
+    <string name="week_view">Week View</string>
+    <string name="id">ID:</string>
+    <string name="event_date">Event Date</string>
+    <string name="event_date1">Event Date:</string>
+    <string name="event_title1">Event Title:</string>
+    <string name="building">Building:</string>
+    <string name="time">Time:</string>
+    <string name="room_number1">Room Number:</string>
+    <string name="event_group">Event Group:</string>
+    <string name="color_preference">Color Preference:</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="locations">Locations</string>
+    <string name="loading_location_information">Loading Location Information</string>
+    <string name="location_details">Location Details</string>
+    <string name="loading_location_coord">Loading location coord</string>
+    <string name="loading_location_address">Loading location address</string>
+    <string name="loading_location_name">Loading location Name</string>
+    <string name="navigate_here">Navigate Here</string>
+    <string name="navigate_to_location">Navigate to Location</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="all_locations">All Locations</string>
+    <string name="set_time">Set Time</string>
+    <string name="event_type">Event Type:</string>
+    <string name="daily_view">Daily View</string>
+    <string name="month">Month</string>
+    <string name="week">Week</string>
+    <string name="end_date">End Date:</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+
+</resources>

@@ -1,0 +1,301 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createMeetingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/icon_back_arrow"
+        app:navigationIconTint="@color/black"
+        app:title="Edit Event"
+        app:titleTextColor="@color/black"
+        app:titleCentered="true"/>
+
+    <!-- ScrollView for better UI handling -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="12dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Event Title Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Event Title"
+                    android:inputType="text"
+                    android:padding="12dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Building Input with Search -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/buildingSearchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Building Name">
+
+                <AutoCompleteTextView
+                    android:id="@+id/BuildingSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:padding="10dp"
+                    android:inputType="text"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:focusableInTouchMode="true"
+                    android:completionThreshold="1"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Room Number Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/EventRoomLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/EventRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Room Number"
+                    android:inputType="text"
+                    android:padding="12dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Repeating Event Toggle (Styled Like an Input Field) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/repeatEventCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:padding="12dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp"
+                android:background="?attr/colorSurface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <!-- Label -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/repeatingEventText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Repeating Event"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:paddingStart="12dp"/>
+
+                    <!-- Switch (Right-Aligned) -->
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/RepeatEventSelector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="12dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Repeat Options (Initially Hidden) -->
+            <LinearLayout
+                android:id="@+id/repeatOptionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:visibility="gone">
+
+                <!-- Days Selection -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Repeat On:"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:paddingBottom="8dp"/>
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleGroupDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="false"
+                    android:paddingBottom="12dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSun"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="S"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMon"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="M"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnTue"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="T"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnWed"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="W"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnThu"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="Th"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFri"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="F"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSat"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="Sa"
+                        android:textSize="18sp"
+                        android:backgroundTint="?attr/colorSurface"/>
+
+                     </com.google.android.material.button.MaterialButtonToggleGroup>
+            </LinearLayout>
+
+
+
+            <!-- End Date Selection -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/endDateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_calender_today">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/EndResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:textSize="16sp"
+                    android:padding="12dp"
+                    android:text="Select End Date"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Event Time Selection -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/timeInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_access_time">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/EventTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:textSize="16sp"
+                    android:padding="12dp"
+                    android:hint="Select Time"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/colorPickerButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Pick Color"
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="?attr/colorPrimary"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:layout_marginBottom="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/confirmEventButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Confirm"
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="?attr/colorPrimary"
+                    android:textColor="?attr/colorOnPrimary"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,612 @@
+  {
+  "locations":[
+    {
+      "name": "Alford-Montgomery Hall",
+      "address": "1505 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.007535,-120.534281",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "alaford.jpg",
+      "description": "Alford-Montgomery Hall (often called Al-Monty) in the Student Village North area of Central is named for two former Central students who both loved music and lost their lives in the service of their country during World War II."
+    },
+    {
+      "name": "Anderson Hall",
+      "address": "1273-1317 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005022, -120.537568",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "anderson.jpg",
+      "description": "Anderson is an attractive option for students who prefer apartment living for the academic school year but do not wish to remain on campus over the Summer."
+    },
+    {
+      "name": "Aquatic Center",
+      "address": "1510 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.007796,-120.539159",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "aquatic.jpg",
+      "description": "The Aquatic Center at CWU offers an array of programs and activities designed to accommodate learning, recreational swimming, and competitive swimming needs."
+    },
+    {
+      "name": "Avation Training Center",
+      "address": "Central Washington University Aviation Training Center, 807 Elmview Rd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.028326,-120.537371",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "avation.jpg",
+      "description": "The Aviation Training Center (ATC) serves as the venue for some of our aviation classes and houses our advanced flight simulators."
+    },
+    {
+      "name": "Barge Hall",
+      "address": "400 E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000318,-120.542206",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "barge.jpg",
+      "description": "Barge Hall is the oldest building on the CWU campus. Barge is home to campus leadership, as well as the Civil Rights Compliance Office and the Office of Diversity, Equity, and Inclusivity."
+    },
+    {
+      "name": "Barto Hall",
+      "address": "1202 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.004614,-120.535941",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "barto.jpg",
+      "description": "Located in central campus near the Student Union and Recreation Center, Barto offers an easy commute to classes, all the activities in the SURC and the main dining center on campus. Nearby, students can find lighted outdoor handball courts, half-court basketball courts, volleyball nets, and large lawn areas for fun activities or relaxation."
+    },
+    {
+      "name": "Beck Hall",
+      "address": "Beck Hall, 833-899 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003720,-120.536405",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "beck.jpg",
+      "description": "Beck Hall is one of our six traditional residence halls that make up the Bassetties complex which houses first year students. Nearby, students can find lighted outdoor handball, half-court basketball courts, and large lawn areas for fun activities or relaxation."
+    },
+    {
+      "name": "Black Hall",
+      "address": "N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.001796,-120.538313",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "black.jpg",
+      "description": "Originally constructed in 1960, was named to honor George H. Black, who served as the fourth principal of Washington State Normal School before it became Central Washington University."
+    },
+    {
+      "name": "Bouillon Hall",
+      "address": "Bouillon Hall, N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000807,-120.538714",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "bouillon.jpg",
+      "description": "Bouillon Hall is here to help you. From Admissions and Student Financial Services to our Veterans Center and Registrar, if you have questions or need support, Bouillon is a great place to start."
+    },
+    {
+      "name": "Breeze Thru Caf",
+      "address": "700 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005781,-120.538147",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "breezeThru.jpg",
+      "description": "Located in the skywalk between Michaelsen and Randall Hall, Breeze Thru Caf  is the perfect location for your quick coffee or snack. Choose from the many hot and cold beverages."
+    },
+    {
+      "name": "Brook Lane Village Apartments",
+      "address": "18th & Brooklane, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.010967,-120.525579",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "brooklane.jpg",
+      "description": "Brooklane Village is located to the northeast of campus and houses a mix of single students and students with families. These apartments are about a 15 minute walk from campus."
+    },
+    {
+      "name": "Brooks library",
+      "address": "E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005174,-120.541166",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "library.jpg",
+      "description": "The Brooks Library holds a vast collection of books, academic journals, multimedia resources and even a fax machine. Whether you are looking for a quiet study space, research assistance, or access to a computer lab, the Brooks Library is the place to go."
+    },
+    {
+      "name": "Button Hall",
+      "address": "D St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000448,-120.543453",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "button.jpg",
+      "description": "Button Hall is home to Central's Housing and Residence Life office staff and administration."
+    },
+    {
+      "name": "Carmody-Munro Hall",
+      "address": "1513 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.007925,-120.534140",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "carmody.jpg",
+      "description": "Carmody-Munro Apartments are located on North campus in Carmody-Munro Hall. These microstudio apartments are furnished and are all single rooms. Furnishings include a bed, desk, chair, wardrobe, and microfridge. Residents will have access to a community kitchen, laundry room, study areas, and lounges. All rooms have access to community restrooms."
+    },
+    {
+      "name": "Cat Trax East",
+      "address": "1007 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.002913,-120.537730",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "catTraxE.jpg",
+      "description": "Cat Trax East offers a range of beverages and serves Caffe Vita Coffee, as well as all-natural Freshens Smoothies."
+    },
+    {
+      "name": "Cat Trax West & Cats Market",
+      "address": "1007 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.002590,-120.538875",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "catTraxW.jpg",
+      "description": "Cat Trax West offers a range of hot and cold beverages and serves Caffe Vita, Seattle's leading independent roasters. This location also includes Cats Market, a one-stop-shop for all your convenience needs."
+    },
+    {
+      "name": "Central Marketplace",
+      "address": "1007 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003113,-120.537663",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "marketplace.jpg",
+      "description": "As a CWU dining hub, Central Marketplace has something to satisfy every craving, offering a range of culinary options to choose from."
+    },
+    {
+      "name": "Coach's Coffee House",
+      "address": "1401 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.006499,-120.533397",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "coachCoffee.jpg",
+      "description": "Named after a beloved faculty member from the Music Department, Coach's Coffee House is a favorite destination for students, faculty, and staff to pick up a hot or cold beverage between classes."
+    },
+    {
+      "name": "Davies Hall",
+      "address": "Davies Hall, 913 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003526,-120.534557",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "davies.jpg",
+      "description": "Davies Hall is one of our six traditional residence halls that make up the Bassetties Complex. This hall is for sophomore students and above and offers all single rooms."
+    },
+    {
+      "name": "Dean Hall",
+      "address": "1200 D St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003985,-120.541952",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "dean.jpg",
+      "description": "Built in 1968, Dean Hall was the beginning of our science neighborhood at CWU. Dean was remodeled and modernized in 2008, becoming the university s first Leadership in Energy and Environmental Design (LEED) certified building."
+    },
+    {
+      "name": "Discovery Hall",
+      "address": "Science Phase II, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.002257, -120.540200",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "discovery.jpg",
+      "description": "Opened in 2016, Discovery Hall is home to many of our science programs and labs to facilitate your learning experience."
+    },
+    {
+      "name": "Dougmore Hall",
+      "address": "401 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.006562,-120.542429",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "dugmore.jpg",
+      "description": "Dugmore is equipped with both communal and suite style bathrooms, study rooms, laundry rooms on each floor, and a communal kitchen on the first floor. Dugmore is located at the North East end of campus close to the library and Northside Commons."
+    },
+    {
+      "name": "Early Childhood Learning Center",
+      "address": "1900 Brook Ln, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.012070,-120.522286",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "earlyChildhood.jpg",
+      "description": "The Early Childhood Learning Center (ECLC) provides childcare services and an educational curriculum to serve the needs of young children."
+    },
+    {
+      "name": "Farrell Hall",
+      "address": "Farrell Hall, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005087,-120.542738",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "Farrell.jpg",
+      "description": "Farrell Hall was built between 1973 as part of what was originally known as the Library Complex. The structure was named for Corrine Farrell, an alumna and former CWU research professor."
+    },
+    {
+      "name": "Flight Instructor Office Building",
+      "address": "1105 W Bowers Rd, Ellensburg, WA 98926, USA",
+      "mainEntranceCoordinate": "47.029074,-120.531294",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "flightTraining.jpg",
+      "description": "While not instructing aviation classes in Black Hall, this is where the aviation professors reside. It's a stuffy little office building, but it' home to them."
+    },
+    {
+      "name": "Flight Training Center",
+      "address": "1101 W Bowers Rd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.029024,-120.531830",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "flightTraining.jpg",
+      "description": "The Flight Training Center (FTC) is essential to our Aviation program at CWU. This is where the actual flight training takes place and where our airplanes and flight instructors are stationed to facilitate your learning experience."
+    },
+    {
+      "name": "Getz-Shortz Apartments",
+      "address": "702 N Ruby St, Ellensburg, WA 98926, USA",
+      "mainEntranceCoordinate": "46.999298, -120.544338",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "getz-short.jpg",
+      "description": "Short Getz Apartments are in the Southwest corner of campus and offer unfurnished 1- and 2-bedroom units with options for both a parking lot and on-street parking. Short Getz residents are walking distance from downtown Ellensburg and enjoy close proximity to Shaw-Smyser Hall and convenient grocery shopping."
+    },
+    {
+      "name": "Green Hall",
+      "address": "1611 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.008649,-120.533991",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "green.jpg",
+      "description": "Green hall was once a regular small student apartment complex, but in 2017 Central's Outreach Community acquired the hall and turned it into a 'Haven House' a place where students recovering from substance dependency to live in an understanding community"
+    },
+    {
+      "name": "Greenhouse",
+      "address": "N Wildcat Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.004119,-120.542471",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "",
+      "description": "The Greenhouse facility is composed of four separate rooms, each room has a different environment: the Jungle Room, Research Room, Desert Room, and Tropical Room."
+    },
+    {
+      "name": "Grupe Faculty Center",
+      "address": " 903 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.001535,-120.538635",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "grupe.jpg",
+      "description": "The Grupe Faculty Center was built in 1961 and named after Mary Grupe, a teacher from the Washington State Normal School in 1897."
+    },
+    {
+      "name": "Health Sciences Building",
+      "address": "Health Sciences Building, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.002299,-120.541750",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "healthScience.jpg",
+      "description": "The Health Sciences building rounds out the science community at CWU. This LEED-certified building, equipped with solar panels and state-of-the-art energy controls, is home to our Health Science programs."
+    },
+    {
+      "name": "Hebeler Hall",
+      "address": "907 N Wildcat Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.001601,-120.542590",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "hebeler.jpg",
+      "description": "Hebeler Hall is named to honor Amanda Hebeler, who played an integral role in the teacher training programs at CWU from 1924 to 1956. One of our oldest buildings, built in 1939."
+    },
+    {
+      "name": "Hitchcock Hall",
+      "address": "807 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003421,-120.535841",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "hitchcock.jpg",
+      "description": "Located in central campus near the Student Union and Recreation Center, Hitchcock offers an easy commute to classes, all the activities in the SURC and the main dining center on campus. Nearby, students can find lighted outdoor handball courts, half-court basketball courts, and large lawn areas for fun activities or relaxation."
+    },
+    {
+      "name": "Hogue Technology Building",
+      "address": "44444 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005677,-120.536274",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "hogue.jpg",
+      "description": "The Hogue Technology Building is the home of our Engineering Technologies, Safety, and Construction (ETSC) Department. Newly renovated, Hogue is an industrial complex. With 18 different labs every program offers plenty of hands-on opportunities to produce industry-ready graduates."
+    },
+    {
+      "name": "Holmes Dining Room",
+      "address": "1007 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.002513,-120.539085",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "holmes.jpg",
+      "description": "Holmes Dining offers an array of culinary choices, catering to what you're in the mood for."
+    },
+    {
+      "name": "Jimmy B's Caf",
+      "address": "400 E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005159,-120.541493",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "",
+      "description": "Fuel your studies at Jimmy B's. Grab a drink or a bite to eat, and come study in the comfortable seating area. Conveniently located inside Brooks Library on the north side of campus."
+    },
+    {
+      "name": "Jongeward Building",
+      "address": "205 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003534,-120.544501",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "jimmyB.jpg",
+      "description": "Jongeward houses Facilities Management and the Capital Planning and Projects Department."
+    },
+    {
+      "name": "Kamola Hall",
+      "address": "Kamola Hall, 501 E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000109,-120.540763",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "kamola.jpg",
+      "description": "Located on the south end of campus on University Way, Kamola is next to many of our academic buildings which offers an easy commute to classes and all the actives in the SURC. Kamola offers many unique room types, and large lounge areas make it easy to connect with other residents in the hall."
+    },
+    {
+      "name": "Kennedy Hall",
+      "address": "Kennedy Hall, 1605 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.008297,-120.534335",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "kennedy.jpg",
+      "description": "Kennedy Hall is a student dormitory that no longer exists (or does it???)"
+    },
+    {
+      "name": "Lind Hall",
+      "address": "702 E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000220,-120.538414",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "lind.jpg",
+      "description": "Built in 1946, Lind Hall is home to an array of programs. Near the center of the building is a 36-foot-tall Foucault pendulum that passes through an opening in the floors of the second story and a third-story penthouse."
+    },
+    {
+      "name": "McConnell Hall",
+      "address": "E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000525,-120.541570",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "mcconnell.jpg",
+      "description": "McConnell Hall is the residence of the Theatre Arts Department and serves as a performing arts venue, open to students and the entire Ellensburg community. In 1979, the Milo Smith Theatre was added to the north end of the building, providing additional space to facilitate student needs."
+    },
+    {
+      "name": "Mcintyre Music Building",
+      "address": "906 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005767,-120.534636",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "mcintyre.jpg",
+      "description": "The McIntyre Music Building houses our renowned Music Department, serving as a hub for musical innovation and expression."
+    },
+    {
+      "name": "Meisner Hall",
+      "address": "Meisner Hall, 911, 901 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003389,-120.535145",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "mcintyre.jpg",
+      "description": "Located in central campus near the Student Union and Recreation Center, Meisner offers an easy commute to classes, all the activities in the SURC and the main dining center on campus. Nearby, students can find lighted outdoor handball courts, half-court basketball courts, and large lawn areas for fun activities or relaxation."
+    },
+    {
+      "name": "Michaelsen Hall",
+      "address": "E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005565,-120.537721",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "michaelson.jpg",
+      "description": "Michaelsen Hall, named in honor of Helen Michaelsen, a home economics professor from 1937 to 1970, embodies the legacy of its namesake."
+    },
+    {
+      "name": "Mitchell Hall",
+      "address": "907 N Wildcat Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.001129,-120.541983",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "mitchell.jpg",
+      "description": "Both the Human Resources Department and Financial Affairs and Operations are found in Mitchell Hall. Services include hiring, employee training, benefits, student employment and planning for retirement, as well as university business, financial planning, contracts and purchasing, accounting, and payroll."
+    },
+    {
+      "name": "Moore Hall",
+      "address": "1262 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005026, -120.538010",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "",
+      "description": "Suites in Moore include three single bedrooms that share a bathroom. Located in central campus near the Student Union and Recreation Center, Moore offers an easy commute to many academic building, all the actives in the SURC and the main dining center on campus"
+    },
+    {
+      "name": "Munson Hall",
+      "address": "707 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "46.999626,-120.539638",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "moore.jpg",
+      "description": "Central Washington University offers residence hall-style lodging in Munson Hall during the summer months."
+    },
+    {
+      "name": "Naneum Building",
+      "address": "Naneum Building, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.004507,-120.544651",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "naneum.jpg",
+      "description": "Building occupied by Facilities Management Custodial Services."
+    },
+    {
+      "name": "Nicholson Pavilion",
+      "address": "715 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.007086,-120.538247",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "nicholson.jpg",
+      "description": "Originally built in 1960, and renovated in 2008, Nicholson s cable-suspension design makes it one of the nation s most unique sports arenas. Home to Wildcat Athletics, Nicholson plays host to basketball and volleyball games, summer camps, big-name entertainers, and other large events. The building has a newly renovated weight training room for athletes, a field house, and locker room."
+    },
+    {
+      "name": "North Hall",
+      "address": "North Hall, 1100 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003254,-120.539142",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "north.jpg",
+      "description": "Located in central campus near the Student Union and Recreation Center, North offers an easy commute to many academic building, all the actives in the SURC and the main dining center on campus. Nearby, students can find a large lawn area for fun actives or relaxation."
+    },
+    {
+      "name": "Northside Commons",
+      "address": "405 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.006764,-120.541176",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "northside.jpg",
+      "description": "Located within Northside Commons next to Dugmore Hall, Northside Caf  offers a selection of coffee and espresso drinks."
+    },
+    {
+      "name": "Old Heating Plant",
+      "address": "501 E 7th Ave, Ellensburg, WA 98926, USA",
+      "mainEntranceCoordinate": "46.999163,-120.541065",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "oldHeat.png",
+      "description": "The brick smokestack on CWU s Old Heat building was constructed in 1917 in New York, then moved to Washington and installed as a coal-fired steam-heat plant in 1946. The boilers in Old Heat were converted from coal to gas about 10 years later."
+    },
+    {
+      "name": "Psychology Building",
+      "address": "1405 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.006634,-120.540183",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "psychology.jpg",
+      "description": "The Psychology Building was built in 1972 and constructed in the Brutalist architectural style popular in the 60s. The Psychology Building is home to the Psychology Department."
+    },
+    {
+      "name": "Public Saftey Building",
+      "address": "1211 N D St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.004572,-120.544148",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "publicSaftey.png",
+      "description": "Find Police and Public Safety in the Public Safety Building. Also make sure to say hello to Facility dog, Archie, if you see him!"
+    },
+    {
+      "name": "Quigley Hall",
+      "address": "Sparks Hall, 998, 900 E 12th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.004210,-120.534869",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "quigley.jpg",
+      "description": "Located in central campus near the Student Union and Recreation Center, Quigley offers an easy commute to classes, all the activities in the SURC and the main dining center on campus. Nearby, students can find lighted outdoor handball courts, half-court basketball courts, and large lawn areas for fun activities or relaxation."
+    },
+    {
+      "name": "Randall Hall",
+      "address": "44444 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.005760,-120.538466",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "randall.jpg",
+      "description": "Home of the Department of Art + Design, Randall Hall has studios for: Ceramics, Graphic Design, Metalsmithing, Painting, Photography, and Wood Design"
+    },
+    {
+      "name": "Residence Life",
+      "address": "Sparks Hall, 900 W 12th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003986,-120.536129",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "residenceLife.png",
+      "description": "Here you'll find Residence Life, Orientation and Transitions, and Parent and Support Network Programs."
+    },
+    {
+      "name": "Samuelson Building",
+      "address": "111, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.001154,-120.540344",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "samuelson.jpg",
+      "description": "Renovated in 2018, Samuelson is made up of 17 high-tech classrooms, 11 computer labs, and 6 studios to create creative and complex online content."
+    },
+    {
+      "name": "Science Building",
+      "address": "1100 N Wildcat Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003211,-120.541574",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "science.jpg",
+      "description": "The Science Building is settled in the realm of science, providing labs and classrooms to support your learning. It is also home to various reptiles and aquatic creatures."
+    },
+    {
+      "name": "Shaw-Smyser hall",
+      "address": "D St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000620,-120.542669",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "shaw-smyser.jpg",
+      "description": "Shaw-Smyser is home to the College of Business. Programs in the College of Business offer internships. business simulations, collaborative research, community projects, industry competitions, and professional certifications."
+    },
+    {
+      "name": "Sparks Hall",
+      "address": "Sparks Hall, 900 East 12th Avenue, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003935,-120.535527",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "sparks.jpg",
+      "description": "Located in central campus near the Student Union and Recreation Center, Sparks offers an easy commute to classes, all the activities in the SURC and the main dining center on campus. Nearby, students can find lighted outdoor handball courts, half-court basketball courts, and large lawn areas for fun activities or relaxation."
+    },
+    {
+      "name": "Stephens-Whitney Hall",
+      "address": "Stephens-Whitney Hall, 1236, 1200 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.004129,-120.538679",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "stephens-whitney.jpg",
+      "description": "Each suite contains a single room, a double room, a shared bathroom, and a living room area. Located in central campus near the Student Union and Recreation Center, Stephens Whitney offers an easy commute to many academic buildings, all the actives in the SURC and the main dining center on campus. Nearby, students can find a patio and large lawn area next to the SURC for fun activities or relaxation."
+    },
+    {
+      "name": "Student Health Services",
+      "address": "900 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.002792,-120.535171",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "healthServices.jpg",
+      "description": "The Student Health Services building is located on campus and is for students who need general medical services."
+    },
+    {
+      "name": "Student Union and Recreation Center",
+      "address": "1007 N Chestnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003113,-120.537663",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "SURC.jpg",
+      "description": "Located in the center of campus, the Student Union and Recreation Center, more commonly know as the SURC, is more than 220,000 square feet. It's the largest building on campus and one of the first facilities of its kind to combine residential dining, bookstore, recreation and student life programs and services."
+    },
+    {
+      "name": "Student Village",
+      "address": "1501 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.008562, -120.532756",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "studentVillage.jpg",
+      "description": "Student Village Apartments are located on the North side of CWU s campus and close to Nicholson Pavilion, tennis courts, athletic fields and the North Village Caf ."
+    },
+    {
+      "name": "Sue Lombard Dining Room",
+      "address": "601 E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000256,-120.540327",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "sueLombardDining.jpg",
+      "description": "The Lombard Room in Sue Lombard Hall is a multi-use room that can fit up to 160 guests in a theater-style setup. The room has 2 built-in screens that drop down from the ceiling, and can be set up with a full AV cart including in-house sound."
+    },
+    {
+      "name": "Sue Lombard Hall",
+      "address": "601 E University Way, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000214,-120.539973",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "sueLombard.jpg",
+      "description": "Located on the south end of campus on University Way and next to many of our academic buildings, Sue Lombard offers an easy commute to classes and all the actives in the SURC. Sue Lombard is a small community which makes it easy for residents to get to know their neighbors."
+    },
+    {
+      "name": "Surplus Property Warehouse",
+      "address": "1210 N B St, Ellensburg, WA 98926, USA",
+      "mainEntranceCoordinate": "47.004891,-120.546511",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "surplus.jpg",
+      "description": "The Surplus Property Warehouse is where you'll find the team responsible for holding surplus sales, managing surplus furniture and equipment, recycling materials, and handling abandoned property."
+    },
+    {
+      "name": "The Bistro",
+      "address": "807 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.000579,-120.539772",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "bistro.jpg",
+      "description": "The Bistro offers hot and cold beverages, and well as baked goods and Bistro on the Go items, made fresh right here on campus. Also featuring Winegar's Ice Cream."
+    },
+    {
+      "name": "The Village Coffee, Market, Grill",
+      "address": "1611 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.008610,-120.533931",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "villageCoffee.jpg",
+      "description": "The Village Coffee has plenty of seating and the longest hours of any caf  on campus, serving delicious Caffe Vita espresso until midnight. It's the perfect spot to study, or grab a bite from the grill or pick up full sized groceries from the market."
+    },
+    {
+      "name": "Tomlinson Stadium",
+      "address": "1699, 1601 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.008784,-120.539076",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "tomlinson.jpg",
+      "description": "CWU s home field, Tomlinson Stadium, supports our Division I Rugby teams and Division II Football team. Tomlinson Stadium was named to honor Wildcat football player, Jack Tomlinson."
+    },
+    {
+      "name": "Wahle Apartment Complex",
+      "address": "1601-1699 N Walnut St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.007971, -120.540071",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "wahle.jpg",
+      "description": "Wahle Apartments are conveniently located in the Northwest corner of the CWU campus. Wahle residents enjoy close proximity to the Brooks Library, Psychology building, Purser Hall, Nicholson Pavilion and the Northside Commons Dining featuring Panda Express."
+    },
+    {
+      "name": "Wendell Hill Hall A",
+      "address": "905 E Dean Nicholson Blvd, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.006575,-120.534063",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "wendellA.jpg",
+      "description": "Wendell Hill Hall A is one of our two Wendell Hill residence halls with a modern set up and feel for our sophomore and up students. Nearby, students can find many outdoor recreation opportunities such as the tennis courts, basketball courts and field house. There is also a full-service coffee shop on the ground floor of Wendell B."
+    },
+    {
+      "name": "Wendell Hill Hall B",
+      "address": "1401 N Alder St, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.006501,-120.533386",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "wendellB.jpg",
+      "description": "Located in the northern area of campus near the athletic center and many academic buildings, students can find many outdoor recreation opportunities such as the tennis courts, basketball courts and field house. There is also a full-service coffee shop on the ground floor."
+    },
+    {
+      "name": "Wildcat Printing",
+      "address": "501 E 7th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "46.998963,-120.541660",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "printing.jpg",
+      "description": "Wildcat Printing can handle your printing needs. Print posters, post cards, fliers, and programs with a variety of finishing options to choose from."
+    },
+    {
+      "name": "Wilson Hall",
+      "address": "Wilson Hall, 709 E 11th Ave, Ellensburg, WA 98926",
+      "mainEntranceCoordinate": "47.003229,-120.538495",
+      "wheelchairEntranceCoordinate": "",
+      "imagePath": "wilson.jpg",
+      "description": "Wilson houses first year students and provides residents easy access to the Wildcat Shop, Recreation Center, and Dining Services. Wilson offers amenities such as two lounges, two laundry rooms, two kitchens, and a small lobby upstairs for social events or studying."
+    }
+  ]
+  }

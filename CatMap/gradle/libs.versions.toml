@@ -1,0 +1,62 @@
+[versions]
+agp = "8.8.1"
+desugar_jdk_libs = "2.1.4"
+firebaseAnalytics = "22.2.0"
+firebaseAuth = "23.2.0"
+firebaseBom = "33.9.0"
+firebaseFirestore = "25.1.2"
+googleServices = "4.4.2"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+activity = "1.8.0"
+constraintlayout = "2.2.0"
+playServicesAuth = "21.3.0"
+playServicesMaps = "19.0.0"
+preference = "1.2.1"
+spectrum = "0.7.1"
+colorpicker = "1.1.6"
+colorpickerVersion = "1.1.6"
+colorpickerview = "ColorPickerView"
+colorpickerLibrary = "1.1.10"
+spectrumVersion = "0.7.1"
+appcompatVersion = "1.6.1"
+githubColorpicker = "0.0.13"
+gson = "Gson"
+gsonVersion = "JsonObject"
+googleGson = "JsonParser"
+googleGsonVersion = "2.12.1"
+retrofit = "2.9.0"
+roundedimageview = "2.3.0"
+materialVersion = "1.8.0"
+volley = "1.2.1"
+
+[libraries]
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version = "1.10.0" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+roundedimageview = { group = "com.makeramen", name = "roundedimageview", version.ref = "roundedimageview" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+
