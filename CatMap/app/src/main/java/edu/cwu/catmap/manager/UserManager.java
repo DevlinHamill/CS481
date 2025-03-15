@@ -71,6 +71,7 @@ public class UserManager {
                         userData.put(Constants.KEY_PREF_COLOR_BLIND_MODE, Constants.VALUE_NORMAL_VISION);
                         userData.put(Constants.KEY_ENABLE_NOTIFICATIONS, true);
                         userData.put(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY, Constants.VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY);
+                        userData.put(Constants.KEY_ACCOUNT_TYPE, Constants.VALUE_ACCOUNT_EMAIL);
 
                         //add user data to the users collection
                         db.collection(Constants.KEY_USER_COLLECTION).document(userId).set(userData)
@@ -98,6 +99,7 @@ public class UserManager {
         userData.put(Constants.KEY_PREF_COLOR_BLIND_MODE, Constants.VALUE_NORMAL_VISION);
         userData.put(Constants.KEY_ENABLE_NOTIFICATIONS, true);
         userData.put(Constants.KEY_MINUTES_BEFORE_EVENT_TO_NOTIFY, Constants.VALUE_DEFAULT_MINUTES_BEFORE_EVENT_TO_NOTIFY);
+        userData.put(Constants.KEY_ACCOUNT_TYPE, Constants.VALUE_ACCOUNT_GOOGLE);
 
         //add user data to the users collection
         db.collection(Constants.KEY_USER_COLLECTION).document(userId).set(userData)
@@ -109,6 +111,19 @@ public class UserManager {
                 //this will trigger if the user document cannot be created
                 .addOnFailureListener(e -> Log.e("SignUp", "Unable to create new user document in users collection", e));
     }
+
+    public void updateGooglePhoto(String userId, String encodedProfilePicture, OnCompleteListener<Void> listener) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(Constants.KEY_ENCODED_PROFILE_PICTURE, encodedProfilePicture);
+
+        db.collection(Constants.KEY_USER_COLLECTION).document(userId)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("UpdateProfilePic", "Profile picture updated successfully");
+                })
+                .addOnFailureListener(e -> Log.e("UpdateProfilePic", "Failed to update profile picture", e));
+        }
+
 
     /**
      * Attempt to log th user in with their provided email address and password.

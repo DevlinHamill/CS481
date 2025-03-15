@@ -1,5 +1,6 @@
 package edu.cwu.catmap.activities;
 
+import static android.content.ContentValues.TAG;
 import static edu.cwu.catmap.utilities.ToastHelper.showToast;
 
 import android.content.Intent;
@@ -9,12 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -32,6 +35,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.manager.UserManager;
@@ -45,7 +49,7 @@ public class Profile extends AppCompatActivity {
 
     private RoundedImageView profileImage;
     private FloatingActionButton editProfileImageButton;
-    private TextView profileName, profileEmail;
+    private TextView profileName, profileEmail, profileHeader;
     private String encodedProfilePicture;
     private FirebaseAuth auth;
     private FirebaseFirestore database;
@@ -80,16 +84,58 @@ public class Profile extends AppCompatActivity {
         editProfileImageButton = findViewById(R.id.editProfileImage);
         profileName = findViewById(R.id.profileName);
         profileEmail = findViewById(R.id.profileEmail);
+        profileHeader = findViewById(R.id.profileHeader);
         LinearLayout changeUsernameButton = findViewById(R.id.changeUserName);
         LinearLayout changePasswordButton = findViewById(R.id.changePassword);
         TextView logOutButton = findViewById(R.id.logOut);
 
         // Load user details when profile page opens
         listenForProfileUpdates();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = null;
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            DocumentReference userDocRef = database.collection(Constants.KEY_USER_COLLECTION).document(userId);
+            userDocRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists() && document.contains(Constants.KEY_ACCOUNT_TYPE)) {
+                        if (Objects.equals(document.getString(Constants.KEY_ACCOUNT_TYPE), Constants.VALUE_ACCOUNT_GOOGLE)) {
+                            editProfileImageButton.setVisibility(View.GONE);
+                            changeUsernameButton.setVisibility(View.GONE);
+                            changePasswordButton.setVisibility(View.GONE);
+                            profileHeader.setText("Google Account");
+                            Log.d(TAG, "User account type: " + document.getString("account_type"));
+                        } else {
+                            editProfileImageButton.setOnClickListener(v -> openGallery());
+                            changeUsernameButton.setOnClickListener(v -> startActivity(new Intent(Profile.this, ChangeUserName.class)));
+                            changePasswordButton.setOnClickListener(v -> startActivity(new Intent(Profile.this, ChangePassword.class)));
+                            Log.d(TAG, "User account type: " + document.getString("account_type"));
+                        }
+                    } else {
+                        editProfileImageButton.setVisibility(View.GONE);
+                        changeUsernameButton.setVisibility(View.GONE);
+                        changePasswordButton.setVisibility(View.GONE);
+                        profileHeader.setText("Account Type Error");
+                        Log.d(TAG, "User data file not found");
+                    }
+                } else {
+                    editProfileImageButton.setVisibility(View.GONE);
+                    changeUsernameButton.setVisibility(View.GONE);
+                    changePasswordButton.setVisibility(View.GONE);
+                    profileHeader.setText("Account Database Connection Error");
+                    Log.d(TAG, "Firestore GET failed", task.getException());
+                }
+            });
+        } else {
+            editProfileImageButton.setVisibility(View.GONE);
+            changeUsernameButton.setVisibility(View.GONE);
+            changePasswordButton.setVisibility(View.GONE);
+            profileHeader.setText("Account Database Connection Error");
+            Log.e(TAG, "Failed to retrieve current user.");
+        }
 
-        editProfileImageButton.setOnClickListener(v -> openGallery());
-        changeUsernameButton.setOnClickListener(v -> startActivity(new Intent(Profile.this, ChangeUserName.class)));
-        changePasswordButton.setOnClickListener(v -> startActivity(new Intent(Profile.this, ChangePassword.class)));
+
 
         logOutButton.setOnClickListener(v -> {
             auth.signOut();
