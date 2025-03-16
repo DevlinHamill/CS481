@@ -15,6 +15,7 @@
 <color name="gray_900">#121212</color>
 <color name="gray_800">#1E1E1E</color>
 <color name="gray_700">#E0E0E0</color>
+<color name="purple">#8401A2</color>
 
 <!-- High Contrast Mode Colors -->
 <color name="yellow_700">#FFD600</color> <!-- Bright Yellow for High Visibility -->

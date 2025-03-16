@@ -24,8 +24,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.LocationsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CatMap" />
+            android:exported="false" />
         <activity
             android:name=".activities.ScheduleDetails"
             android:exported="false" />
