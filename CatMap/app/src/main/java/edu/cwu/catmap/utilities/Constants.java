@@ -41,4 +41,8 @@ public class Constants {
     //location json filename
     public static final String KEY_LOCATION_JSON_NAME = "json/locations.json";
 
+    //shared prefs
+    public static final String KEY_SHARED_PREFRENCES_NAME = "AppPrefs";
+    public static final String KEY_SHARED_PREFRENCES_DARK_MODE = "dark_mode";
+
 }

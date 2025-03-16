@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import edu.cwu.catmap.R;
 
-public class generalUtils {
+public class GeneralUtils {
     public static int getSavedTheme(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         String theme = prefs.getString("theme", "light"); // Default to light theme

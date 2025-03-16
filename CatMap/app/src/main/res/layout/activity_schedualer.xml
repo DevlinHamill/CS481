@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:text="@string/month"
             android:layout_margin="8dp"
-            android:textColor="@color/white" />
+            android:textColor="?attr/colorOnPrimary"
+            />
 
 
         <com.google.android.material.button.MaterialButton
@@ -35,7 +36,8 @@
             android:layout_height="wrap_content"
             android:text="@string/week"
             android:layout_margin="8dp"
-            android:textColor="@color/white" />
+            android:textColor="?attr/colorOnPrimary"
+            />
 
     </LinearLayout>
 
@@ -83,7 +85,7 @@
             android:text="+"
             android:textSize="20sp"
             android:layout_margin="8dp"
-            android:textColor="@color/white"
+            android:textColor="?attr/colorOnPrimary"
             />
 
 
