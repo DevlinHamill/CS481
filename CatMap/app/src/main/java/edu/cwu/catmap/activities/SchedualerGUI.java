@@ -334,7 +334,7 @@ public class SchedualerGUI extends AppCompatActivity {
 
 
     private void weekView() {
-
+        EventList.clear();
         schedualer.calendarView.setVisibility(View.GONE);
         schedualer.AddMeeting.setVisibility(View.GONE);
 
@@ -448,7 +448,7 @@ public class SchedualerGUI extends AppCompatActivity {
                         }
                     } else {
                         EventList.add(new ScheduleListItem.SectionHeader("No events this week"));
-                        grabSuggestions();
+
                     }
 
                     adapter = new SchedulerAdapter(EventList);
