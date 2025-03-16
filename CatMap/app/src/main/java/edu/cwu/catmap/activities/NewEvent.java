@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -153,9 +154,13 @@ public class NewEvent extends AppCompatActivity {
     }
 
     private void showColorPicker() {
-        ColorDrawable backgroundColor = (ColorDrawable) binding.createMeetingLayout.getBackground();
-        int backgroundColorInt = backgroundColor.getColor();
+        Drawable background = binding.createMeetingLayout.getBackground();
 
+        int backgroundColorInt = Color.WHITE;
+
+        if (background instanceof ColorDrawable) {
+            backgroundColorInt = ((ColorDrawable) background).getColor();
+        }
         ColorPickerDialogBuilder
                 .with(this)
                 .setTitle("Choose a color")
