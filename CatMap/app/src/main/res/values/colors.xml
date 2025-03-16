@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="grey">#FF929292</color>
+    <color name="red">#FFFF0000</color>
+
 <!-- Light Mode Colors -->
 <color name="blue_600">#1976D2</color>
 <color name="white">#FFFFFF</color>

@@ -74,5 +74,6 @@
     <string name="week">Week</string>
     <string name="end_date">End Date:</string>
     <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="end_navigation">End Navigation</string>
 
 </resources>
