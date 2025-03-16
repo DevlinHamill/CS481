@@ -1,6 +1,7 @@
 package edu.cwu.catmap.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,6 +62,8 @@ import edu.cwu.catmap.core.ScheduleListItem;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
 import edu.cwu.catmap.adapters.DailyEventAdapter;
 import edu.cwu.catmap.manager.LocationsManager;
+import edu.cwu.catmap.utilities.Constants;
+import edu.cwu.catmap.utilities.GeneralUtils;
 import edu.cwu.catmap.utilities.LocationPermissionHelper;
 import edu.cwu.catmap.utilities.EventUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -77,13 +81,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private FusedLocationProviderClient fusedLocationClient;
     private Marker userMarker;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         hub = ActivityMainBinding.inflate(getLayoutInflater());
+        sharedPreferences = getSharedPreferences(Constants.KEY_SHARED_PREFRENCES_NAME, MODE_PRIVATE);
+        applyTheme();
         setContentView(hub.getRoot());
 
         //initialize FusedLocationProviderClient
@@ -103,6 +110,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+    }
+
+    public void onResume() {
+        super.onResume();
+    }
+
+    private void applyTheme() {
+        boolean isDarkMode = sharedPreferences.getBoolean(Constants.KEY_SHARED_PREFRENCES_DARK_MODE, false);
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     //handle permission request result

@@ -16,18 +16,26 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.utilities.Constants;
+import edu.cwu.catmap.utilities.GeneralUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private MaterialSwitch switchDarkMode, switchHighContrast, switchAdaAccessible, switchNotifications;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Apply the correct theme before setting content view
-        applyTheme();
-
         super.onCreate(savedInstanceState);
+
+        //get sharedPrefs
+        sharedPreferences = getSharedPreferences(Constants.KEY_SHARED_PREFRENCES_NAME, MODE_PRIVATE);
+
+        applyTheme();
+        setTheme(GeneralUtils.getSavedTheme(this));
         setContentView(R.layout.settings_activity);
+
 
         // Initialize UI components
         switchDarkMode = findViewById(R.id.switch_dark_mode);
@@ -45,12 +53,20 @@ public class SettingsActivity extends AppCompatActivity {
         switchNotifications.setOnCheckedChangeListener(this::onSwitchToggled);
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        super.onBackPressed();
+
+        finish();
+    }
+
     /**
      * Applies the saved theme before setting the UI.
      */
     private void applyTheme() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isDarkMode = preferences.getBoolean("dark_mode", false);
+        boolean isDarkMode = sharedPreferences.getBoolean(Constants.KEY_SHARED_PREFRENCES_DARK_MODE, false);
 
         if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -63,19 +79,17 @@ public class SettingsActivity extends AppCompatActivity {
      * Loads saved preferences and updates the switches accordingly.
      */
     private void loadSettings() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        switchDarkMode.setChecked(preferences.getBoolean("dark_mode", false));
-        switchHighContrast.setChecked(preferences.getBoolean("high_contrast", false));
-        switchAdaAccessible.setChecked(preferences.getBoolean("ada_accessible", false));
-        switchNotifications.setChecked(preferences.getBoolean("notifications", true));
+        switchDarkMode.setChecked(sharedPreferences.getBoolean("dark_mode", false));
+        switchHighContrast.setChecked(sharedPreferences.getBoolean("high_contrast", false));
+        switchAdaAccessible.setChecked(sharedPreferences.getBoolean("ada_accessible", false));
+        switchNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
 
         // Get references
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
         LinearLayout alertRow = findViewById(R.id.alert_option_container);
 
-        boolean notificationsEnabled = preferences.getBoolean("notifications", true);
-        String alertOption = preferences.getString("alert_option", "10 minutes before");
+        boolean notificationsEnabled = sharedPreferences.getBoolean("notifications", true);
+        String alertOption = sharedPreferences.getString("alert_option", "10 minutes before");
 
         if (notificationsEnabled) {
             textSelectedAlert.setText(alertOption);
@@ -92,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
      * Saves preference when a switch is toggled and updates the UI dynamically.
      */
     private void onSwitchToggled(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (buttonView.getId() == R.id.switch_dark_mode) {
             editor.putBoolean("dark_mode", isChecked);
@@ -126,8 +140,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (isChecked) {
                 // Restore last alert selection
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                String lastAlert = preferences.getString("alert_option", "10 minutes before");
+                String lastAlert = sharedPreferences.getString("alert_option", "10 minutes before");
                 textSelectedAlert.setText(lastAlert);
                 alertRow.setEnabled(true);
                 alertRow.setAlpha(1f);
@@ -158,15 +171,14 @@ public class SettingsActivity extends AppCompatActivity {
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
         LinearLayout alertRow = findViewById(R.id.alert_option_container);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         boolean isChecked = switchNotifications.isChecked();
         editor.putBoolean("notifications", isChecked);
 
         if (isChecked) {
             // Restore last selected alert option or default to "10 minutes before"
-            String lastAlert = preferences.getString("alert_option", "10 minutes before");
+            String lastAlert = sharedPreferences.getString("alert_option", "10 minutes before");
             textSelectedAlert.setText(lastAlert);
             alertRow.setEnabled(true);
             alertRow.setAlpha(1f);
@@ -182,10 +194,8 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     public void showAlertDialog(View view) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Prevent dialog from opening if notifications are disabled
-        if (!preferences.getBoolean("notifications", true)) {
+        if (!sharedPreferences.getBoolean("notifications", true)) {
             return;
         }
 
@@ -196,7 +206,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
 
         // Load the currently selected alert option
-        String currentSelection = preferences.getString("alert_option", "10 minutes before");
+        String currentSelection = sharedPreferences.getString("alert_option", "10 minutes before");
 
         // Find the index of the current selection
         int checkedItem = 2; // Default to "10 minutes before"
@@ -215,7 +225,7 @@ public class SettingsActivity extends AppCompatActivity {
                     textSelectedAlert.setText(alertOptions[which]);
 
                     // Save selection in SharedPreferences
-                    SharedPreferences.Editor editor = preferences.edit();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("alert_option", alertOptions[which]);
                     editor.apply();
 
