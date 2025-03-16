@@ -3,6 +3,7 @@ package edu.cwu.catmap.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -56,6 +57,8 @@ public class SchedualerGUI extends AppCompatActivity {
         EdgeToEdge.enable(this);
         schedualer = edu.cwu.catmap.databinding.ActivitySchedualerBinding.inflate(getLayoutInflater());
         setContentView(schedualer.getRoot());
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -180,10 +183,20 @@ public class SchedualerGUI extends AppCompatActivity {
     }
 
 
+    private String selectedDate = null;  // Store latest selected date
+
     private void onclick() {
-        schedualer.AddMeeting.setOnClickListener(v ->
-                adding()
-        );
+        schedualer.AddMeeting.setOnClickListener(v -> {
+            // If no date is selected, default to today's date dynamically
+            if (selectedDate == null) {
+                selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+            }
+
+
+            AddMeetingBottomSheet bottomSheet = AddMeetingBottomSheet.newInstance(selectedDate);
+            bottomSheet.show(getSupportFragmentManager(), "AddMeetingBottomSheet");
+        });
+
 
         schedualer.WeekButton.setOnClickListener(v ->
                 weekView()
@@ -200,8 +213,8 @@ public class SchedualerGUI extends AppCompatActivity {
         schedualer.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
-            selectedDateMillis = calendar.getTimeInMillis();
-            populateEvents();
+            selectedDateMillis = calendar.getTimeInMillis();  // ✅ Store the selected date
+            selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.getTime());
         });
     }
 

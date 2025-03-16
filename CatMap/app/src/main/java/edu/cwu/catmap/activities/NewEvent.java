@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -57,9 +58,13 @@ public class NewEvent extends AppCompatActivity {
         context = this;
         repeatingCondition = false;
 
-        // Get event details from intent
+        // Retrieve intent data
         Event_Type = getIntent().getStringExtra("header");
         date = getIntent().getStringExtra("SELECTED_DATE");
+
+        // Display the date in the UI
+        binding.EndResult.setText(date);
+
         binding.EndResult.setText(date);
         addTitle(Event_Type);
         setListeners();

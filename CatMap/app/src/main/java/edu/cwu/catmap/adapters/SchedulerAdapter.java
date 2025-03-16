@@ -22,6 +22,7 @@ import edu.cwu.catmap.activities.ScheduleDetails;
 import edu.cwu.catmap.activities.SettingsActivity;
 import edu.cwu.catmap.core.Schedule;
 import edu.cwu.catmap.core.ScheduleListItem;
+import edu.cwu.catmap.utilities.DateFormatter;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
@@ -165,6 +166,7 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView EventName;
         TextView Time;
+        TextView EventDayDate;
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -176,6 +178,8 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             EventName.setText(item.getTitle());
             Time.setText(item.getTime());
         }
+
+
     }
 
 }

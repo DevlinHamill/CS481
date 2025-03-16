@@ -4,20 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/createMeetingLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/icon_back_arrow"
-        app:navigationIconTint="@color/black"
+        app:navigationIconTint="?attr/colorOnSurface"
         app:title="Edit Event"
-        app:titleTextColor="@color/black"
         app:titleCentered="true"/>
 
     <!-- ScrollView for better UI handling -->
@@ -96,8 +93,7 @@
                 android:padding="12dp"
                 app:cardCornerRadius="5dp"
                 app:strokeColor="?attr/colorOutline"
-                app:strokeWidth="1dp"
-                android:background="?attr/colorSurface">
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,7 +109,6 @@
                         android:layout_weight="1"
                         android:text="Repeating Event"
                         android:textSize="16sp"
-                        android:textColor="?attr/colorOnSurface"
                         android:paddingStart="12dp"/>
 
                     <!-- Switch (Right-Aligned) -->
@@ -156,8 +151,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="S"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMon"
@@ -166,8 +160,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="M"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnTue"
@@ -176,8 +169,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="T"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnWed"
@@ -186,8 +178,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="W"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnThu"
@@ -196,8 +187,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="Th"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnFri"
@@ -206,8 +196,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="F"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSat"
@@ -216,8 +205,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="Sa"
-                        android:textSize="18sp"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textSize="18sp" />
 
                      </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
