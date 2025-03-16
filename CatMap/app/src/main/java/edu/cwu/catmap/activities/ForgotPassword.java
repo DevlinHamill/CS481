@@ -27,9 +27,9 @@ public class ForgotPassword extends AppCompatActivity {
 
 
     private void setListeners() {
-        binding.btnBackToLogin.setOnClickListener(v -> onBackPressed());
+        binding.textSignIn.setOnClickListener(v -> onBackPressed());
 
-        binding.btnSendEmail.setOnClickListener(v -> sendEmail());
+        binding.resetPasswordButton.setOnClickListener(v -> sendEmail());
     }
 
     private void showToast(String message) {
@@ -37,23 +37,27 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     private void sendEmail() {
-        String email = binding.etEmail.getText().toString().trim();
+        if (binding.inputEmail.getText() != null){
+            String email = binding.inputEmail.getText().toString().trim();
 
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showToast("Please enter a valid e-mail.");
-            return;
+            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                showToast("Please enter a valid e-mail.");
+                return;
+            }
+
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener(new OnSuccessListener() {
+                        public void onSuccess(Object result) {
+                            showToast("Password reset e-mail sent.");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        public void onFailure(Exception e) {
+                            showToast("Failed to send password reset e-mail.");
+                        }
+                    });
+        } else {
+            showToast("Error retrieving input");
         }
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.sendPasswordResetEmail(email)
-                .addOnSuccessListener(new OnSuccessListener() {
-                    public void onSuccess(Object result) {
-                        showToast("Password reset e-mail sent.");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    public void onFailure(Exception e) {
-                        showToast("Failed to send password reset e-mail.");
-                    }
-                });
     }
 }
