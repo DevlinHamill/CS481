@@ -27,6 +27,11 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.items = items;
     }
 
+    public void updateData(List<ScheduleListItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemViewType(int position) {
         ScheduleListItem item = items.get(position);
