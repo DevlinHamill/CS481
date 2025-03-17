@@ -55,12 +55,19 @@ public class AddMeetingBottomSheet extends BottomSheetDialogFragment {
         if (selectedDate == null) {
             return; // Prevents starting activity with a null value
         }
+        if (type == "Class"){
+            Intent intent = new Intent(getActivity(), ClassManagerActivity.class);
+            intent.putExtra("header", type);
+            intent.putExtra("SELECTED_DATE", selectedDate);
+            startActivity(intent);
+        }else {
 
-        Intent intent = new Intent(getActivity(), NewEvent.class);
-        intent.putExtra("header", type);
-        intent.putExtra("SELECTED_DATE", selectedDate); // Pass date correctly
+            Intent intent = new Intent(getActivity(), NewEvent.class);
+            intent.putExtra("header", type);
+            intent.putExtra("SELECTED_DATE", selectedDate); // Pass date correctly
+            startActivity(intent);
+        }
 
-        startActivity(intent);
         dismiss(); // Close the bottom sheet
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:background="?attr/colorSurface"
+    android:background="@drawable/activity_background"
     android:elevation="8dp">
 
     <!-- Title -->
@@ -13,7 +13,7 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" Add New"
+        android:text=" Calender Options"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="?attr/colorOnSurface"
@@ -27,7 +27,7 @@
         android:id="@+id/AddtoClassbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Class"
+        android:text="Manage Class"
         android:textSize="18sp"
         app:cornerRadius="12dp"
         android:textColor="?attr/colorOnPrimary"
@@ -42,7 +42,7 @@
         android:id="@+id/AddtoEventbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Event"
+        android:text="Add New Event"
         android:textSize="18sp"
         app:cornerRadius="12dp"
         android:textColor="?attr/colorOnPrimary"
