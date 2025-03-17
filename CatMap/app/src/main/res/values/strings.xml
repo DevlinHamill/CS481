@@ -1,6 +1,4 @@
 <resources>
-    <string name="default_web_client_id">259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com</string>
-
     <string name="app_name">CatMap</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="default_web_client_id">259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com</string>
