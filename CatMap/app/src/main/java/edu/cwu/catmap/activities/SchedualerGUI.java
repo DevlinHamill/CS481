@@ -213,8 +213,10 @@ public class SchedualerGUI extends AppCompatActivity {
         schedualer.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
+
             selectedDateMillis = calendar.getTimeInMillis();  //  Store the selected date
             selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.getTime());
+            populateEvents();
         });
     }
 
