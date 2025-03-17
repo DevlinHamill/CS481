@@ -14,7 +14,8 @@
         android:text="7 AM"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="?attr/colorOnSurface"/>
 
     <Button
         android:id="@+id/eventButton"
