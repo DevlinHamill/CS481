@@ -218,6 +218,8 @@ public class SchedualerGUI extends AppCompatActivity {
             selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.getTime());
             populateEvents();
         });
+
+        schedualer.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void grabSuggestions() {

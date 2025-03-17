@@ -123,10 +123,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/endNavigationButton"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
         app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
-        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/misc"
+        android:layout_margin="20dp"
         android:backgroundTint="@color/red"
         android:text="@string/end_navigation"
         android:textSize="18sp"

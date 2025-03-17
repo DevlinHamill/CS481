@@ -1,5 +1,7 @@
 package edu.cwu.catmap.core;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Location {
     private final String name, address, mainEntranceCoordinate, wheelchairEntranceCoordinate, imagePath, description;
 
@@ -34,5 +36,10 @@ public class Location {
 
     public String getDescription() {
         return description;
+    }
+
+    public LatLng getMainEntranceCoordinateLatLng() {
+        String[] latLngStringArray = mainEntranceCoordinate.split(",");
+        return new LatLng(Double.parseDouble(latLngStringArray[0].trim()), Double.parseDouble(latLngStringArray[1].trim()));
     }
 }
