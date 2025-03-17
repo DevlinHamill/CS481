@@ -54,7 +54,7 @@ public class SchedualerGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        schedualer = edu.cwu.catmap.databinding.ActivitySchedualerBinding.inflate(getLayoutInflater());
+        schedualer = ActivitySchedualerBinding.inflate(getLayoutInflater());
         setContentView(schedualer.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -181,11 +181,19 @@ public class SchedualerGUI extends AppCompatActivity {
 
     }
 
+    private String selectedDate = null;
 
     private void onclick() {
-        schedualer.AddMeeting.setOnClickListener(v ->
-                adding()
-        );
+        schedualer.AddMeeting.setOnClickListener(v -> {
+            // If no date is selected, default to today's date dynamically
+            if (selectedDate == null) {
+                selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+            }
+
+
+            AddMeetingBottomSheet bottomSheet = AddMeetingBottomSheet.newInstance(selectedDate);
+            bottomSheet.show(getSupportFragmentManager(), "AddMeetingBottomSheet");
+        });
 
         schedualer.WeekButton.setOnClickListener(v -> {
                     schedualer.eventRecyclerView.setVisibility(View.INVISIBLE);
@@ -205,8 +213,8 @@ public class SchedualerGUI extends AppCompatActivity {
         schedualer.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
-            selectedDateMillis = calendar.getTimeInMillis();
-            populateEvents();
+            selectedDateMillis = calendar.getTimeInMillis();  //  Store the selected date
+            selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.getTime());
         });
     }
 
