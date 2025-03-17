@@ -100,14 +100,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean isDirectionsRequestInProgress = false; //flag to prevent overlapping requests
     private boolean isRunning = true; //flag to stop the loop
 
-    private BroadcastReceiver stopRunnableReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopRefreshTask();
-            finish();
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,10 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         hub = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(hub.getRoot());
         //destination = new LatLng(47.0076653, -120.5366559); //destination override
-
-        // Register BroadcastReceiver
-        IntentFilter filter = new IntentFilter("STOP_REFRESHTASK");
-        registerReceiver(stopRunnableReceiver, filter);
 
         refreshTask = new Runnable() {
             @Override
@@ -163,9 +151,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onDestroy() {
+        Log.d("MainActivity", "onDestroy called");
         super.onDestroy();
         stopRefreshTask();
-        unregisterReceiver(stopRunnableReceiver); // Clean up receiver
     }
 
     @Override

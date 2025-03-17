@@ -140,8 +140,6 @@ public class Profile extends AppCompatActivity {
         logOutButton.setOnClickListener(v -> {
             auth.signOut();
             userManager.logout();
-            Intent intent = new Intent("STOP_REFRESHTASK");
-            sendBroadcast(intent);
             startActivity(new Intent(Profile.this, Login.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
