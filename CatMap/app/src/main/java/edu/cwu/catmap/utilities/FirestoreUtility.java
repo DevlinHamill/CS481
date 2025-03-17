@@ -1,12 +1,12 @@
 package edu.cwu.catmap.utilities;
 
-import static edu.cwu.catmap.utilities.ToastHelper.showToast;
-
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,12 +15,12 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import edu.cwu.catmap.core.Event;
-import edu.cwu.catmap.core.EventGroup;
-import edu.cwu.catmap.core.Schedule;
+import edu.cwu.catmap.core.ClassItem;
 import edu.cwu.catmap.manager.UserManager;
 
 /**
@@ -42,29 +42,9 @@ public class FirestoreUtility {
 
         return instance;
     }
-
-    public void getEvents(FirebaseUser firebaseUser, OnCompleteListener<DocumentSnapshot> listener) {
-        db.collection(Constants.KEY_EVENT_COLLECTION).document(firebaseUser.getUid()).get()
-                .addOnCompleteListener(listener);
-    }
-
-    public void storeEvents(FirebaseUser firebaseUser, ArrayList<Event> events, OnCompleteListener<Void> listener) {
-        db.collection(Constants.KEY_EVENT_COLLECTION).document(firebaseUser.getUid()).set(events)
-                .addOnCompleteListener(listener);
-    }
     public void teststoreEvents(FirebaseUser user, HashMap<String,String> input, OnCompleteListener<DocumentReference> listener){
         db.collection(Constants.KEY_USER_COLLECTION).document(user.getUid()).collection("Events")
                 .add(input)
-                .addOnCompleteListener(listener);
-    }
-
-    public void getEventGroups(FirebaseUser firebaseUser, OnCompleteListener<DocumentSnapshot> listener) {
-        db.collection(Constants.KEY_EVENT_GROUP_COLLECTION).document(firebaseUser.getUid()).get()
-                .addOnCompleteListener(listener);
-    }
-
-    public void storeEventGroups(FirebaseUser firebaseUser, ArrayList<EventGroup> eventGroups, OnCompleteListener<Void> listener) {
-        db.collection(Constants.KEY_EVENT_GROUP_COLLECTION).document(firebaseUser.getUid()).set(eventGroups)
                 .addOnCompleteListener(listener);
     }
 
@@ -83,7 +63,7 @@ public class FirestoreUtility {
         Log.i("Location info controller", "Hashmap created and populated, running database call");
         db.collection(Constants.KEY_USER_COLLECTION)
                 .document(UserManager.getInstance().getCurrentFirebaseUser().getUid())
-                .collection(Constants.KEY_FAVORITE_LOCATIONS_COLLECTION)
+                .collection(Constants.KEY_FAVORITE_LOCATIONS_SUBCOLLECTION)
                 .document(locationName) // Use locationName as the document ID
                 .set(favoriteLocationMap, SetOptions.merge()) // Merge to avoid overwriting existing fields
                 .addOnCompleteListener(task -> {
@@ -106,7 +86,7 @@ public class FirestoreUtility {
         //check to see if the location exists in the favorite locations table
         db.collection(Constants.KEY_USER_COLLECTION)
                 .document(UserManager.getInstance().getCurrentFirebaseUser().getUid())
-                .collection(Constants.KEY_FAVORITE_LOCATIONS_COLLECTION)
+                .collection(Constants.KEY_FAVORITE_LOCATIONS_SUBCOLLECTION)
                 .whereEqualTo(Constants.KEY_LOCATION_NAME, locationName)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -116,7 +96,7 @@ public class FirestoreUtility {
 
                         db.collection(Constants.KEY_USER_COLLECTION)
                                 .document(UserManager.getInstance().getCurrentFirebaseUser().getUid())
-                                .collection(Constants.KEY_FAVORITE_LOCATIONS_COLLECTION)
+                                .collection(Constants.KEY_FAVORITE_LOCATIONS_SUBCOLLECTION)
                                 .document(documentId)
                                 .delete()
                                 .addOnCompleteListener(task -> {
@@ -136,7 +116,7 @@ public class FirestoreUtility {
     public void getFavoriteLocations(FirestoreTraceback traceback) {
         db.collection(Constants.KEY_USER_COLLECTION)
                 .document(UserManager.getInstance().getCurrentFirebaseUser().getUid())
-                .collection(Constants.KEY_FAVORITE_LOCATIONS_COLLECTION)
+                .collection(Constants.KEY_FAVORITE_LOCATIONS_SUBCOLLECTION)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
@@ -160,7 +140,7 @@ public class FirestoreUtility {
         //check to see if the location exists in the favorite locations table
         db.collection(Constants.KEY_USER_COLLECTION)
                 .document(UserManager.getInstance().getCurrentFirebaseUser().getUid())
-                .collection(Constants.KEY_FAVORITE_LOCATIONS_COLLECTION)
+                .collection(Constants.KEY_FAVORITE_LOCATIONS_SUBCOLLECTION)
                 .whereEqualTo(Constants.KEY_LOCATION_NAME, locationName)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -174,6 +154,85 @@ public class FirestoreUtility {
                 }).addOnFailureListener(e -> {
                     //could not access the database
                     traceback.failure("Unable to access favorite locations table");
+                });
+    }
+
+    public void getClasses(FirestoreTraceback traceback) {
+        Log.i("Firestore Utility", "fetching classes from db");
+        String currentUID = UserManager.getInstance().getCurrentFirebaseUser().getUid();
+
+        Log.i("Firestore Utility", "current user ID: " + currentUID);
+
+        db.collection(Constants.KEY_USER_COLLECTION)
+                .document(currentUID)
+                .collection(Constants.KEY_EVENTS_SUBCOLLECTION)
+                .whereEqualTo(Constants.KEY_EVENT_TYPE, Constants.VALUE_EVENT_TYPE_CLASS)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    //set to collect distinct class names so no duplicates
+                    Set<ClassItem> classItemSet = new HashSet<>();
+
+                    Log.i("Firestore Utility", "queryDocumentSnapshots size: " + queryDocumentSnapshots.size());
+
+                    //add class names to set
+                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String title = (String) documentSnapshot.get(Constants.KEY_EVENT_TITLE);
+                        int color = Integer.parseInt((String) documentSnapshot.get(Constants.KEY_EVENT_COLOR));
+                        if(title != null) {
+                            ClassItem classItem = new ClassItem(title, color);
+                            Log.i("Firestore Utility", "new classItem added to set: " + classItem);
+                            classItemSet.add(classItem);
+                        }
+                    }
+
+                    ArrayList<ClassItem> classItemsList = new ArrayList<>(classItemSet);
+
+                    traceback.success("Class names retrieved successfully!", classItemsList);
+                })
+                .addOnFailureListener(e -> {
+                    traceback.failure("Could not connect to the database!");
+                });
+    }
+
+    public void removeClass(String className, FirestoreTraceback traceback) {
+        Log.i("Firestore Utility", "removing class: " + className + " from the database");
+        String currentUID = UserManager.getInstance().getCurrentFirebaseUser().getUid();
+
+        Log.i("Firestore Utility", "current user ID: " + currentUID);
+
+        db.collection(Constants.KEY_USER_COLLECTION)
+                .document(currentUID)
+                .collection(Constants.KEY_EVENTS_SUBCOLLECTION)
+                .whereEqualTo(Constants.KEY_EVENT_TITLE, className)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(queryDocumentSnapshots.isEmpty()) {
+                        Log.i("Firestore Utility", "No events found for class: " + className);
+                        traceback.failure("No events found for class: " + className);
+                        return;
+                    }
+
+                    List<Task<Void>> deletionTasks = new ArrayList<>();
+
+                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Log.i("Firestore Utility", "Deleting event of class: " + documentSnapshot.getString(Constants.KEY_EVENT_TITLE));
+                        deletionTasks.add(documentSnapshot.getReference().delete()
+                                .addOnFailureListener(e -> Log.e("Firestore Utility", "Failed to delete event: " + documentSnapshot.getId(), e)));
+                    }
+
+                    Tasks.whenAllSuccess(deletionTasks)
+                            .addOnSuccessListener(command -> {
+                                Log.i("Firestore Utility", "Successfully deleted all events for class: " + className);
+                                traceback.success("Deleted all events of class " + className);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore Utility", "Error deleting some events", e);
+                                traceback.failure("Error occurred while deleting events.");
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Utility", "Firestore query failed", e);
+                    traceback.failure("Unable to connect to the database!");
                 });
     }
 
@@ -192,13 +251,5 @@ public class FirestoreUtility {
             }
         }
         return favoriteLocation;
-    }
-
-    public void storeSchedule(FirebaseUser firebaseUser, Schedule schedule, OnCompleteListener<Void> listener) {
-        db.collection(Constants.KEY_SCHEDULE_COLLECTION).document(firebaseUser.getUid()).set(schedule);
-    }
-
-    public void getSchedule(FirebaseUser firebaseUser, OnCompleteListener<DocumentSnapshot> listener) {
-        db.collection(Constants.KEY_SCHEDULE_COLLECTION).document(firebaseUser.getUid()).get();
     }
 }

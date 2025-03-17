@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LocationsActivity"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/header"
+        app:layout_constraintEnd_toEndOf="@id/header"
+        app:layout_constraintTop_toTopOf="@id/header"
+        android:text="@string/class_manager"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="20sp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-20dp"
+        android:paddingTop="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:elevation="4dp"
+        android:background="@drawable/activity_background"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recycler_container"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_layout"
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/Classes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/recyclerView"
+                android:text="@string/classes"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/button_add_class"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/background_rectangle_selected"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_add"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Classes"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="10dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/recycler_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete_class"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/delete_class"
+                android:textSize="20sp"
+                android:enabled="false"/>
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_add_event"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/add_event"
+                android:textSize="20sp"
+                android:enabled="false"
+                />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

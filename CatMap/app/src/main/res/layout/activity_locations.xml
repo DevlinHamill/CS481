@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LocationsActivity"
-    android:background="@drawable/activity_background">
+    tools:context=".activities.LocationsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/header"

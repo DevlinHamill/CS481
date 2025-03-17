@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -36,6 +39,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 
 import org.json.JSONArray;
@@ -71,7 +75,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap gMap;
-    private ActivityMainBinding hub;
+    private ActivityMainBinding binding;
     private RecyclerView eventRecyclerView;
     private DailyEventAdapter dailyEventAdapter;
 
@@ -83,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
-        hub = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(hub.getRoot());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -103,6 +107,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+
+        //fill floating action buttons
+        fillFABColor();
+    }
+
+    /**
+     * Fill the floating action buttons icons with white to fit the theme better. 
+     */
+    private void fillFABColor() {
+        //change button fill colors to match the theme
+        ArrayList<FloatingActionButton> fabList = new ArrayList<>();
+        TypedValue typedValue = new TypedValue();
+        this.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int color = typedValue.data;
+
+        fabList.add(binding.MiscButton);
+        fabList.add(binding.settingsButton);
+        fabList.add(binding.LocationsButton);
+        fabList.add(binding.SchedulerButton);
+        fabList.add(binding.profileButton);
+
+        for(FloatingActionButton button : fabList) {
+            Drawable drawable = button.getDrawable();
+
+            if(drawable != null) {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
+        }
     }
 
     //handle permission request result
@@ -237,38 +269,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void onclick(){
-        hub.MiscButton.setOnClickListener( v->
+        binding.MiscButton.setOnClickListener(v->
                 miscclick()
         );
 
-        hub.profileButton.setOnClickListener(v ->
+        binding.profileButton.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), Profile.class))
         );
-        hub.SchedulerButton.setOnClickListener(v->
+        binding.SchedulerButton.setOnClickListener(v->
                 startActivity(new Intent(getApplicationContext(), SchedualerGUI.class))
         );
-        hub.LocationsButton.setOnClickListener(v->
+        binding.LocationsButton.setOnClickListener(v->
                 startActivity(new Intent(getApplicationContext(), LocationsActivity.class))
         );
-        hub.settingsButton.setOnClickListener(v->
+        binding.settingsButton.setOnClickListener(v->
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class))
         );
 
 
     }
     public void miscclick(){
-        if(hub.misc.getVisibility() == View.INVISIBLE){
-            hub.misc.setVisibility(View.VISIBLE);
-            hub.profileButton.setVisibility(View.VISIBLE);
-            hub.settingsButton.setVisibility(View.VISIBLE);
-            hub.LocationsButton.setVisibility(View.VISIBLE);
-            hub.SchedulerButton.setVisibility(View.VISIBLE);
+        if(binding.misc.getVisibility() == View.INVISIBLE){
+            binding.misc.setVisibility(View.VISIBLE);
+            binding.profileButton.setVisibility(View.VISIBLE);
+            binding.settingsButton.setVisibility(View.VISIBLE);
+            binding.LocationsButton.setVisibility(View.VISIBLE);
+            binding.SchedulerButton.setVisibility(View.VISIBLE);
         }else{
-            hub.misc.setVisibility(View.INVISIBLE);
-            hub.profileButton.setVisibility(View.INVISIBLE);
-            hub.settingsButton.setVisibility(View.INVISIBLE);
-            hub.LocationsButton.setVisibility(View.INVISIBLE);
-            hub.SchedulerButton.setVisibility(View.INVISIBLE);
+            binding.misc.setVisibility(View.INVISIBLE);
+            binding.profileButton.setVisibility(View.INVISIBLE);
+            binding.settingsButton.setVisibility(View.INVISIBLE);
+            binding.LocationsButton.setVisibility(View.INVISIBLE);
+            binding.SchedulerButton.setVisibility(View.INVISIBLE);
         }
     }
 
