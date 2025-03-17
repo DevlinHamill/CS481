@@ -49,8 +49,8 @@
     <string name="time">Time:</string>
     <string name="room_number1">Room Number:</string>
     <string name="event_group">Event Group:</string>
-    <string name="color_preference">Color Preference:</string>
-    <string name="edit">Edit</string>
+    <string name="color_preference">Color Preference</string>
+    <string name="edit">Confirm Edits</string>
     <string name="remove">Remove</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

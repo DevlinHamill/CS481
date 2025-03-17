@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,7 +28,6 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -88,9 +86,11 @@ public class ScheduleDetails extends AppCompatActivity {
         binding.nameresult.setText(map.get("Event_Title"));
         binding.DateResult.setText(map.get("Event_Date"));
         binding.timeresult.setText(map.get("Event_Time"));
-        binding.buildingresult.setIconifiedByDefault(false);
-        binding.buildingresult.setIconified(false);
-        binding.buildingresult.setQuery(map.get("Building_Name"), false);
+//        binding.buildingresult.setIconifiedByDefault(false);
+//        binding.buildingresult.setIconified(false);
+//        binding.buildingresult.setQuery(map.get("Building_Name"), false);
+        binding.buildingresult.setText(map.get("Building_Name"));
+
         binding.roomresult.setText(map.get("Room_Number"));
         binding.typeresult.setText(map.get("Event_Type"));
         binding.colorResult.setBackgroundColor(Integer.parseInt(map.get("Color_Preference")));
@@ -159,11 +159,11 @@ public class ScheduleDetails extends AppCompatActivity {
             showToast("Please enter a Event title");
             return false;
 
-        }else if(binding.buildingresult.getQuery().toString().trim().isEmpty()) {
+        }else if(binding.buildingresult.getText().toString().trim().isEmpty()) {
             showToast("Please enter a valid building name");
             return false;
 
-        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getQuery().toString())){
+        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getText().toString())){
             showToast("Please enter an existing building name");
             return false;
 
@@ -183,7 +183,7 @@ public class ScheduleDetails extends AppCompatActivity {
         }
     }
 
-    private void checkbuildings(SearchView BuildingSearchView){
+    private void checkbuildings(AutoCompleteTextView BuildingSearchView){
 
         /*Adapter for auto suggestions*/
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
@@ -196,7 +196,7 @@ public class ScheduleDetails extends AppCompatActivity {
             searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 String selectedItem = adapter.getItem(position);
                 searchAutoComplete.setText(selectedItem);
-                BuildingSearchView.setQuery(selectedItem, false); /*Set the autocomplete query without submitting it*/
+                BuildingSearchView.setText(selectedItem, false);/*Set the autocomplete query without submitting it*/
             });
         }
     }
@@ -208,6 +208,7 @@ public class ScheduleDetails extends AppCompatActivity {
 
         binding.editButton.setOnClickListener(v->
                 edit()
+
         );
         binding.colorResult.setOnClickListener(view -> {
             ColorDrawable backgroundColor = (ColorDrawable) binding.colorbackground.getBackground();
@@ -282,6 +283,12 @@ public class ScheduleDetails extends AppCompatActivity {
             showDatePicker()
         );
 
+        binding.layoutHeader.setNavigationOnClickListener(v ->
+                onBackPressed()
+        );
+
+
+
     }
 
     private void showDatePicker() {
@@ -335,10 +342,8 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private void setselecteddays(TextView button){
         if(!button.isSelected()) {
-            button.setBackgroundColor(Color.GRAY);
             button.setSelected(true);
         }else{
-            button.setBackgroundColor(Color.WHITE);
             button.setSelected(false);
         }
     }
@@ -368,7 +373,7 @@ public class ScheduleDetails extends AppCompatActivity {
             tempmap.put("Event_Title", binding.nameresult.getText().toString());
             tempmap.put("Event_Date", binding.DateResult.getText().toString());
             tempmap.put("Event_Time", binding.timeresult.getText().toString());
-            tempmap.put("Building_Name", binding.buildingresult.getQuery().toString());
+            tempmap.put("Building_Name", binding.buildingresult.getText().toString());
             tempmap.put("Room_Number", binding.roomresult.getText().toString());
             tempmap.put("Event_Type", binding.typeresult.getText().toString());
             tempmap.put("Color_Preference", colorPreference);
