@@ -2,6 +2,8 @@ package edu.cwu.catmap.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.activities.ScheduleDetails;
@@ -62,11 +65,11 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (viewType == TYPE_SECTION_HEADER) {
             view = inflater.inflate(R.layout.item_container_schedule, parent, false);
-            viewHolder = new SchedulerAdapter.SectionHeaderViewHolder(view);
+            viewHolder = new SectionHeaderViewHolder(view);
         }
         else if (viewType == TYPE_EVENT) {
             view = inflater.inflate(R.layout.item_container_event, parent, false);
-            viewHolder = new SchedulerAdapter.EventViewHolder(view);
+            viewHolder = new EventViewHolder(view);
         }
         else {
             Log.e("FavoriteLocationsAdapter", "viewType cannot be determined, give type of " + viewType);
@@ -81,7 +84,7 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ScheduleListItem item = filteredItems.get(position);
 
         if (holder instanceof SectionHeaderViewHolder) {
-            ((SchedulerAdapter.SectionHeaderViewHolder) holder).bind((ScheduleListItem.SectionHeader) item);
+            ((SectionHeaderViewHolder) holder).bind((ScheduleListItem.SectionHeader) item);
         }
         else if (holder instanceof EventViewHolder) {
             EventViewHolder eventHolder = (EventViewHolder) holder;
@@ -166,17 +169,19 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView EventName;
         TextView Time;
-
+        ConstraintLayout layout;
 
         EventViewHolder(View itemView) {
             super(itemView);
             EventName = itemView.findViewById(R.id.event_name_left);
             Time = itemView.findViewById(R.id.time_right);
+            layout = itemView.findViewById(R.id.eventItemPreference);
         }
 
         void bind(ScheduleListItem.Event item) {
             EventName.setText(item.getTitle());
             Time.setText(item.getTime());
+            layout.setBackground(new ColorDrawable(Integer.parseInt(Objects.requireNonNull(item.getMap().get("Color_Preference")))));
         }
     }
 
