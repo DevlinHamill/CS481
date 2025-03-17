@@ -12,6 +12,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -165,6 +166,7 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView EventName;
         TextView Time;
+
 
         EventViewHolder(View itemView) {
             super(itemView);

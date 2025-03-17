@@ -1,6 +1,9 @@
 package edu.cwu.catmap.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker userMarker;
 
     private LatLng destination;
-    private Handler handler = new Handler();
+    private static Handler handler = new Handler();
     private Runnable refreshTask;
     private static final long REFRESH_INTERVAL = 6000; // 6 seconds (adjust as needed)
 
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker newDestinationMarker;
     private String EtaText;
     private boolean isDirectionsRequestInProgress = false; //flag to prevent overlapping requests
+    private boolean isRunning = true; //flag to stop the loop
 
 
     @Override
@@ -108,9 +112,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         refreshTask = new Runnable() {
             @Override
             public void run() {
+                if (!isRunning) return;
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
                 refreshEvents();
                 refreshDirections(); // Call the refresher method
                 displayRouteOnMap();
+                Log.d("MainActivity", "Refreshed Events");
                 handler.postDelayed(this, REFRESH_INTERVAL); // Schedule the task again
             }
         };
@@ -136,6 +143,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         dailyEventAdapter = new DailyEventAdapter(new ArrayList<>());
         eventRecyclerView.setAdapter(dailyEventAdapter);
     }
+
+    public void stopRefreshTask() {
+        handler.removeCallbacks(refreshTask);
+        isRunning = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("MainActivity", "onDestroy called");
+        super.onDestroy();
+        stopRefreshTask();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
