@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -345,7 +346,10 @@ public class ScheduleDetails extends AppCompatActivity {
                 .collection("Events")
                 .document(binding.idresult.getText().toString())
                 .delete();
-        onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), SchedualerGUI.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void edit() {
