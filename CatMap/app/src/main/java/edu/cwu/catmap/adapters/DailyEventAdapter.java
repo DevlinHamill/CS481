@@ -46,7 +46,7 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_EVENT) {
-            View view = inflater.inflate(R.layout.daily_event, parent, false); // Use the new item_event.xml layout
+            View view = inflater.inflate(R.layout.daily_event, parent, false);
             return new EventViewHolder(view);
         }
         throw new IllegalArgumentException("Unsupported view type: " + viewType);
@@ -56,10 +56,11 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ScheduleListItem item = items.get(position);
         if (holder instanceof EventViewHolder) {
-            ((EventViewHolder) holder).bind((ScheduleListItem.Event) item);
+            EventViewHolder eventHolder = (EventViewHolder) holder;
+            eventHolder.bind((ScheduleListItem.Event) item);
 
-            // Set click listener for the event
-            holder.itemView.setOnClickListener(v -> {
+            //set click listener for the eventButton
+            eventHolder.eventButton.setOnClickListener(v -> {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ScheduleDetails.class);
                 intent.putExtra("Map", ((ScheduleListItem.Event) item).getMap());
