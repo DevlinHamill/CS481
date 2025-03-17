@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         hub = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(hub.getRoot());
-        destination = new LatLng(47.0076653, -120.5366559);
+        //destination = new LatLng(47.0076653, -120.5366559); //destination override
 
         refreshTask = new Runnable() {
             @Override
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             startLocationUpdates();
         } else {
             //permissions denied
-            Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
         }
     }
     @Override
@@ -176,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String eventTime = eventDetails.get("Event_Time");
 
                     //use the event details (e.g., set a waypoint)
-                    Toast.makeText(MainActivity.this, "Next Event: " + eventTitle + " at " + buildingName + ", Room " + roomNumber, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Next Event: " + eventTitle + " at " + buildingName + ", Room " + roomNumber, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "No upcoming events found", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "No upcoming events found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -657,20 +657,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 // Call getDirections() with the user's location and the destination
                                                 getDirections(userLocation, temDest);
                                             } else {
-                                                Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             } else {
-                                Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -698,45 +698,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 getDirections(userLocation, destination);
                             }
                         } else {
-                            Toast.makeText(this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
-            Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void displayRouteOnMap() {
         //ensure the map is ready
         if (gMap == null) {
-            Log.e("MainActivity", "GoogleMap object is null. Map is not ready.");
             return;
         }
 
-        // Step 1: Remove the old polyline and marker
+        //remove old polyline and marker
         if (oldPolyline != null) {
-            oldPolyline.remove(); // Remove the old polyline from the map
-            Log.d("MainActivity", "Old polyline removed.");
+            oldPolyline.remove();
         }
         if (oldDestinationMarker != null) {
-            oldDestinationMarker.remove(); // Remove the old marker from the map
-            Log.d("MainActivity", "Old marker removed.");
+            oldDestinationMarker.remove();
         }
 
-        //step 2: Add the new polyline and marker
+        //add new polyline and marker
         if (newPolylineOptions != null) {
-            newPolyline = gMap.addPolyline(newPolylineOptions); // Add the new polyline
-            Log.d("MainActivity", "New polyline added to the map.");
-        } else {
-            Log.d("MainActivity", "No polyline options available.");
+            newPolyline = gMap.addPolyline(newPolylineOptions);
         }
 
         if (newDestinationMarkerOptions != null) {
             newDestinationMarker = gMap.addMarker(newDestinationMarkerOptions); // Add the new marker
-            newDestinationMarker.showInfoWindow(); // Show the ETA text window
-            Log.d("MainActivity", "New marker added to the map.");
-        } else {
-            Log.d("MainActivity", "No marker options available.");
+            newDestinationMarker.showInfoWindow();
         }
 
         //step 3: Update references
