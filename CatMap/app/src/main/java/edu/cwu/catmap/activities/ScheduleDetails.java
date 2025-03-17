@@ -207,9 +207,10 @@ public class ScheduleDetails extends AppCompatActivity {
                 remove()
         );
 
-        binding.editButton.setOnClickListener(v->
-                edit()
-
+        binding.editButton.setOnClickListener(v-> {
+            edit();
+            onBackPressed();
+                }
         );
         binding.colorResult.setOnClickListener(view ->
             showColorPicker()

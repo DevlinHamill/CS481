@@ -78,18 +78,7 @@
                 android:layout_weight="1">
 
                 <!-- Floating Action Button for Adding Meetings -->
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/AddMeeting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
-                    android:contentDescription="Add Meeting"
-                    android:outlineAmbientShadowColor="@android:color/transparent"
-                    android:outlineSpotShadowColor="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_add"
-                    app:tint="?attr/colorOnSurface"
 
-                    />
             </FrameLayout>
         </LinearLayout>
 
@@ -107,15 +96,30 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventRecyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/calendarView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/AddMeeting"
         android:orientation="vertical"
         android:padding="10dp"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/AddMeeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:contentDescription="Add Meeting"
+        android:outlineAmbientShadowColor="@android:color/transparent"
+        android:outlineSpotShadowColor="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_add"
+        app:maxImageSize="40dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

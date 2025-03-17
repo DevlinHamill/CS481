@@ -2,7 +2,10 @@ package edu.cwu.catmap.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,8 +76,26 @@ public class SchedualerGUI extends AppCompatActivity {
 
         EventList = new ArrayList<>();
         populateEvents();
+        fillFABColor();
 
+    }
 
+    private void fillFABColor() {
+        //change button fill colors to match the theme
+        ArrayList<FloatingActionButton> fabList = new ArrayList<>();
+        TypedValue typedValue = new TypedValue();
+        this.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int color = typedValue.data;
+
+        fabList.add(schedualer.AddMeeting);
+
+        for(FloatingActionButton button : fabList) {
+            Drawable drawable = button.getDrawable();
+
+            if(drawable != null) {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
+        }
     }
 
     private void populateEvents() {
