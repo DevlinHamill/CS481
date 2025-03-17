@@ -197,12 +197,17 @@ public class ScheduleDetails extends AppCompatActivity {
 
 
     private void onclick(){
-        binding.RemoveButton.setOnClickListener(v->
+        binding.RemoveButton.setOnClickListener(v ->
                 remove()
         );
 
-        binding.editButton.setOnClickListener(v->
-                edit()
+        binding.editButton.setOnClickListener(v -> {
+            edit();
+            Intent intent = new Intent(this, SchedualerGUI.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+                }
 
         );
         binding.colorResult.setOnClickListener(view ->

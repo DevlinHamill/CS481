@@ -46,9 +46,9 @@
         android:clickable="true"
         app:srcCompat="@android:drawable/ic_dialog_dialer"
         android:backgroundTint="?attr/colorPrimary"
-        android:layout_marginBottom="160dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View

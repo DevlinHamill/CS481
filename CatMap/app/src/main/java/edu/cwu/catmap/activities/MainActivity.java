@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 
 import org.json.JSONArray;
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng destination;
     private Handler handler = new Handler();
     private Runnable refreshTask;
-    private static final long REFRESH_INTERVAL = 6000; // 6 seconds (adjust as needed)
+    private static final long REFRESH_INTERVAL = 2000; // 2 seconds (adjust as needed)
 
     //private PolylineOptions oldPolylineOptions;
     private Polyline oldPolyline;
@@ -129,12 +133,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         eventRecyclerView = findViewById(R.id.eventRecyclerView);
 
-        onclick();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
         dailyEventAdapter = new DailyEventAdapter(new ArrayList<>());
         eventRecyclerView.setAdapter(dailyEventAdapter);
+
+        //set on click listeners and fill the action button icons with the color on primary color
+        onclick();
+        fillFABColor();
     }
     @Override
     protected void onResume() {
@@ -294,6 +301,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         );
 
 
+    }
+
+    private void fillFABColor() {
+        //change button fill colors to match the theme
+        ArrayList<FloatingActionButton> fabList = new ArrayList<>();
+        TypedValue typedValue = new TypedValue();
+        this.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int color = typedValue.data;
+
+        fabList.add(hub.MiscButton);
+        fabList.add(hub.settingsButton);
+        fabList.add(hub.LocationsButton);
+        fabList.add(hub.SchedulerButton);
+        fabList.add(hub.profileButton);
+
+        for(FloatingActionButton button : fabList) {
+            Drawable drawable = button.getDrawable();
+
+            if(drawable != null) {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
+        }
     }
     public void miscclick(){
         if(hub.misc.getVisibility() == View.INVISIBLE){

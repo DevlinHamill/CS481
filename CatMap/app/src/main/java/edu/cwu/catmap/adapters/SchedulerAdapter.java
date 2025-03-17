@@ -2,6 +2,8 @@ package edu.cwu.catmap.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,10 +14,12 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.activities.ScheduleDetails;
@@ -165,16 +169,19 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView EventName;
         TextView Time;
+        ConstraintLayout layout;
 
         EventViewHolder(View itemView) {
             super(itemView);
             EventName = itemView.findViewById(R.id.event_name_left);
             Time = itemView.findViewById(R.id.time_right);
+            layout = itemView.findViewById(R.id.eventItemPreference);
         }
 
         void bind(ScheduleListItem.Event item) {
             EventName.setText(item.getTitle());
             Time.setText(item.getTime());
+            layout.setBackground(new ColorDrawable(Integer.parseInt(Objects.requireNonNull(item.getMap().get("Color_Preference")))));
         }
     }
 

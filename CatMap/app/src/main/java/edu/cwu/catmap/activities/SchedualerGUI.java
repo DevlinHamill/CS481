@@ -208,6 +208,8 @@ public class SchedualerGUI extends AppCompatActivity {
             selectedDateMillis = calendar.getTimeInMillis();
             populateEvents();
         });
+
+        schedualer.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void grabSuggestions() {
