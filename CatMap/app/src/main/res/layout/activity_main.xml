@@ -52,7 +52,7 @@
         app:srcCompat="@drawable/ic_settings"
         android:visibility="invisible"
         android:backgroundTint="?attr/colorPrimary"
-    />
+        />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -1,11 +1,11 @@
 package edu.cwu.catmap.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +36,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.FirebaseApp;
 
@@ -62,8 +62,6 @@ import edu.cwu.catmap.core.ScheduleListItem;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
 import edu.cwu.catmap.adapters.DailyEventAdapter;
 import edu.cwu.catmap.manager.LocationsManager;
-import edu.cwu.catmap.utilities.Constants;
-import edu.cwu.catmap.utilities.GeneralUtils;
 import edu.cwu.catmap.utilities.LocationPermissionHelper;
 import edu.cwu.catmap.utilities.EventUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -81,17 +79,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private FusedLocationProviderClient fusedLocationClient;
     private Marker userMarker;
-    private SharedPreferences sharedPreferences;
+
+    private LatLng destination;
+    private Handler handler = new Handler();
+    private Runnable refreshTask;
+    private static final long REFRESH_INTERVAL = 6000; // 6 seconds (adjust as needed)
+
+    //private PolylineOptions oldPolylineOptions;
+    private Polyline oldPolyline;
+    //private MarkerOptions oldDestinationMarkerOptions;
+    private Marker oldDestinationMarker;
+    private PolylineOptions newPolylineOptions;
+    private Polyline newPolyline;
+    private MarkerOptions newDestinationMarkerOptions;
+    private Marker newDestinationMarker;
+    private String EtaText;
+    private boolean isDirectionsRequestInProgress = false; //flag to prevent overlapping requests
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        super.onCreate(savedInstanceState);
         hub = ActivityMainBinding.inflate(getLayoutInflater());
-        sharedPreferences = getSharedPreferences(Constants.KEY_SHARED_PREFRENCES_NAME, MODE_PRIVATE);
-        applyTheme();
         setContentView(hub.getRoot());
+        //destination = new LatLng(47.0076653, -120.5366559); //destination override
+
+        refreshTask = new Runnable() {
+            @Override
+            public void run() {
+                refreshEvents();
+                refreshDirections(); // Call the refresher method
+                displayRouteOnMap();
+                handler.postDelayed(this, REFRESH_INTERVAL); // Schedule the task again
+            }
+        };
+        handler.postDelayed(refreshTask, REFRESH_INTERVAL);
 
         //initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -110,20 +133,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+        dailyEventAdapter = new DailyEventAdapter(new ArrayList<>());
+        eventRecyclerView.setAdapter(dailyEventAdapter);
     }
-
-    public void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
-    }
-
-    private void applyTheme() {
-        boolean isDarkMode = sharedPreferences.getBoolean(Constants.KEY_SHARED_PREFRENCES_DARK_MODE, false);
-
-        if (isDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        refreshEvents();
+        refreshDirections();
+        displayRouteOnMap();
     }
 
     //handle permission request result
@@ -135,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             startLocationUpdates();
         } else {
             //permissions denied
-            Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
         }
     }
     @Override
@@ -157,10 +175,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String eventTitle = eventDetails.get("Event_Title");
                     String eventTime = eventDetails.get("Event_Time");
 
-                    // Use the event details (e.g., set a waypoint)
-                    Toast.makeText(MainActivity.this, "Next Event: " + eventTitle + " at " + buildingName + ", Room " + roomNumber, Toast.LENGTH_SHORT).show();
+                    //use the event details (e.g., set a waypoint)
+                    //Toast.makeText(MainActivity.this, "Next Event: " + eventTitle + " at " + buildingName + ", Room " + roomNumber, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "No upcoming events found", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "No upcoming events found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -294,6 +312,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void getDirections(LatLng origin, LatLng destination) {
+        //prevent overlapping requests
+        if (isDirectionsRequestInProgress) {
+            return;
+        }
+
+        //set the flag to true
+        isDirectionsRequestInProgress = true;
+
         String apiUrl = "https://routes.googleapis.com/directions/v2:computeRoutes";
 
         //JSON request body
@@ -330,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        isDirectionsRequestInProgress = false; // Reset the flag
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             JSONArray routes = jsonResponse.getJSONArray("routes");
@@ -339,13 +366,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             JSONObject polyline = route.getJSONObject("polyline");
                             String encodedPolyline = polyline.getString("encodedPolyline");
 
-                            //decode and draw the route
+                            //decode the polyline
                             List<LatLng> decodedPath = decodePolyline(encodedPolyline);
-                            PolylineOptions polylineOptions = new PolylineOptions()
+
+                            //store the polyline options
+                            newPolylineOptions = new PolylineOptions()
                                     .addAll(decodedPath)
                                     .width(10)
                                     .color(Color.BLUE);
-                            gMap.addPolyline(polylineOptions);
 
                             //extract duration
                             String duration = route.getString("duration");
@@ -353,16 +381,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //convert duration to minutes
                             String durationInMinutes = convertDurationToMinutes(duration);
 
-                            //add marker at destination
-                            MarkerOptions markerOptions = new MarkerOptions()
+                            //store the destination marker options and ETA text
+                            newDestinationMarkerOptions = new MarkerOptions()
                                     .position(destination)
                                     .title("Travel Time")
                                     .snippet("Duration: " + durationInMinutes)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)); // Customize marker icon if needed
-                            Marker destinationMarker = gMap.addMarker(markerOptions);
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                            EtaText = durationInMinutes;
 
-                            //show the InfoWindow
-                            destinationMarker.showInfoWindow();
+                            //display the route on the map
+                            displayRouteOnMap();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -372,6 +400,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        isDirectionsRequestInProgress = false; // Reset the flag
                         if (error.networkResponse != null) {
                             Log.e("API Error", "Status code: " + error.networkResponse.statusCode);
                             Log.e("API Error", "Response data: " + new String(error.networkResponse.data));
@@ -395,6 +424,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         };
 
         Volley.newRequestQueue(this).add(stringRequest);
+
     }
 
     //method to convert duration to minutes
@@ -464,13 +494,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //method to set up the RecyclerView
     private void setupEventRecyclerView() {
-        // Set up the layout manager for horizontal scrolling
+        //set up the layout manager for horizontal scrolling
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         eventRecyclerView.setLayoutManager(layoutManager);
 
         //use EventUtils to populate the RecyclerView
         long currentDateMillis = System.currentTimeMillis();
-        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis);
+        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis, dailyEventAdapter);
     }
     private void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -496,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             //update marker position
             userMarker.setPosition(location);
         }
-        // Move the camera to the user's location
+        //move the camera to the user's location
         //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
     }
 
@@ -597,52 +627,119 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void navigateToNextEvent() {
+
         getNextUpcomingEvent(new OnNextUpcomingEventListener() {
             @Override
             public void onNextUpcomingEvent(Map<String, String> eventDetails) {
                 if (eventDetails != null) {
                     String buildingName = eventDetails.get("Building_Name");
 
-                    //load locations from JSON
+                    // Load locations from JSON
                     LocationsManager locationsManager = LocationsManager.getInstance(MainActivity.this);
                     Location eventLocation = locationsManager.getLocation(buildingName);
 
                     if (eventLocation != null) {
                         String mainEntranceCoordinate = eventLocation.getMainEntranceCoordinate();
                         if (mainEntranceCoordinate != null && !mainEntranceCoordinate.isEmpty()) {
-                            //parse the mainEntranceCoordinate into a LatLng object
+                            // Parse the mainEntranceCoordinate into a LatLng object
                             String[] latLngParts = mainEntranceCoordinate.split(",");
                             double lat = Double.parseDouble(latLngParts[0]);
                             double lng = Double.parseDouble(latLngParts[1]);
-                            LatLng destination = new LatLng(lat, lng);
+                            LatLng temDest = new LatLng(lat, lng);
 
-                            //get user's current location
+                            // Get user's current location
                             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                                 fusedLocationClient.getLastLocation()
                                         .addOnSuccessListener(MainActivity.this, location -> {
                                             if (location != null) {
                                                 LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                                //call getDirections() with the user's location and the destination
-                                                getDirections(userLocation, destination);
+                                                // Call getDirections() with the user's location and the destination
+                                                getDirections(userLocation, temDest);
                                             } else {
-                                                Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             } else {
-                                Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+    public void refreshEvents() {
+        long currentDateMillis = System.currentTimeMillis();
+        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis, dailyEventAdapter);
+    }
+
+    private void refreshDirections() {
+        //update the user's location marker
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            updateUserLocationMarker(userLocation);
+
+                            //check if destination is null
+                            if (destination == null) {
+                                //if destination is null, navigate to the next event
+                                navigateToNextEvent();
+                            } else {
+                                //if destination is not null, get directions to the destination
+                                getDirections(userLocation, destination);
+                            }
+                        } else {
+                            //Toast.makeText(this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            //Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayRouteOnMap() {
+        //ensure the map is ready
+        if (gMap == null) {
+            return;
+        }
+
+        //remove old polyline and marker
+        if (oldPolyline != null) {
+            oldPolyline.remove();
+        }
+        if (oldDestinationMarker != null) {
+            oldDestinationMarker.remove();
+        }
+
+        //add new polyline and marker
+        if (newPolylineOptions != null) {
+            newPolyline = gMap.addPolyline(newPolylineOptions);
+        }
+
+        if (newDestinationMarkerOptions != null) {
+            newDestinationMarker = gMap.addMarker(newDestinationMarkerOptions); // Add the new marker
+            newDestinationMarker.showInfoWindow();
+        }
+
+        //update references
+        oldPolyline = newPolyline;
+        oldDestinationMarker = newDestinationMarker;
+
+
+        //reset new references
+        newPolyline = null;
+        newDestinationMarker = null;
+        newPolylineOptions = null;
+        newDestinationMarkerOptions = null;
     }
 
 }

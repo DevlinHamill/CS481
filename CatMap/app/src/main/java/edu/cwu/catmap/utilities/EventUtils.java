@@ -26,7 +26,7 @@ import edu.cwu.catmap.adapters.DailyEventAdapter;
 import edu.cwu.catmap.core.ScheduleListItem;
 
 public class EventUtils {
-    public static void populateEvents(Context context, RecyclerView recyclerView, long selectedDateMillis) {
+    public static void populateEvents(Context context, RecyclerView recyclerView, long selectedDateMillis, DailyEventAdapter adapter) {
         List<ScheduleListItem> itemList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
         SimpleDateFormat timeFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault());
@@ -134,11 +134,12 @@ public class EventUtils {
                     });
 
                     //update RecyclerView adapter with list of ScheduleListItem
-                    DailyEventAdapter adapter = new DailyEventAdapter(itemList);
-                    recyclerView.setAdapter(adapter);
+                    DailyEventAdapter adapt = new DailyEventAdapter(itemList);
+                    recyclerView.setAdapter(adapt);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to load daily events", Toast.LENGTH_SHORT).show();
                 });
+        adapter.updateData(itemList);
     }
 }
