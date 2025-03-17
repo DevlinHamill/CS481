@@ -241,7 +241,7 @@
                     android:inputType="none"
                     android:textSize="16sp"
                     android:padding="12dp"
-                    android:text="Select End Date"/>
+                    android:hint="Select End Date"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Event Time Selection -->
