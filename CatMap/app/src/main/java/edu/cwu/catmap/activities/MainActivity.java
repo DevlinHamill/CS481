@@ -730,12 +730,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             newDestinationMarker.showInfoWindow();
         }
 
-        //step 3: Update references
+        //update references
         oldPolyline = newPolyline;
         oldDestinationMarker = newDestinationMarker;
 
 
-        //step 4: Reset new references
+        //reset new references
         newPolyline = null;
         newDestinationMarker = null;
         newPolylineOptions = null;
