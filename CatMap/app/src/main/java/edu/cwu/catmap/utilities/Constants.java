@@ -38,8 +38,9 @@ public class Constants {
     public static final String KEY_LOCATION_NAME = "location_name";
     public static final String KEY_COLOR = "color";
 
-    //location json filename
+    //locations
     public static final String KEY_LOCATION_JSON_NAME = "json/locations.json";
+    public static final String VALUE_NO_LOCATIONS_FOUND = "No Favorite Locations Found";
 
     //events constants
     public static final String KEY_EVENT_TYPE = "Event_Type";

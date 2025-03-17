@@ -1,6 +1,7 @@
 package edu.cwu.catmap.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -118,6 +119,12 @@ public class LocationInformationActivity extends AppCompatActivity {
             }
 
             addFavorite();
+        });
+        binding.navigateButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(Constants.KEY_LOCATION_NAME, location.getName());
+            startActivity(intent);
         });
     }
 
