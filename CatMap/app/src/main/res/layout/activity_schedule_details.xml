@@ -7,343 +7,384 @@
     android:layout_height="match_parent"
     tools:context=".activities.ScheduleDetails">
 
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/icon_back_arrow"
+        app:navigationIconTint="@color/black"
+        app:title="Edit Event"
+        app:titleTextColor="@color/black"
+        app:titleCentered="true"/>
+
     <LinearLayout
         android:id="@+id/textlayout"
-        android:layout_width="409dp"
-        android:layout_height="669dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/buttonlayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/main">
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
 
-        <TextView
-            android:id="@+id/EventID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/id"
-            android:textSize="20sp"
-            android:paddingRight="10dp"/>
-
-        <TextView
-            android:id="@+id/idresult"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="20sp"/>
-    </LinearLayout>
+            app:endIconMode="clear_text"
+            android:layout_marginBottom="12dp">
 
-    <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout1"
-            android:layout_margin="5dp">
-
-            <TextView
-                android:id="@+id/EventName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/event_title1"
-                android:textSize="20sp"
-                android:paddingRight="10dp"/>
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="TextView"
-                />
-        </LinearLayout>
+                android:hint="Edit Title"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-            android:id="@+id/linearLayout3"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout2"
-            android:layout_margin="5dp">
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_callender"
+            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:id="@+id/EventDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/event_date1"
-                android:textSize="20sp"
-                android:paddingRight="10dp"/>
-
-            <TextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/DateResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:hint="Edit Date"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp">
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_access_time"
+            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:id="@+id/enddisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/end_date"
-                android:textSize="20sp"
-                android:paddingRight="10dp"/>
-
-            <Button
-                android:id="@+id/endresult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp">
-
-            <TextView
-                android:id="@+id/timedisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time"
-                android:textSize="20sp"
-                android:paddingRight="45dp"/>
-
-            <Button
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/timeresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:hint="Select Time"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp">
+            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:id="@+id/buildingdisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/building"
-                android:textSize="20sp"
-                android:paddingRight="10dp"/>
-
-            <androidx.appcompat.widget.SearchView
+            <AutoCompleteTextView
                 android:id="@+id/buildingresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp">
-
-            <TextView
-                android:id="@+id/roomdisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/room_number1"
-                android:textSize="20sp"
-                android:paddingRight="10dp"/>
-
-            <EditText
-                android:id="@+id/roomresult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp">
-
-            <TextView
-                android:id="@+id/typedisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/event_type"
-                android:paddingRight="10dp"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/typeresult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-         <LinearLayout
-             android:id="@+id/colorbackground"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="horizontal"
-             android:layout_margin="5dp">
-
-            <TextView
-                android:id="@+id/ColorDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/color_preference"
-                android:paddingRight="10dp"
-                android:textSize="20sp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/colorResult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Color"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:hint="Edit Building"
+                android:inputType="text"
+                android:padding="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:completionThreshold="1"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_margin="10dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
-            <Switch
-                android:textAlignment="center"
-                android:id="@+id/RepeatEventSelector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/repeating_event"
-                app:layout_constraintTop_toBottomOf="@id/EventRoom"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-
+            <!-- Event Type Section -->
             <LinearLayout
-                android:orientation="horizontal"
-                android:id="@+id/Weeklayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="16dp"
-                android:visibility="invisible">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/sunbutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/sun"
-                    android:textSize="12sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/monbutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/mon"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tuebutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/tue"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/wenbutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/wen"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/Thurbutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/thur"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/Fributton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/fri"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/satbutton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/sat"
-                    android:textSize="12sp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/typeresult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Type"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+            <!-- Room Number Section -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/roomresult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Edit Room Number"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
+        <!-- Combined Row for Color and Repeating Event -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <!-- Color Preference Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/colorbackground"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="12dp"
+                app:cardCornerRadius="4dp"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp"
+                android:background="?attr/colorSurface"
+                android:layout_marginEnd="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:id="@+id/colorResult"
+                    android:clickable="true"
+                    android:focusable="false"
+                    >
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Color"
+                        android:textColor="@color/white"
+                        android:padding="5dp"
+                        android:textSize="18sp"
+                        />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Repeating Event Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/repeatEventCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="12dp"
+                app:cardCornerRadius="4dp"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp"
+                android:background="?attr/colorSurface"
+                android:layout_marginStart="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/repeatingEventText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Repeat"
+                        android:textColor="?attr/colorOnSurface"
+                        android:padding="5dp"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/RepeatEventSelector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="12dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+
+        <!-- Repeat Options (Initially Hidden) -->
+    <LinearLayout
+        android:id="@+id/Weeklayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- Days Selection -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Repeat on"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:paddingBottom="8dp"/>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleGroupDays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleSelection="false"
+            android:paddingBottom="12dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sunbutton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="S"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/monbutton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="M"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/tuebutton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="T"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/wenbutton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="W"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Thurbutton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Th"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Fributton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="F"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/satbutton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Sa"
+                android:textSize="18sp"
+                android:backgroundTint="?attr/colorSurface"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_callender"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/endresult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:hint="Select Date"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/idresult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20sp"
+        tools:ignore="MissingConstraints"
+        android:visibility="gone"/>
 
-
-
+    <!-- Bottom Buttons -->
     <LinearLayout
         android:id="@+id/buttonlayout"
-        android:layout_width="407dp"
-        android:layout_height="58dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textlayout">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
+        <!-- Edit Button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/editButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/edit"
-            android:layout_margin="10dp"/>
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="18sp"
+            app:cornerRadius="5dp"/>
 
-        <Button
+        <!-- Remove Button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/RemoveButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="10dp"
             android:text="@string/remove"
-            android:layout_margin="10dp"/>
+            android:backgroundTint="?attr/colorError"
+            android:textColor="?attr/colorOnError"
+            android:textSize="18sp"
+            app:cornerRadius="5dp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

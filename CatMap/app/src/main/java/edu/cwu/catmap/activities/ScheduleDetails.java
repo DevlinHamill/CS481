@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,7 +30,6 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -39,6 +37,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.databinding.ActivityScheduleDetailsBinding;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -75,7 +74,7 @@ public class ScheduleDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        binding = edu.cwu.catmap.databinding.ActivityScheduleDetailsBinding.inflate(getLayoutInflater());
+        binding = ActivityScheduleDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -90,9 +89,11 @@ public class ScheduleDetails extends AppCompatActivity {
         binding.nameresult.setText(map.get("Event_Title"));
         binding.DateResult.setText(map.get("Event_Date"));
         binding.timeresult.setText(map.get("Event_Time"));
-        binding.buildingresult.setIconifiedByDefault(false);
-        binding.buildingresult.setIconified(false);
-        binding.buildingresult.setQuery(map.get("Building_Name"), false);
+//        binding.buildingresult.setIconifiedByDefault(false);
+//        binding.buildingresult.setIconified(false);
+//        binding.buildingresult.setQuery(map.get("Building_Name"), false);
+        binding.buildingresult.setText(map.get("Building_Name"));
+
         binding.roomresult.setText(map.get("Room_Number"));
         binding.typeresult.setText(map.get("Event_Type"));
         binding.colorResult.setBackgroundColor(Integer.parseInt(map.get("Color_Preference")));
@@ -161,11 +162,11 @@ public class ScheduleDetails extends AppCompatActivity {
             showToast("Please enter a Event title");
             return false;
 
-        }else if(binding.buildingresult.getQuery().toString().trim().isEmpty()) {
+        }else if(!LocationsManager.getInstance(this).hasLocation(binding.buildingresult.getText().toString().trim())) {
             showToast("Please enter a valid building name");
             return false;
 
-        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getQuery().toString())){
+        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getText().toString())){
             showToast("Please enter an existing building name");
             return false;
 
@@ -185,23 +186,18 @@ public class ScheduleDetails extends AppCompatActivity {
         }
     }
 
-    private void checkbuildings(SearchView BuildingSearchView){
+    private void checkbuildings(AutoCompleteTextView buildingSearch) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line,
+                LocationsManager.getInstance(this).getLocationNames().toArray(new String[0]));
 
-        /*Adapter for auto suggestions*/
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
-
-        /*Attaches autocomplete functionality to the search view*/
-        AutoCompleteTextView searchAutoComplete = BuildingSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        if (searchAutoComplete != null) {
-            searchAutoComplete.setAdapter(adapter);
-
-            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                String selectedItem = adapter.getItem(position);
-                searchAutoComplete.setText(selectedItem);
-                BuildingSearchView.setQuery(selectedItem, false); /*Set the autocomplete query without submitting it*/
-            });
-        }
+        buildingSearch.setAdapter(adapter);
+        buildingSearch.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedBuilding = adapter.getItem(position);
+            buildingSearch.setText(selectedBuilding, false);
+        });
     }
+
 
     private void onclick(){
         binding.RemoveButton.setOnClickListener(v->
@@ -210,10 +206,11 @@ public class ScheduleDetails extends AppCompatActivity {
 
         binding.editButton.setOnClickListener(v->
                 edit()
+
         );
-        binding.colorResult.setOnClickListener(view -> {
-            showColorPicker();
-        });
+        binding.colorResult.setOnClickListener(view ->
+            showColorPicker()
+        );
 
         binding.RepeatEventSelector.setOnClickListener(v ->
                 setWeekVisible()
@@ -254,24 +251,12 @@ public class ScheduleDetails extends AppCompatActivity {
             showDatePicker()
         );
 
-    }
-
-    private void showDatePicker() {
-
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        binding.layoutHeader.setNavigationOnClickListener(v ->
+                onBackPressed()
+        );
 
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (DatePicker view, int selectedYear, int selectedMonth, int selectedDay) -> {
 
-                    String formattedDate = String.format("%02d/%02d/%d", selectedMonth + 1, selectedDay, selectedYear);
-                    binding.endresult.setText(formattedDate);
-                }, year, month, day);
-
-        datePickerDialog.show();
     }
 
     private void showColorPicker() {
@@ -296,6 +281,24 @@ public class ScheduleDetails extends AppCompatActivity {
                 .setNegativeButton("Cancel", (dialog, which) -> showToast("Color selection canceled"))
                 .build()
                 .show();
+    }
+
+    private void showDatePicker() {
+
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (DatePicker view, int selectedYear, int selectedMonth, int selectedDay) -> {
+
+                    String formattedDate = String.format("%02d/%02d/%d", selectedMonth + 1, selectedDay, selectedYear);
+                    binding.endresult.setText(formattedDate);
+                }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private void showTimePicker() {
@@ -331,10 +334,8 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private void setselecteddays(TextView button){
         if(!button.isSelected()) {
-            button.setBackgroundColor(Color.GRAY);
             button.setSelected(true);
         }else{
-            button.setBackgroundColor(Color.WHITE);
             button.setSelected(false);
         }
     }
@@ -346,6 +347,7 @@ public class ScheduleDetails extends AppCompatActivity {
                 .collection("Events")
                 .document(binding.idresult.getText().toString())
                 .delete();
+
         Intent intent = new Intent(getApplicationContext(), SchedualerGUI.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -367,7 +369,7 @@ public class ScheduleDetails extends AppCompatActivity {
             tempmap.put("Event_Title", binding.nameresult.getText().toString());
             tempmap.put("Event_Date", binding.DateResult.getText().toString());
             tempmap.put("Event_Time", binding.timeresult.getText().toString());
-            tempmap.put("Building_Name", binding.buildingresult.getQuery().toString());
+            tempmap.put("Building_Name", binding.buildingresult.getText().toString());
             tempmap.put("Room_Number", binding.roomresult.getText().toString());
             tempmap.put("Event_Type", binding.typeresult.getText().toString());
             tempmap.put("Color_Preference", colorPreference);
