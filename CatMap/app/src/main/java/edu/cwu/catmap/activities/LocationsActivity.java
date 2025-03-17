@@ -33,17 +33,15 @@ public class LocationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityLocationsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_locations);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        binding = ActivityLocationsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
         ArrayList<FavoriteLocationsListItem> locationsList = new ArrayList<>();
         populateLocations(locationsList);
@@ -88,7 +86,10 @@ public class LocationsActivity extends AppCompatActivity {
         FirestoreUtility.getInstance().getFavoriteLocations(new FirestoreTraceback() {
             @Override
             public void success(String message) {
-                // No action needed here
+                Log.i("Locations Activity", "Error case of firebase util calling success with no data, message: " + message);
+                ToastHelper.showToast(context, message);
+                locationsList.add(new FavoriteLocationsListItem.Location(Constants.VALUE_NO_LOCATIONS_FOUND));
+                addAllLocationsToLocationsList(locationsList, context);
             }
 
             @Override
@@ -96,22 +97,14 @@ public class LocationsActivity extends AppCompatActivity {
                 List<HashMap<String, String>> favoriteLocationsList = (ArrayList<HashMap<String, String>>) data;
 
                 for (HashMap<String, String> favoriteLocationMap : favoriteLocationsList) {
-                    Log.i("Locations Activity", "location_name: " + favoriteLocationMap.get(Constants.KEY_LOCATION_NAME) + " color: " + favoriteLocationMap.get(Constants.KEY_COLOR) + " color int: " + Integer.parseInt(Objects.requireNonNull(favoriteLocationMap.get(Constants.KEY_COLOR))));
+                    Log.i("Locations Activity", "location_name: " + favoriteLocationMap.get(Constants.KEY_LOCATION_NAME) +
+                            " color: " + favoriteLocationMap.get(Constants.KEY_COLOR) +
+                            " color int: " + Integer.parseInt(Objects.requireNonNull(favoriteLocationMap.get(Constants.KEY_COLOR))));
+
                     locationsList.add(new FavoriteLocationsListItem.FavoriteLocation(favoriteLocationMap.get(Constants.KEY_LOCATION_NAME), Integer.parseInt(favoriteLocationMap.get(Constants.KEY_COLOR))));
                 }
 
-                locationsList.add(new FavoriteLocationsListItem.SectionHeader("All Locations"));
-                LocationsManager locationsManager = LocationsManager.getInstance(context);
-
-                ArrayList<String> sortedLocations = new ArrayList<>(locationsManager.getLocationNames());
-                Collections.sort(sortedLocations);
-
-                for (String location : sortedLocations) {
-                    locationsList.add(new FavoriteLocationsListItem.Location(location));
-                }
-
-                // Once Firestore has finished loading, update RecyclerView
-                runOnUiThread(() -> updateAdapterInfo(locationsList));
+                addAllLocationsToLocationsList(locationsList, context);
             }
 
             @Override
@@ -119,5 +112,20 @@ public class LocationsActivity extends AppCompatActivity {
                 ToastHelper.showToast(context, "Failed to retrieve favorite location data");
             }
         });
+    }
+
+    private void addAllLocationsToLocationsList(List<FavoriteLocationsListItem> locationsList, Context context) {
+        locationsList.add(new FavoriteLocationsListItem.SectionHeader("All Locations"));
+        LocationsManager locationsManager = LocationsManager.getInstance(context);
+
+        ArrayList<String> sortedLocations = new ArrayList<>(locationsManager.getLocationNames());
+        Collections.sort(sortedLocations);
+
+        for (String location : sortedLocations) {
+            locationsList.add(new FavoriteLocationsListItem.Location(location));
+        }
+
+        // Once Firestore has finished loading, update RecyclerView
+        runOnUiThread(() -> updateAdapterInfo(locationsList));
     }
 }

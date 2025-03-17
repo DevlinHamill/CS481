@@ -23,7 +23,7 @@
         android:text="@string/test"
         android:textSize="18sp"
         android:ellipsize="end"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toEndOf="@id/colorIndicator"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

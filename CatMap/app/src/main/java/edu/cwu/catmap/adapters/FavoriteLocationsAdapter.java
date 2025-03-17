@@ -210,13 +210,15 @@ public class FavoriteLocationsAdapter extends RecyclerView.Adapter<RecyclerView.
         void bind(FavoriteLocationsListItem.Location item) {
             locationName.setText(item.getName());
 
-            //set on click listener to open up location info page with this location name
-            super.itemView.setOnClickListener(view -> {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, LocationInformationActivity.class);
-                intent.putExtra(Constants.KEY_LOCATION_NAME, item.getName());
-                context.startActivity(intent);
-            });
+            if (!item.getName().equals(Constants.VALUE_NO_LOCATIONS_FOUND)) {
+                //set on click listener to open up location info page with this location name
+                super.itemView.setOnClickListener(view -> {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, LocationInformationActivity.class);
+                    intent.putExtra(Constants.KEY_LOCATION_NAME, item.getName());
+                    context.startActivity(intent);
+                });
+            }
         }
     }
 }

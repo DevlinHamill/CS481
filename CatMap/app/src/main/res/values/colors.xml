@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="grey">#FF929292</color>
+    <color name="red">#FFFF0000</color>
+    <color name="gray_100_transparent">#1AF5F5F5</color> <!-- Soft background -->
 
-    <color name="lightScheme_Dark">#FF555FFF</color>
-    <color name="lightScheme_MidDark">#FF97a0ff</color>
-    <color name="lightScheme_Mid">#FFbcccff</color>
-    <color name="lightScheme_MidLight">#FFd2deff</color>
-    <color name="lightScheme_Light">#FFd9e3ff</color>
+<!-- Light Mode Colors -->
+<color name="blue_600">#1976D2</color>
+<color name="white">#FFFFFF</color>
+<color name="black">#000000</color>
+<color name="gray_100">#F5F5F5</color>
 
-    <color name="darkScheme_Dark">#FF080852</color>
-    <color name="darkScheme_MidDark">#FF163087</color>
-    <color name="darkScheme_Mid">#FF3763C3</color>
-    <color name="darkScheme_MidLight">#FF4A4AB4</color>
-    <color name="darkScheme_Light">#FF899BE0</color>
-    <color name="darkScheme_primary">#FFDD6C6C</color>
+<!-- Dark Mode Colors -->
+<color name="blue_300">#90CAF9</color>
+<color name="gray_900">#121212</color>
+<color name="gray_800">#1E1E1E</color>
+<color name="gray_700">#E0E0E0</color>
+<color name="orange">#FF5722</color>
+<color name="purple">#8401A2</color>
 
-
-    <!-- Light Theme Colors -->
-    <color name="blue_600">#1976D2</color> <!-- Vibrant blue for primary -->
-    <color name="gray_100">#F5F5F5</color> <!-- Soft background -->
-
-    <!-- Dark Theme Colors -->
-    <color name="blue_300">#90CAF9</color> <!-- Muted blue for dark mode -->
-    <color name="gray_900">#121212</color>
-    <color name="gray_800">#1E1E1E</color>
-    <color name="gray_700">#E0E0E0</color>
-
-
+<!-- High Contrast Mode Colors -->
+<color name="yellow_700">#FFD600</color> <!-- Bright Yellow for High Visibility -->
+<color name="yellow_100">#FFF59D</color> <!-- Softer Yellow for Background -->
 </resources>

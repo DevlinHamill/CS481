@@ -8,6 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
@@ -15,18 +16,26 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.utilities.Constants;
+import edu.cwu.catmap.utilities.GeneralUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private MaterialSwitch switchDarkMode, switchHighContrast, switchAdaAccessible, switchNotifications;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Apply the correct theme before setting content view
-        applyTheme();
-
         super.onCreate(savedInstanceState);
+
+        //get sharedPrefs
+        sharedPreferences = getSharedPreferences(Constants.KEY_SHARED_PREFRENCES_NAME, MODE_PRIVATE);
+
+        applyTheme();
+        setTheme(GeneralUtils.getSavedTheme(this));
         setContentView(R.layout.settings_activity);
+
 
         // Initialize UI components
         switchDarkMode = findViewById(R.id.switch_dark_mode);
@@ -44,12 +53,20 @@ public class SettingsActivity extends AppCompatActivity {
         switchNotifications.setOnCheckedChangeListener(this::onSwitchToggled);
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        super.onBackPressed();
+
+        finish();
+    }
+
     /**
      * Applies the saved theme before setting the UI.
      */
     private void applyTheme() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isDarkMode = preferences.getBoolean("dark_mode", false);
+        boolean isDarkMode = sharedPreferences.getBoolean(Constants.KEY_SHARED_PREFRENCES_DARK_MODE, false);
 
         if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -62,19 +79,17 @@ public class SettingsActivity extends AppCompatActivity {
      * Loads saved preferences and updates the switches accordingly.
      */
     private void loadSettings() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        switchDarkMode.setChecked(preferences.getBoolean("dark_mode", false));
-        switchHighContrast.setChecked(preferences.getBoolean("high_contrast", false));
-        switchAdaAccessible.setChecked(preferences.getBoolean("ada_accessible", false));
-        switchNotifications.setChecked(preferences.getBoolean("notifications", true));
+        switchDarkMode.setChecked(sharedPreferences.getBoolean("dark_mode", false));
+        switchHighContrast.setChecked(sharedPreferences.getBoolean("high_contrast", false));
+        switchAdaAccessible.setChecked(sharedPreferences.getBoolean("ada_accessible", false));
+        switchNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
 
         // Get references
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
         LinearLayout alertRow = findViewById(R.id.alert_option_container);
 
-        boolean notificationsEnabled = preferences.getBoolean("notifications", true);
-        String alertOption = preferences.getString("alert_option", "10 minutes before");
+        boolean notificationsEnabled = sharedPreferences.getBoolean("notifications", true);
+        String alertOption = sharedPreferences.getString("alert_option", "10 minutes before");
 
         if (notificationsEnabled) {
             textSelectedAlert.setText(alertOption);
@@ -91,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
      * Saves preference when a switch is toggled and updates the UI dynamically.
      */
     private void onSwitchToggled(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (buttonView.getId() == R.id.switch_dark_mode) {
             editor.putBoolean("dark_mode", isChecked);
@@ -118,7 +133,23 @@ public class SettingsActivity extends AppCompatActivity {
 
         } else if (buttonView.getId() == R.id.switch_notifications) {
             editor.putBoolean("notifications", isChecked);
-            updateNotificationUI(isChecked);
+
+            // 🚀 Update UI dynamically
+            TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
+            LinearLayout alertRow = findViewById(R.id.alert_option_container);
+
+            if (isChecked) {
+                // Restore last alert selection
+                String lastAlert = sharedPreferences.getString("alert_option", "10 minutes before");
+                textSelectedAlert.setText(lastAlert);
+                alertRow.setEnabled(true);
+                alertRow.setAlpha(1f);
+            } else {
+                // Disable alert row
+                textSelectedAlert.setText("None");
+                alertRow.setEnabled(false);
+                alertRow.setAlpha(0.5f);
+            }
         }
 
         editor.apply();
@@ -133,23 +164,77 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * Updates UI based on notifications toggle.
-     */
-    private void updateNotificationUI(boolean isChecked) {
+    public void toggleNotifications(View view) {
+        MaterialSwitch switchNotifications = findViewById(R.id.switch_notifications);
+        switchNotifications.toggle();
+
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
         LinearLayout alertRow = findViewById(R.id.alert_option_container);
 
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        boolean isChecked = switchNotifications.isChecked();
+        editor.putBoolean("notifications", isChecked);
+
         if (isChecked) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String lastAlert = preferences.getString("alert_option", "10 minutes before");
+            // Restore last selected alert option or default to "10 minutes before"
+            String lastAlert = sharedPreferences.getString("alert_option", "10 minutes before");
             textSelectedAlert.setText(lastAlert);
             alertRow.setEnabled(true);
             alertRow.setAlpha(1f);
         } else {
+            // When notifications are OFF, set alert to "None" and disable the row
             textSelectedAlert.setText("None");
             alertRow.setEnabled(false);
             alertRow.setAlpha(0.5f);
         }
+
+        editor.apply();
     }
+
+
+    public void showAlertDialog(View view) {
+        // Prevent dialog from opening if notifications are disabled
+        if (!sharedPreferences.getBoolean("notifications", true)) {
+            return;
+        }
+
+        // Define alert options
+        final String[] alertOptions = {"At time of event", "5 minutes before", "10 minutes before", "15 minutes before"};
+
+        // Get reference to alert text view
+        TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
+
+        // Load the currently selected alert option
+        String currentSelection = sharedPreferences.getString("alert_option", "10 minutes before");
+
+        // Find the index of the current selection
+        int checkedItem = 2; // Default to "10 minutes before"
+        for (int i = 0; i < alertOptions.length; i++) {
+            if (alertOptions[i].equals(currentSelection)) {
+                checkedItem = i;
+                break;
+            }
+        }
+
+        // Create and show the AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Alert Time")
+                .setSingleChoiceItems(alertOptions, checkedItem, (dialog, which) -> {
+                    // Update text view with the selected option
+                    textSelectedAlert.setText(alertOptions[which]);
+
+                    // Save selection in SharedPreferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("alert_option", alertOptions[which]);
+                    editor.apply();
+
+                    // Dismiss the dialog
+                    dialog.dismiss();
+                });
+
+        builder.create().show();
+    }
+
+
 }

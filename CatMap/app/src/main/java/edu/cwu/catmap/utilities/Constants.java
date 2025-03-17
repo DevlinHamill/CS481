@@ -29,16 +29,42 @@ public class Constants {
 
     //collection names constants
     public static final String KEY_USER_COLLECTION = "user_collection";
-    public static final String KEY_EVENT_COLLECTION = "event_collection";
+    public static final String KEY_EVENTS_SUBCOLLECTION = "Events";
     public static final String KEY_EVENT_GROUP_COLLECTION = "event_group_collection";
-    public static final String KEY_FAVORITE_LOCATIONS_COLLECTION = "favorite_locations_collection";
+    public static final String KEY_FAVORITE_LOCATIONS_SUBCOLLECTION = "favorite_locations_collection";
     public static final String KEY_SCHEDULE_COLLECTION = "schedule_collection";
 
     //intent extra keys
     public static final String KEY_LOCATION_NAME = "location_name";
     public static final String KEY_COLOR = "color";
 
-    //location json filename
+    //locations
     public static final String KEY_LOCATION_JSON_NAME = "json/locations.json";
+    public static final String VALUE_NO_LOCATIONS_FOUND = "No Favorite Locations Found";
+
+    //events constants
+    public static final String KEY_EVENT_TYPE = "Event_Type";
+    public static final String KEY_EVENT_TITLE = "Event_Title";
+    public static final String KEY_EVENT_COLOR = "Color_Preference";
+    public static final String VALUE_EVENT_TYPE_EVENT = "Event";
+    public static final String VALUE_EVENT_TYPE_CLASS = "Class";
+
+    //new event keys
+    public static final String KEY_NEW_EVENT_TYPE = "header";
+    public static final String KEY_NEW_EVENT_SELECTED_DATE = "SELECTED_DATE";
+    public static final String KEY_NEW_EVENT_IS_EXISTING_CLASS = "is_existing_class";
+    public static final String KEY_NEW_EVENT_CLASS_NAME = "class_name";
+    public static final String KEY_NEW_EVENT_CLASS_COLOR = "class_color";
+
+
+
+    public static final String KEY_EVENT_COLLECTION = "event_collection";
+
+    public static final String KEY_FAVORITE_LOCATIONS_COLLECTION = "favorite_locations_collection";
+
+    //shared prefs
+    public static final String KEY_SHARED_PREFRENCES_NAME = "AppPrefs";
+    public static final String KEY_SHARED_PREFRENCES_DARK_MODE = "dark_mode";
+
 
 }

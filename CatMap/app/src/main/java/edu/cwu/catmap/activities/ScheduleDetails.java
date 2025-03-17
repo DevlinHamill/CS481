@@ -6,8 +6,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,8 +29,8 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -37,11 +38,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.databinding.ActivityScheduleDetailsBinding;
 import com.google.firebase.firestore.DocumentReference;
 
 public class ScheduleDetails extends AppCompatActivity {
 
+    private String Event_type;
     private String colorPreference;
 
     private String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
@@ -73,7 +76,7 @@ public class ScheduleDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        binding = edu.cwu.catmap.databinding.ActivityScheduleDetailsBinding.inflate(getLayoutInflater());
+        binding = ActivityScheduleDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -88,11 +91,13 @@ public class ScheduleDetails extends AppCompatActivity {
         binding.nameresult.setText(map.get("Event_Title"));
         binding.DateResult.setText(map.get("Event_Date"));
         binding.timeresult.setText(map.get("Event_Time"));
-        binding.buildingresult.setIconifiedByDefault(false);
-        binding.buildingresult.setIconified(false);
-        binding.buildingresult.setQuery(map.get("Building_Name"), false);
+//        binding.buildingresult.setIconifiedByDefault(false);
+//        binding.buildingresult.setIconified(false);
+//        binding.buildingresult.setQuery(map.get("Building_Name"), false);
+        binding.buildingresult.setText(map.get("Building_Name"));
         binding.roomresult.setText(map.get("Room_Number"));
-        binding.typeresult.setText(map.get("Event_Type"));
+        Event_type = map.get("Event_Type");
+        binding.layoutHeader.setTitle("Edit "+ Event_type);
         binding.colorResult.setBackgroundColor(Integer.parseInt(map.get("Color_Preference")));
         binding.endresult.setText(map.get("End_Date"));
         colorPreference = map.get("Color_Preference");
@@ -103,6 +108,7 @@ public class ScheduleDetails extends AppCompatActivity {
         if(repeatingCondition){
 
             binding.RepeatEventSelector.setChecked(true);
+            binding.RepeatEventSelector.setSelected(true);
             binding.Weeklayout.setVisibility(View.VISIBLE);
             binding.RepeatEventSelector.setSelected(true);
             String repeatedEventsString = map.get("Repeated_Events");
@@ -159,11 +165,11 @@ public class ScheduleDetails extends AppCompatActivity {
             showToast("Please enter a Event title");
             return false;
 
-        }else if(binding.buildingresult.getQuery().toString().trim().isEmpty()) {
+        }else if(!LocationsManager.getInstance(this).hasLocation(binding.buildingresult.getText().toString().trim())) {
             showToast("Please enter a valid building name");
             return false;
 
-        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getQuery().toString())){
+        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getText().toString())){
             showToast("Please enter an existing building name");
             return false;
 
@@ -183,65 +189,32 @@ public class ScheduleDetails extends AppCompatActivity {
         }
     }
 
-    private void checkbuildings(SearchView BuildingSearchView){
+    private void checkbuildings(AutoCompleteTextView buildingSearch) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line,
+                LocationsManager.getInstance(this).getLocationNames().toArray(new String[0]));
 
-        /*Adapter for auto suggestions*/
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
-
-        /*Attaches autocomplete functionality to the search view*/
-        AutoCompleteTextView searchAutoComplete = BuildingSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        if (searchAutoComplete != null) {
-            searchAutoComplete.setAdapter(adapter);
-
-            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                String selectedItem = adapter.getItem(position);
-                searchAutoComplete.setText(selectedItem);
-                BuildingSearchView.setQuery(selectedItem, false); /*Set the autocomplete query without submitting it*/
-            });
-        }
+        buildingSearch.setAdapter(adapter);
+        buildingSearch.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedBuilding = adapter.getItem(position);
+            buildingSearch.setText(selectedBuilding, false);
+        });
     }
+
 
     private void onclick(){
         binding.RemoveButton.setOnClickListener(v->
                 remove()
         );
 
-        binding.editButton.setOnClickListener(v->
-                edit()
+        binding.editButton.setOnClickListener(v-> {
+            edit();
+            onBackPressed();
+                }
         );
-        binding.colorResult.setOnClickListener(view -> {
-            ColorDrawable backgroundColor = (ColorDrawable) binding.colorbackground.getBackground();
-            int backgroundColorInt = backgroundColor.getColor();
-
-            ColorPickerDialogBuilder
-                    .with(this)
-                    .setTitle("Choose a color")
-                    .initialColor(backgroundColorInt)
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(12)
-                    .showAlphaSlider(false)
-                    .setOnColorSelectedListener(new OnColorSelectedListener() {
-                        @Override
-                        public void onColorSelected(int selectedColor) {
-                            showToast(context, "selected color " + selectedColor);
-                        }
-                    })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            showToast(context, "Select color canceled");
-                        }
-                    })
-                    .setPositiveButton("confirm", new ColorPickerClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
-                            binding.colorResult.setBackgroundColor(lastSelectedColor);
-                            colorPreference = ""+lastSelectedColor;
-                        }
-                    })
-                    .build()
-                    .show();
-        });
+        binding.colorResult.setOnClickListener(view ->
+            showColorPicker()
+        );
 
         binding.RepeatEventSelector.setOnClickListener(v ->
                 setWeekVisible()
@@ -282,6 +255,36 @@ public class ScheduleDetails extends AppCompatActivity {
             showDatePicker()
         );
 
+        binding.layoutHeader.setNavigationOnClickListener(v ->
+                onBackPressed()
+        );
+
+
+
+    }
+
+    private void showColorPicker() {
+        Drawable background = binding.colorbackground.getBackground();
+
+        int backgroundColorInt = Color.WHITE;
+
+        if (background instanceof ColorDrawable) {
+            backgroundColorInt = ((ColorDrawable) background).getColor();
+        }
+        ColorPickerDialogBuilder
+                .with(this)
+                .setTitle("Choose a color")
+                .initialColor(backgroundColorInt)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .showAlphaSlider(false)
+                .setPositiveButton("Confirm", (dialog, lastSelectedColor, allColors) -> {
+                    binding.colorResult.setBackgroundColor(lastSelectedColor);
+                    colorPreference = String.valueOf(lastSelectedColor);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> showToast("Color selection canceled"))
+                .build()
+                .show();
     }
 
     private void showDatePicker() {
@@ -323,23 +326,18 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private void setWeekVisible(){
 
-        if(binding.Weeklayout.getVisibility() == View.INVISIBLE){
-            binding.Weeklayout.setVisibility(VISIBLE);
-            binding.RepeatEventSelector.setSelected(true);
-        }else{
-            binding.Weeklayout.setVisibility(View.INVISIBLE);
-            binding.RepeatEventSelector.setSelected(false);
-        }
+        boolean isChecked = binding.RepeatEventSelector.isChecked();
+        binding.Weeklayout.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
 
     }
 
-    private void setselecteddays(TextView button){
+    private void setselecteddays( com.google.android.material.button.MaterialButton button){
         if(!button.isSelected()) {
-            button.setBackgroundColor(Color.GRAY);
             button.setSelected(true);
+            button.setChecked(true);
         }else{
-            button.setBackgroundColor(Color.WHITE);
             button.setSelected(false);
+            button.setChecked(false);
         }
     }
 
@@ -350,7 +348,11 @@ public class ScheduleDetails extends AppCompatActivity {
                 .collection("Events")
                 .document(binding.idresult.getText().toString())
                 .delete();
-        onBackPressed();
+
+        Intent intent = new Intent(getApplicationContext(), SchedualerGUI.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void edit() {
@@ -368,14 +370,14 @@ public class ScheduleDetails extends AppCompatActivity {
             tempmap.put("Event_Title", binding.nameresult.getText().toString());
             tempmap.put("Event_Date", binding.DateResult.getText().toString());
             tempmap.put("Event_Time", binding.timeresult.getText().toString());
-            tempmap.put("Building_Name", binding.buildingresult.getQuery().toString());
+            tempmap.put("Building_Name", binding.buildingresult.getText().toString());
             tempmap.put("Room_Number", binding.roomresult.getText().toString());
-            tempmap.put("Event_Type", binding.typeresult.getText().toString());
+            tempmap.put("Event_Type", Event_type);
             tempmap.put("Color_Preference", colorPreference);
             tempmap.put("End_Date", binding.endresult.getText().toString());
 
 
-            if (binding.RepeatEventSelector.isSelected()) {
+            if (binding.RepeatEventSelector.isChecked()) {
                 if (binding.sunbutton.isSelected()) {
                     repeatingevents[0] = 1;
                 } else {

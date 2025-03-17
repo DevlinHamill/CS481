@@ -7,11 +7,35 @@
     android:layout_height="match_parent"
     tools:context="activities.MainActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="?attr/colorPrimary"
+        app:title="CatMap Navigator"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:titleCentered="true"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        android:layout_marginStart="15dp"
+        android:src="@drawable/logo_pin"
+        />
+
     <fragment
         android:id="@+id/id_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
@@ -21,81 +45,106 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         app:srcCompat="@android:drawable/ic_dialog_dialer"
-        android:layout_marginBottom="160dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="?attr/colorPrimary"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <View
+        android:id="@+id/misc"
+        android:layout_width="152dp"
+        android:layout_height="148dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/app_name"
+        android:background="@drawable/background_misc"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/MiscButton"
+        app:layout_constraintEnd_toStartOf="@+id/MiscButton"
+        app:tint="?attr/backgroundColor"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="184dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/misc"
+        app:layout_constraintBottom_toBottomOf="@id/misc"
+        app:layout_constraintStart_toEndOf="@id/profileButton"
+        app:layout_constraintTop_toBottomOf="@id/LocationsButton"
         app:srcCompat="@drawable/ic_settings"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:backgroundTint="?attr/colorPrimary"
+        />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/profileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:clickable="true"
+        app:layout_constraintStart_toStartOf="@id/misc"
         app:layout_constraintBottom_toBottomOf="@id/misc"
+        app:layout_constraintTop_toBottomOf="@id/SchedulerButton"
         app:layout_constraintEnd_toStartOf="@id/settingsButton"
         app:srcCompat="@drawable/ic_profile"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:backgroundTint="?attr/colorPrimary"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/SchedulerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="76dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@id/misc"
-        app:layout_constraintEnd_toStartOf="@id/settingsButton"
+        app:layout_constraintTop_toTopOf="@id/misc"
+        app:layout_constraintStart_toStartOf="@id/misc"
+        app:layout_constraintEnd_toStartOf="@id/LocationsButton"
+        app:layout_constraintBottom_toTopOf="@id/profileButton"
         app:srcCompat="@drawable/ic_callender"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:backgroundTint="?attr/colorPrimary"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/LocationsButton"
-        android:layout_width="69dp"
-        android:layout_height="57dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@id/settingsButton"
+        app:layout_constraintTop_toTopOf="@id/misc"
         app:layout_constraintEnd_toEndOf="@id/misc"
+        app:layout_constraintStart_toEndOf="@id/SchedulerButton"
+        app:layout_constraintBottom_toTopOf="@id/settingsButton"
         app:srcCompat="@drawable/ic_location"
-        android:visibility="invisible"/>
-
-    <ImageView
-        android:id="@+id/misc"
-        android:layout_width="152dp"
-        android:layout_height="148dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/background_misc"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/MiscButton"
-        app:layout_constraintEnd_toStartOf="@+id/MiscButton"
-        app:tint="@color/black" />
+        android:backgroundTint="?attr/colorPrimary"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/endNavigationButton"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/misc"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/red"
+        android:text="@string/end_navigation"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:visibility="gone"
+        />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="?attr/colorSurface"
         app:fabAlignmentMode="end"
-        tools:ignore="BottomAppBar">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="BottomAppBar"
+        tools:layout_editor_absoluteX="0dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/eventRecyclerView"
@@ -105,9 +154,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/daily_event" />
     </com.google.android.material.bottomappbar.BottomAppBar>
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

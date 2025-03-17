@@ -2,7 +2,10 @@ package edu.cwu.catmap.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,7 +58,7 @@ public class SchedualerGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        schedualer = edu.cwu.catmap.databinding.ActivitySchedualerBinding.inflate(getLayoutInflater());
+        schedualer = ActivitySchedualerBinding.inflate(getLayoutInflater());
         setContentView(schedualer.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -72,8 +76,26 @@ public class SchedualerGUI extends AppCompatActivity {
 
         EventList = new ArrayList<>();
         populateEvents();
+        fillFABColor();
 
+    }
 
+    private void fillFABColor() {
+        //change button fill colors to match the theme
+        ArrayList<FloatingActionButton> fabList = new ArrayList<>();
+        TypedValue typedValue = new TypedValue();
+        this.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int color = typedValue.data;
+
+        fabList.add(schedualer.AddMeeting);
+
+        for(FloatingActionButton button : fabList) {
+            Drawable drawable = button.getDrawable();
+
+            if(drawable != null) {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
+        }
     }
 
     private void populateEvents() {
@@ -173,24 +195,37 @@ public class SchedualerGUI extends AppCompatActivity {
                     adapter = new SchedulerAdapter(EventList);
                     schedualer.eventRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     schedualer.eventRecyclerView.setAdapter(adapter);
+                    schedualer.eventRecyclerView.setVisibility(View.VISIBLE);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Failed to load daily events", Toast.LENGTH_SHORT).show();
                 });
+
     }
 
+    private String selectedDate = null;
 
     private void onclick() {
-        schedualer.AddMeeting.setOnClickListener(v ->
-                adding()
-        );
+        schedualer.AddMeeting.setOnClickListener(v -> {
+            // If no date is selected, default to today's date dynamically
+            if (selectedDate == null) {
+                selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+            }
 
-        schedualer.WeekButton.setOnClickListener(v ->
-                weekView()
+
+            AddMeetingBottomSheet bottomSheet = AddMeetingBottomSheet.newInstance(selectedDate);
+            bottomSheet.show(getSupportFragmentManager(), "AddMeetingBottomSheet");
+        });
+
+        schedualer.WeekButton.setOnClickListener(v -> {
+                    schedualer.eventRecyclerView.setVisibility(View.INVISIBLE);
+                    weekView();
+                }
         );
 
         schedualer.MonthButton.setOnClickListener(v->
                 {
+                    schedualer.eventRecyclerView.setVisibility(View.INVISIBLE);
                     schedualer.calendarView.setVisibility(View.VISIBLE);
                     schedualer.AddMeeting.setVisibility(View.VISIBLE);
                     populateEvents();
@@ -200,9 +235,13 @@ public class SchedualerGUI extends AppCompatActivity {
         schedualer.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
-            selectedDateMillis = calendar.getTimeInMillis();
+
+            selectedDateMillis = calendar.getTimeInMillis();  //  Store the selected date
+            selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.getTime());
             populateEvents();
         });
+
+        schedualer.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void grabSuggestions() {
@@ -324,11 +363,12 @@ public class SchedualerGUI extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Failed to load weekly events", Toast.LENGTH_SHORT).show();
                 });
+        schedualer.eventRecyclerView.setVisibility(View.VISIBLE);
     }
 
 
     private void weekView() {
-
+        EventList.clear();
         schedualer.calendarView.setVisibility(View.GONE);
         schedualer.AddMeeting.setVisibility(View.GONE);
 
@@ -442,16 +482,18 @@ public class SchedualerGUI extends AppCompatActivity {
                         }
                     } else {
                         EventList.add(new ScheduleListItem.SectionHeader("No events this week"));
-                        grabSuggestions();
+
                     }
 
                     adapter = new SchedulerAdapter(EventList);
                     schedualer.eventRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     schedualer.eventRecyclerView.setAdapter(adapter);
+                    schedualer.eventRecyclerView.setVisibility(View.VISIBLE);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Failed to load weekly events", Toast.LENGTH_SHORT).show();
                 });
+
     }
 
     private void adding() {

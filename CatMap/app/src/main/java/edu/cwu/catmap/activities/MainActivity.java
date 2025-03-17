@@ -1,11 +1,18 @@
 package edu.cwu.catmap.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -35,7 +42,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 
 import org.json.JSONArray;
@@ -60,6 +69,7 @@ import edu.cwu.catmap.core.ScheduleListItem;
 import edu.cwu.catmap.databinding.ActivityMainBinding;
 import edu.cwu.catmap.adapters.DailyEventAdapter;
 import edu.cwu.catmap.manager.LocationsManager;
+import edu.cwu.catmap.utilities.Constants;
 import edu.cwu.catmap.utilities.LocationPermissionHelper;
 import edu.cwu.catmap.utilities.EventUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -78,6 +88,99 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient fusedLocationClient;
     private Marker userMarker;
 
+    private LatLng destination;
+    private static Handler handler = new Handler();
+    private Runnable refreshTask;
+    private static final long REFRESH_INTERVAL = 5000; // 2 seconds (adjust as needed)
+
+    //private PolylineOptions oldPolylineOptions;
+    private Polyline oldPolyline;
+    //private MarkerOptions oldDestinationMarkerOptions;
+    private Marker oldDestinationMarker;
+    private PolylineOptions newPolylineOptions;
+    private Polyline newPolyline;
+    private MarkerOptions newDestinationMarkerOptions;
+    private Marker newDestinationMarker;
+    private String EtaText;
+    private boolean isDirectionsRequestInProgress = false; //flag to prevent overlapping requests
+    private boolean isRunning = true; //flag to stop the loop
+
+    //outer bound of polygon (not whole globe)
+    LatLng[] outerBounds = {
+            new LatLng(27.0076653, -140.5366559),
+            new LatLng(27.0076653, -100.5366559),
+            new LatLng(67.0076653, -100.5366559),
+            new LatLng(67.0076653, -140.5366559),
+    };
+    //campus polygon
+    LatLng[] campusBounds = {
+            new LatLng(47.01407056573746, -120.51994167974972),
+            new LatLng(47.01408304551457, -120.52262955204823),
+            new LatLng(47.01279391692807, -120.52425364288959),
+            new LatLng(47.011941099692415, -120.52550440049475),
+            new LatLng(47.01079458969304, -120.52582779530084),
+            new LatLng(47.01066583712106, -120.5288502037981),
+            new LatLng(47.01051100626275, -120.53164600654705),
+            new LatLng(47.01047229847818, -120.5396005618308),
+            new LatLng(47.01049572681534, -120.54484041122356),
+            new LatLng(47.00942383682609, -120.54490208586678),
+            new LatLng(47.00860601682181, -120.5434794545431),
+            new LatLng(47.00674009324229, -120.54347410205268),
+            new LatLng(47.006704911171276, -120.54486896176985),
+            new LatLng(47.00616111163828, -120.5448657967118),
+            new LatLng(47.00605013098817, -120.54724012352013),
+            new LatLng(47.004861619334235, -120.54717389210595),
+            new LatLng(47.00429047654235, -120.54595828473344),
+            new LatLng(47.00349049362342, -120.54662394137064),
+            new LatLng(47.00332533280491, -120.54662970129527),
+            new LatLng(47.003345867333195, -120.54528856709489),
+            new LatLng(47.002799764728984, -120.54527056027807),
+            new LatLng(47.00287539341067, -120.54339282495086),
+            new LatLng(47.00236647447496, -120.54333198405641),
+            new LatLng(47.00233823224595, -120.54425178157626),
+            new LatLng(47.001823038426856, -120.54422671934262),
+            new LatLng(47.00185478036978, -120.54329583637754),
+            new LatLng(47.000788808829505, -120.54328047002583),
+            new LatLng(47.000782346759536, -120.54398943276557),
+            new LatLng(47.000444735444724, -120.54396775676832),
+            new LatLng(47.00044392060786, -120.54412188444245),
+            new LatLng(47.000288501613696, -120.54412195874754),
+            new LatLng(47.000270420082174, -120.54459062372904),
+            new LatLng(46.99979964181349, -120.54455844906596),
+            new LatLng(46.999784885243926, -120.5448810745124),
+            new LatLng(46.99861311639834, -120.54483024862996),
+            new LatLng(46.99865186439213, -120.54323582399306),
+            new LatLng(46.99937602102182, -120.54329690063364),
+            new LatLng(46.99943991105609, -120.5421884737499),
+            new LatLng(46.99864988059308, -120.54215632986747),
+            new LatLng(46.9987233525702, -120.53917605441777),
+            new LatLng(46.999761293382306, -120.53922789652587),
+            new LatLng(46.999805111810176, -120.53794116424261),
+            new LatLng(46.99984286097891, -120.5375749985139),
+            new LatLng(46.9999227149018, -120.53725353906603),
+            new LatLng(47.000020080200315, -120.53696528113892),
+            new LatLng(47.00016091293502, -120.53667149700775),
+            new LatLng(47.00049861636629, -120.53613678564281),
+            new LatLng(47.000752693497354, -120.53570036718709),
+            new LatLng(47.00135615883033, -120.53466708249655),
+            new LatLng(47.00183320863204, -120.53379406347356),
+            new LatLng(47.001907252242525, -120.53353647014117),
+            new LatLng(47.003013874157446, -120.53360386145755),
+            new LatLng(47.003046650455765, -120.53166095505163),
+            new LatLng(47.00618269489664, -120.53178236436707),
+            new LatLng(47.00626683115237, -120.53017840346078),
+            new LatLng(47.00640035145624, -120.5299960132666),
+            new LatLng(47.00656679410747, -120.52968755926172),
+            new LatLng(47.00709787980966, -120.52868386278034),
+            new LatLng(47.00739662482033, -120.52828518308418),
+            new LatLng(47.0080879590786, -120.52767633885593),
+            new LatLng(47.00834222654154, -120.52759315178061),
+            new LatLng(47.00873359772935, -120.52765489108211),
+            new LatLng(47.00973827734657, -120.52704215801924),
+            new LatLng(47.010047186710906, -120.52675842443178),
+            new LatLng(47.010504317834624, -120.52669156078822),
+            new LatLng(47.0106304470581, -120.52288676679845)
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +188,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         hub = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(hub.getRoot());
+
+        //destination = new LatLng(47.0076653, -120.5366559); //destination override
+
+        if(getIntent().hasExtra(Constants.KEY_LOCATION_NAME)) {
+            destination = LocationsManager.getInstance(this).getLocation(getIntent().getStringExtra(Constants.KEY_LOCATION_NAME)).getMainEntranceCoordinateLatLng();
+            hub.endNavigationButton.setVisibility(View.VISIBLE);
+        }
+
+
+        refreshTask = new Runnable() {
+            @Override
+            public void run() {
+                if (!isRunning) return;
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
+                refreshEvents();
+                refreshDirections(); // Call the refresher method
+                displayRouteOnMap();
+                Log.d("MainActivity", "Refreshed Events");
+                handler.postDelayed(this, REFRESH_INTERVAL); // Schedule the task again
+            }
+        };
+        handler.postDelayed(refreshTask, REFRESH_INTERVAL);
 
         //initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -99,10 +224,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         eventRecyclerView = findViewById(R.id.eventRecyclerView);
 
-        onclick();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+        dailyEventAdapter = new DailyEventAdapter(new ArrayList<>());
+        eventRecyclerView.setAdapter(dailyEventAdapter);
+
+        //set on click listeners and fill the action button icons with the color on primary color
+        onclick();
+        fillFABColor();
+    }
+
+    public void stopRefreshTask() {
+        handler.removeCallbacks(refreshTask);
+        isRunning = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("MainActivity", "onDestroy called");
+        super.onDestroy();
+        stopRefreshTask();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshEvents();
+        refreshDirections();
+        displayRouteOnMap();
     }
 
     //handle permission request result
@@ -114,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             startLocationUpdates();
         } else {
             //permissions denied
-            Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Location permissions are required to show your location on the map.", Toast.LENGTH_SHORT).show();
         }
     }
     @Override
@@ -136,92 +286,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String eventTitle = eventDetails.get("Event_Title");
                     String eventTime = eventDetails.get("Event_Time");
 
-                    // Use the event details (e.g., set a waypoint)
-                    Toast.makeText(MainActivity.this, "Next Event: " + eventTitle + " at " + buildingName + ", Room " + roomNumber, Toast.LENGTH_SHORT).show();
+                    //use the event details (e.g., set a waypoint)
+                    //Toast.makeText(MainActivity.this, "Next Event: " + eventTitle + " at " + buildingName + ", Room " + roomNumber, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "No upcoming events found", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "No upcoming events found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         //getDirections(location,new LatLng(46.999784885243926, -120.5448810745124));
         //getDirections(new LatLng(47.01407056573746, -120.51994167974972),location);
-
-        //outer bound of polygon (not whole globe)
-        LatLng[] outerBounds = {
-                new LatLng(27.0076653, -140.5366559),
-                new LatLng(27.0076653, -100.5366559),
-                new LatLng(67.0076653, -100.5366559),
-                new LatLng(67.0076653, -140.5366559),
-        };
-        //campus polygon
-        LatLng[] campusBounds = {
-                new LatLng(47.01407056573746, -120.51994167974972),
-                new LatLng(47.01408304551457, -120.52262955204823),
-                new LatLng(47.01279391692807, -120.52425364288959),
-                new LatLng(47.011941099692415, -120.52550440049475),
-                new LatLng(47.01079458969304, -120.52582779530084),
-                new LatLng(47.01066583712106, -120.5288502037981),
-                new LatLng(47.01051100626275, -120.53164600654705),
-                new LatLng(47.01047229847818, -120.5396005618308),
-                new LatLng(47.01049572681534, -120.54484041122356),
-                new LatLng(47.00942383682609, -120.54490208586678),
-                new LatLng(47.00860601682181, -120.5434794545431),
-                new LatLng(47.00674009324229, -120.54347410205268),
-                new LatLng(47.006704911171276, -120.54486896176985),
-                new LatLng(47.00616111163828, -120.5448657967118),
-                new LatLng(47.00605013098817, -120.54724012352013),
-                new LatLng(47.004861619334235, -120.54717389210595),
-                new LatLng(47.00429047654235, -120.54595828473344),
-                new LatLng(47.00349049362342, -120.54662394137064),
-                new LatLng(47.00332533280491, -120.54662970129527),
-                new LatLng(47.003345867333195, -120.54528856709489),
-                new LatLng(47.002799764728984, -120.54527056027807),
-                new LatLng(47.00287539341067, -120.54339282495086),
-                new LatLng(47.00236647447496, -120.54333198405641),
-                new LatLng(47.00233823224595, -120.54425178157626),
-                new LatLng(47.001823038426856, -120.54422671934262),
-                new LatLng(47.00185478036978, -120.54329583637754),
-                new LatLng(47.000788808829505, -120.54328047002583),
-                new LatLng(47.000782346759536, -120.54398943276557),
-                new LatLng(47.000444735444724, -120.54396775676832),
-                new LatLng(47.00044392060786, -120.54412188444245),
-                new LatLng(47.000288501613696, -120.54412195874754),
-                new LatLng(47.000270420082174, -120.54459062372904),
-                new LatLng(46.99979964181349, -120.54455844906596),
-                new LatLng(46.999784885243926, -120.5448810745124),
-                new LatLng(46.99861311639834, -120.54483024862996),
-                new LatLng(46.99865186439213, -120.54323582399306),
-                new LatLng(46.99937602102182, -120.54329690063364),
-                new LatLng(46.99943991105609, -120.5421884737499),
-                new LatLng(46.99864988059308, -120.54215632986747),
-                new LatLng(46.9987233525702, -120.53917605441777),
-                new LatLng(46.999761293382306, -120.53922789652587),
-                new LatLng(46.999805111810176, -120.53794116424261),
-                new LatLng(46.99984286097891, -120.5375749985139),
-                new LatLng(46.9999227149018, -120.53725353906603),
-                new LatLng(47.000020080200315, -120.53696528113892),
-                new LatLng(47.00016091293502, -120.53667149700775),
-                new LatLng(47.00049861636629, -120.53613678564281),
-                new LatLng(47.000752693497354, -120.53570036718709),
-                new LatLng(47.00135615883033, -120.53466708249655),
-                new LatLng(47.00183320863204, -120.53379406347356),
-                new LatLng(47.001907252242525, -120.53353647014117),
-                new LatLng(47.003013874157446, -120.53360386145755),
-                new LatLng(47.003046650455765, -120.53166095505163),
-                new LatLng(47.00618269489664, -120.53178236436707),
-                new LatLng(47.00626683115237, -120.53017840346078),
-                new LatLng(47.00640035145624, -120.5299960132666),
-                new LatLng(47.00656679410747, -120.52968755926172),
-                new LatLng(47.00709787980966, -120.52868386278034),
-                new LatLng(47.00739662482033, -120.52828518308418),
-                new LatLng(47.0080879590786, -120.52767633885593),
-                new LatLng(47.00834222654154, -120.52759315178061),
-                new LatLng(47.00873359772935, -120.52765489108211),
-                new LatLng(47.00973827734657, -120.52704215801924),
-                new LatLng(47.010047186710906, -120.52675842443178),
-                new LatLng(47.010504317834624, -120.52669156078822),
-                new LatLng(47.0106304470581, -120.52288676679845)
-        };
 
         //cut hole in world polygon
         PolygonOptions polygonOptions = new PolygonOptions();
@@ -253,8 +326,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         hub.settingsButton.setOnClickListener(v->
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class))
         );
+        hub.endNavigationButton.setOnClickListener(v -> {
+            destination = null;
+            hub.endNavigationButton.setVisibility(View.GONE);
+            refreshDirections();
+        });
+    }
 
+    private void fillFABColor() {
+        //change button fill colors to match the theme
+        ArrayList<FloatingActionButton> fabList = new ArrayList<>();
+        TypedValue typedValue = new TypedValue();
+        this.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int color = typedValue.data;
 
+        fabList.add(hub.MiscButton);
+        fabList.add(hub.settingsButton);
+        fabList.add(hub.LocationsButton);
+        fabList.add(hub.SchedulerButton);
+        fabList.add(hub.profileButton);
+
+        for(FloatingActionButton button : fabList) {
+            Drawable drawable = button.getDrawable();
+
+            if(drawable != null) {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
+        }
     }
     public void miscclick(){
         if(hub.misc.getVisibility() == View.INVISIBLE){
@@ -273,6 +371,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void getDirections(LatLng origin, LatLng destination) {
+        //prevent overlapping requests
+        if (isDirectionsRequestInProgress) {
+            return;
+        }
+
+        //set the flag to true
+        isDirectionsRequestInProgress = true;
+
         String apiUrl = "https://routes.googleapis.com/directions/v2:computeRoutes";
 
         //JSON request body
@@ -309,6 +415,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        isDirectionsRequestInProgress = false; // Reset the flag
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             JSONArray routes = jsonResponse.getJSONArray("routes");
@@ -318,13 +425,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             JSONObject polyline = route.getJSONObject("polyline");
                             String encodedPolyline = polyline.getString("encodedPolyline");
 
-                            //decode and draw the route
+                            //decode the polyline
                             List<LatLng> decodedPath = decodePolyline(encodedPolyline);
-                            PolylineOptions polylineOptions = new PolylineOptions()
+
+                            //store the polyline options
+                            newPolylineOptions = new PolylineOptions()
                                     .addAll(decodedPath)
                                     .width(10)
                                     .color(Color.BLUE);
-                            gMap.addPolyline(polylineOptions);
 
                             //extract duration
                             String duration = route.getString("duration");
@@ -332,16 +440,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //convert duration to minutes
                             String durationInMinutes = convertDurationToMinutes(duration);
 
-                            //add marker at destination
-                            MarkerOptions markerOptions = new MarkerOptions()
+                            //store the destination marker options and ETA text
+                            newDestinationMarkerOptions = new MarkerOptions()
                                     .position(destination)
                                     .title("Travel Time")
                                     .snippet("Duration: " + durationInMinutes)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)); // Customize marker icon if needed
-                            Marker destinationMarker = gMap.addMarker(markerOptions);
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                            EtaText = durationInMinutes;
 
-                            //show the InfoWindow
-                            destinationMarker.showInfoWindow();
+                            //display the route on the map
+                            displayRouteOnMap();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -351,6 +459,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        isDirectionsRequestInProgress = false; // Reset the flag
                         if (error.networkResponse != null) {
                             Log.e("API Error", "Status code: " + error.networkResponse.statusCode);
                             Log.e("API Error", "Response data: " + new String(error.networkResponse.data));
@@ -374,6 +483,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         };
 
         Volley.newRequestQueue(this).add(stringRequest);
+
     }
 
     //method to convert duration to minutes
@@ -443,13 +553,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //method to set up the RecyclerView
     private void setupEventRecyclerView() {
-        // Set up the layout manager for horizontal scrolling
+        //set up the layout manager for horizontal scrolling
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         eventRecyclerView.setLayoutManager(layoutManager);
 
         //use EventUtils to populate the RecyclerView
         long currentDateMillis = System.currentTimeMillis();
-        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis);
+        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis, dailyEventAdapter);
     }
     private void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -475,7 +585,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             //update marker position
             userMarker.setPosition(location);
         }
-        // Move the camera to the user's location
+        //move the camera to the user's location
         //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
     }
 
@@ -576,52 +686,118 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void navigateToNextEvent() {
+
         getNextUpcomingEvent(new OnNextUpcomingEventListener() {
             @Override
             public void onNextUpcomingEvent(Map<String, String> eventDetails) {
                 if (eventDetails != null) {
                     String buildingName = eventDetails.get("Building_Name");
 
-                    //load locations from JSON
+                    // Load locations from JSON
                     LocationsManager locationsManager = LocationsManager.getInstance(MainActivity.this);
                     Location eventLocation = locationsManager.getLocation(buildingName);
 
                     if (eventLocation != null) {
                         String mainEntranceCoordinate = eventLocation.getMainEntranceCoordinate();
                         if (mainEntranceCoordinate != null && !mainEntranceCoordinate.isEmpty()) {
-                            //parse the mainEntranceCoordinate into a LatLng object
+                            // Parse the mainEntranceCoordinate into a LatLng object
                             String[] latLngParts = mainEntranceCoordinate.split(",");
                             double lat = Double.parseDouble(latLngParts[0]);
                             double lng = Double.parseDouble(latLngParts[1]);
-                            LatLng destination = new LatLng(lat, lng);
+                            LatLng temDest = new LatLng(lat, lng);
 
-                            //get user's current location
+                            // Get user's current location
                             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                                 fusedLocationClient.getLastLocation()
                                         .addOnSuccessListener(MainActivity.this, location -> {
                                             if (location != null) {
                                                 LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                                //call getDirections() with the user's location and the destination
-                                                getDirections(userLocation, destination);
+                                                // Call getDirections() with the user's location and the destination
+                                                getDirections(userLocation, temDest);
                                             } else {
-                                                Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(MainActivity.this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             } else {
-                                Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MainActivity.this, "Location permission is required.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "No entrance coordinates found for " + buildingName, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Building not found: " + buildingName, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "No upcoming events found.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+    public void refreshEvents() {
+        long currentDateMillis = System.currentTimeMillis();
+        EventUtils.populateEvents(this, eventRecyclerView, currentDateMillis, dailyEventAdapter);
+    }
 
+    private void refreshDirections() {
+        //update the user's location marker
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            updateUserLocationMarker(userLocation);
+
+                            //check if destination is null
+                            if (destination == null) {
+                                //if destination is null, navigate to the next event
+                                navigateToNextEvent();
+                            } else {
+                                //if destination is not null, get directions to the destination
+                                getDirections(userLocation, destination);
+                            }
+                        } else {
+                            //Toast.makeText(this, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            //Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayRouteOnMap() {
+        //ensure the map is ready
+        if (gMap == null) {
+            return;
+        }
+
+        //add new polyline and marker
+        if (newPolylineOptions != null) {
+            newPolyline = gMap.addPolyline(newPolylineOptions);
+        }
+
+        if (newDestinationMarkerOptions != null) {
+            newDestinationMarker = gMap.addMarker(newDestinationMarkerOptions); // Add the new marker
+            newDestinationMarker.showInfoWindow();
+        }
+
+        //remove old polyline and marker
+        if (oldPolyline != null) {
+            oldPolyline.remove();
+        }
+        if (oldDestinationMarker != null) {
+            oldDestinationMarker.remove();
+        }
+
+        //update references
+        oldPolyline = newPolyline;
+        oldDestinationMarker = newDestinationMarker;
+
+
+        //reset new references
+        newPolyline = null;
+        newDestinationMarker = null;
+        newPolylineOptions = null;
+        newDestinationMarkerOptions = null;
+    }
 }

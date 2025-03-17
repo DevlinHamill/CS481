@@ -26,14 +26,19 @@ import edu.cwu.catmap.adapters.DailyEventAdapter;
 import edu.cwu.catmap.core.ScheduleListItem;
 
 public class EventUtils {
-    public static void populateEvents(Context context, RecyclerView recyclerView, long selectedDateMillis) {
-        List<ScheduleListItem> itemList = new ArrayList<>(); // Store ScheduleListItems
+    public static void populateEvents(Context context, RecyclerView recyclerView, long selectedDateMillis, DailyEventAdapter adapter) {
+        List<ScheduleListItem> itemList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(selectedDateMillis);
         int selectedDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
         String formattedDate = sdf.format(calendar.getTime());
+
+        //get current date and time
+        Calendar currentCalendar = Calendar.getInstance();
+        long currentTimeMillis = currentCalendar.getTimeInMillis();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference eventsRef = db.collection("user_collection")
@@ -72,51 +77,69 @@ public class EventUtils {
                         }
 
                         if (formattedDate.equals(eventDate) || isRepeatingEvent) {
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("Event_Title", eventName);
-                            map.put("Event_Time", eventTime);
-                            map.put("Event_Date", eventDate);
-                            map.put("Building_Name", buildingName);
-                            map.put("Color_Preference", colorPreference);
-                            map.put("Event_Type", eventType);
-                            map.put("ID", id);
-                            map.put("Room_Number", roomNum);
-                            map.put("Repeated_Events", repeatedEvent);
-                            map.put("Repeating_Condition", repeatingCondition);
-                            map.put("End_Date", endDate);
+                            //combine event date and time
+                            String eventDateTimeString = eventDate + " " + eventTime;
 
-                            if (eventName != null && eventTime != null) {
-                                // Create a new ScheduleListItem for the event and add it to the list
-                                ScheduleListItem eventItem = new ScheduleListItem.Event(eventName, eventTime, map);
-                                itemList.add(eventItem);
+                            try {
+                                //parse event date and time
+                                Date eventDateTime = timeFormat.parse(eventDateTimeString);
+                                Calendar eventCalendar = Calendar.getInstance();
+                                eventCalendar.setTime(eventDateTime);
+
+                                //compare event date and time with current date and time
+                                if (eventCalendar.getTimeInMillis() >= currentTimeMillis) {
+                                    //only add the event if it is upcoming
+                                    HashMap<String, String> map = new HashMap<>();
+                                    map.put("Event_Title", eventName);
+                                    map.put("Event_Time", eventTime);
+                                    map.put("Event_Date", eventDate);
+                                    map.put("Building_Name", buildingName);
+                                    map.put("Color_Preference", colorPreference);
+                                    map.put("Event_Type", eventType);
+                                    map.put("ID", id);
+                                    map.put("Room_Number", roomNum);
+                                    map.put("Repeated_Events", repeatedEvent);
+                                    map.put("Repeating_Condition", repeatingCondition);
+                                    map.put("End_Date", endDate);
+
+                                    if (eventName != null && eventTime != null) {
+                                        //create new ScheduleListItem for the event and add it to the list
+                                        ScheduleListItem eventItem = new ScheduleListItem.Event(eventName, eventTime, map);
+                                        itemList.add(eventItem);
+                                    }
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
 
-                    // Sort items by event time (if applicable)
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
                     Collections.sort(itemList, (item1, item2) -> {
                         if (item1 instanceof ScheduleListItem.Event && item2 instanceof ScheduleListItem.Event) {
                             ScheduleListItem.Event event1 = (ScheduleListItem.Event) item1;
                             ScheduleListItem.Event event2 = (ScheduleListItem.Event) item2;
+
+                            // Parse the time strings into Date objects for accurate comparison
+                            SimpleDateFormat time = new SimpleDateFormat("h:mm a", Locale.getDefault());
                             try {
-                                Date time1 = timeFormat.parse(event1.getTime());
-                                Date time2 = timeFormat.parse(event2.getTime());
+                                Date time1 = time.parse(event1.getTime());
+                                Date time2 = time.parse(event2.getTime());
                                 return time1.compareTo(time2);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 return 0;
                             }
                         }
-                        return 0; // If they aren't both Event objects, don't sort
+                        return 0;
                     });
 
-                    // Update the RecyclerView adapter with the list of ScheduleListItem
-                    DailyEventAdapter adapter = new DailyEventAdapter(itemList);
-                    recyclerView.setAdapter(adapter);
+                    //update RecyclerView adapter with list of ScheduleListItem
+                    DailyEventAdapter adapt = new DailyEventAdapter(itemList);
+                    recyclerView.setAdapter(adapt);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to load daily events", Toast.LENGTH_SHORT).show();
                 });
+        adapter.updateData(itemList);
     }
 }

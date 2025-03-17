@@ -2,6 +2,7 @@ package edu.cwu.catmap.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,11 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.items = items;
     }
 
+    public void updateData(List<ScheduleListItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemViewType(int position) {
         ScheduleListItem item = items.get(position);
@@ -40,7 +46,7 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_EVENT) {
-            View view = inflater.inflate(R.layout.daily_event, parent, false); // Use the new item_event.xml layout
+            View view = inflater.inflate(R.layout.daily_event, parent, false);
             return new EventViewHolder(view);
         }
         throw new IllegalArgumentException("Unsupported view type: " + viewType);
@@ -50,10 +56,11 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ScheduleListItem item = items.get(position);
         if (holder instanceof EventViewHolder) {
-            ((EventViewHolder) holder).bind((ScheduleListItem.Event) item);
+            EventViewHolder eventHolder = (EventViewHolder) holder;
+            eventHolder.bind((ScheduleListItem.Event) item);
 
-            // Set click listener for the event
-            holder.itemView.setOnClickListener(v -> {
+            //set click listener for the eventButton
+            eventHolder.eventButton.setOnClickListener(v -> {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ScheduleDetails.class);
                 intent.putExtra("Map", ((ScheduleListItem.Event) item).getMap());
@@ -83,7 +90,21 @@ public class DailyEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             timeLabel.setText(item.getTime());
             eventButton.setText(item.getTitle());
 
-            // Hide the button if there's no event
+            //extract the colorPreference
+            String colorPreference = item.getMap().get("Color_Preference");
+
+            //set background color
+            if (colorPreference != null && !colorPreference.isEmpty()) {
+                try {
+                    int color = Integer.parseInt(colorPreference);
+                    eventButton.setBackgroundColor(color);
+                } catch (IllegalArgumentException e) {
+                    eventButton.setBackgroundColor(Color.GRAY);
+                }
+            } else {
+                eventButton.setBackgroundColor(Color.GRAY);
+            }
+
             if (item.getTitle().isEmpty()) {
                 eventButton.setVisibility(View.INVISIBLE);
             } else {

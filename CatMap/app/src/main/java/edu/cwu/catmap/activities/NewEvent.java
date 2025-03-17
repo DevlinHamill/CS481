@@ -5,15 +5,15 @@ import static android.view.View.VISIBLE;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,15 +22,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.cwu.catmap.databinding.ActivityNewEventBinding;
 import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.manager.UserManager;
+import edu.cwu.catmap.utilities.Constants;
 import edu.cwu.catmap.utilities.FirestoreUtility;
 import edu.cwu.catmap.utilities.ToastHelper;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -61,8 +58,12 @@ public class NewEvent extends AppCompatActivity {
         Event_Type = getIntent().getStringExtra("header");
         date = getIntent().getStringExtra("SELECTED_DATE");
         binding.EndResult.setText(date);
-        addTitle(Event_Type);
+
+        Log.i("New Event", "Passed event type: " + Event_Type + ", date: " + date);
+
         setListeners();
+        addTitle(Event_Type);
+        updateGUIIfAddingToClass();
         setupBuildingSearch(binding.BuildingSearch);
     }
 
@@ -120,6 +121,30 @@ public class NewEvent extends AppCompatActivity {
         });
     }
 
+    private void updateGUIIfAddingToClass() {
+        String eventType = getIntent().getStringExtra(Constants.KEY_NEW_EVENT_TYPE);
+        boolean isExistingClass = getIntent().getBooleanExtra(Constants.KEY_NEW_EVENT_IS_EXISTING_CLASS, false);
+
+        if(eventType != null
+                && eventType.equals(Constants.VALUE_EVENT_TYPE_CLASS)
+                && isExistingClass) {
+            //set the event title
+            binding.eventTitle.setText(getIntent().getStringExtra(Constants.KEY_NEW_EVENT_CLASS_NAME));
+            binding.eventTitle.setEnabled(false);
+
+            //set the event color
+            int providedColor = getIntent().getIntExtra(Constants.KEY_NEW_EVENT_CLASS_COLOR, Color.BLACK);
+            binding.colorPickerButton.setBackgroundColor(providedColor);
+            binding.colorPickerButton.setText("Class Color");
+            binding.colorPickerButton.setClickable(false);
+
+            colorPreference = String.valueOf(providedColor);
+
+            //set the header to include more context
+            binding.layoutHeader.setTitle("Add to Existing Class");
+        }
+    }
+
     private void setselecteddays( com.google.android.material.button.MaterialButton button){
         if(!button.isSelected()) {
             button.setSelected(true);
@@ -153,8 +178,14 @@ public class NewEvent extends AppCompatActivity {
     }
 
     private void showColorPicker() {
-        ColorDrawable backgroundColor = (ColorDrawable) binding.createMeetingLayout.getBackground();
-        int backgroundColorInt = backgroundColor.getColor();
+
+        Drawable background = binding.createMeetingLayout.getBackground();
+
+        int backgroundColorInt = Color.WHITE;
+
+        if (background instanceof ColorDrawable) {
+            backgroundColorInt = ((ColorDrawable) background).getColor();
+        }
 
         ColorPickerDialogBuilder
                 .with(this)
