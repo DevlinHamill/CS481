@@ -7,6 +7,7 @@
         <item name="backgroundColor">@color/gray_100</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnBackground">@color/black</item>
+        <item name="backgroundStacked">@color/gray_100_transparent</item>
     </style>
 
     <!-- Dark Theme -->

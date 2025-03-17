@@ -3,6 +3,7 @@
 
     <color name="grey">#FF929292</color>
     <color name="red">#FFFF0000</color>
+    <color name="gray_100_transparent">#1AF5F5F5</color> <!-- Soft background -->
 
 <!-- Light Mode Colors -->
 <color name="blue_600">#1976D2</color>

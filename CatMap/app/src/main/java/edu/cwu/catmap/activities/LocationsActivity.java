@@ -33,8 +33,9 @@ public class LocationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityLocationsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_locations);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -42,8 +43,7 @@ public class LocationsActivity extends AppCompatActivity {
             return insets;
         });
 
-        binding = ActivityLocationsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+
 
         ArrayList<FavoriteLocationsListItem> locationsList = new ArrayList<>();
         populateLocations(locationsList);

@@ -20,6 +20,9 @@
         android:theme="@style/Theme.CatMap"
         tools:targetApi="34">
         <activity
+            android:name=".activities.ClassManagerActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.LocationInformationActivity"
             android:exported="false" />
         <activity
