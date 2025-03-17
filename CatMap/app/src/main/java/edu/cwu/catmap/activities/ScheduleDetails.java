@@ -1,11 +1,8 @@
 package edu.cwu.catmap.activities;
 
-import static android.view.View.VISIBLE;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,7 +12,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,10 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -40,29 +33,14 @@ import java.util.HashMap;
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.databinding.ActivityScheduleDetailsBinding;
+import edu.cwu.catmap.utilities.Constants;
+
 import com.google.firebase.firestore.DocumentReference;
 
 public class ScheduleDetails extends AppCompatActivity {
 
     private String Event_type;
     private String colorPreference;
-
-    private String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
-            "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
-            "Brooks library", "Button Hall", "Carmody-Munro Hall", "Cat Trax East", "Cat Trax West & Cats Market",
-            "Central Marketplace", "Coach's Coffee House", "Davies Hall", "Dean Hall", "Discovery Hall", "Dougmore Hall",
-            "Early Childhood Learning Center", "Farrell Hall", "Flight Instructor Office Building", "Flight Training Center",
-            "Getz-Shortz Apartments", "Green Hall", "Greenhouse", "Grupe Faculty Center", "Health Sciences Building", "Hebeler Hall",
-            "Hitchcock Hall", "Hogue Technology Building", "Holmes Dining Room", "Jimmy B's Caf", "Jongeward Building",
-            "Kamola Hall", "Kennedy Hall", "Lind Hall", "McConnell Hall", "Mcintyre Music Building", "Meisner Hall",
-            "Michaelsen Hall", "Mitchell Hall", "Moore Hall", "Munson Hall", "Naneum Building", "Nicholson Pavilion", "North Hall",
-            "Northside Commons", "Old Heating Plant", "Psychology Building", "Public Saftey Building", "Quigley Hall",
-            "Randall Hall", "Residence Life", "Samuelson Building", "Science Building", "Shaw-Smyser hall", "Sparks Hall",
-            "Stephens-Whitney Hall", "Student Health Services", "Student Union and Recreation Center", "Student Village",
-            "Sue Lombard Dining Room", "Sue Lombard Hall", "Surplus Property Warehouse", "The Bistro", "The Village Coffee, Market, Grill",
-            "Tomlinson Stadium", "Wahle Apartment Complex", "Wendell Hill Hall A", "Wendell Hill Hall B", "Wildcat Printing", "Wilson Hall"};
-
-
     private Context context;
 
     ActivityScheduleDetailsBinding binding;
@@ -141,7 +119,23 @@ public class ScheduleDetails extends AppCompatActivity {
 
 
         onclick();
+        updateGUIIfEditingClass();
+    }
 
+    private void updateGUIIfEditingClass() {
+        String eventType = Event_type;
+
+        if(eventType != null && eventType.equals(Constants.VALUE_EVENT_TYPE_CLASS)) {
+            //set the event title
+            binding.nameresult.setEnabled(false);
+
+            //set the event color
+            binding.colorPickerText.setText("Class Color");
+            binding.colorResult.setClickable(false);
+
+            //set the header to include more context
+            binding.layoutHeader.setTitle("Edit Existing Class Event");
+        }
     }
 
     private void showToast(String message){
@@ -169,7 +163,7 @@ public class ScheduleDetails extends AppCompatActivity {
             showToast("Please enter a valid building name");
             return false;
 
-        }else if(!Arrays.asList(buildingNames).contains(binding.buildingresult.getText().toString())){
+        }else if(!LocationsManager.getInstance(this).getLocationNames().contains(binding.buildingresult.getText().toString())){
             showToast("Please enter an existing building name");
             return false;
 

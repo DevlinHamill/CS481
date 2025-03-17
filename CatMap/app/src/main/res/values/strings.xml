@@ -80,5 +80,6 @@
     <string name="manage_classes_qmark">Manage classes?</string>
     <string name="color_preference">Color Preference</string>
     <string name="edit">Confirm Edits</string>
+    <string name="calendar">Calendar</string>
 
 </resources>

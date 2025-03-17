@@ -7,25 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/icon_back_arrow"
+        app:navigationIconTint="?attr/colorOnPrimary"
+        app:title="Schedule"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:titleCentered="true"
+        />
+
     <!-- Top Header -->
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="15dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- Calendar Label -->
-        <TextView
-            android:id="@+id/calendarLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Calendar"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginBottom="8dp" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        >
 
         <!-- Button Group -->
         <LinearLayout
@@ -40,29 +45,30 @@
                 android:id="@+id/buttonToggleGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                app:singleSelection="true"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/MonthButton"
                     style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
+                    android:checkable="true"
                     android:text="@string/month"
                     android:textColor="?attr/colorOnSurface"
-                    app:cornerRadius="0dp"
-                    android:checkable="true" />
+                    app:cornerRadius="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/WeekButton"
                     style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
+                    android:checkable="true"
                     android:text="@string/week"
                     android:textColor="?attr/colorOnSurface"
-                    app:cornerRadius="0dp"
-                    android:checkable="true" />
+                    app:cornerRadius="0dp" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <!-- Plus Button (Keeps space preserved) -->
@@ -76,12 +82,13 @@
                     android:id="@+id/AddMeeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="Add Meeting"
+                    android:outlineAmbientShadowColor="@android:color/transparent"
+                    android:outlineSpotShadowColor="@android:color/transparent"
                     app:srcCompat="@drawable/ic_add"
                     app:tint="?attr/colorOnSurface"
-                    android:backgroundTint="@android:color/transparent"
-                    android:outlineSpotShadowColor="@android:color/transparent"
-                    android:outlineAmbientShadowColor="@android:color/transparent"
-                    android:contentDescription="Add Meeting"
+
                     />
             </FrameLayout>
         </LinearLayout>
