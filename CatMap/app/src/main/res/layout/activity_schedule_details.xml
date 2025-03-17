@@ -89,7 +89,10 @@
                 android:layout_height="wrap_content"
                 android:hint="Edit Building"
                 android:inputType="text"
-                android:padding="12dp"/>
+                android:padding="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:completionThreshold="1"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout

@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.manager.LocationsManager;
 import edu.cwu.catmap.databinding.ActivityScheduleDetailsBinding;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -159,7 +160,7 @@ public class ScheduleDetails extends AppCompatActivity {
             showToast("Please enter a Event title");
             return false;
 
-        }else if(binding.buildingresult.getText().toString().trim().isEmpty()) {
+        }else if(!LocationsManager.getInstance(this).hasLocation(binding.buildingresult.getText().toString().trim())) {
             showToast("Please enter a valid building name");
             return false;
 
@@ -183,23 +184,18 @@ public class ScheduleDetails extends AppCompatActivity {
         }
     }
 
-    private void checkbuildings(AutoCompleteTextView BuildingSearchView){
+    private void checkbuildings(AutoCompleteTextView buildingSearch) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line,
+                LocationsManager.getInstance(this).getLocationNames().toArray(new String[0]));
 
-        /*Adapter for auto suggestions*/
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, buildingNames);
-
-        /*Attaches autocomplete functionality to the search view*/
-        AutoCompleteTextView searchAutoComplete = BuildingSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        if (searchAutoComplete != null) {
-            searchAutoComplete.setAdapter(adapter);
-
-            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                String selectedItem = adapter.getItem(position);
-                searchAutoComplete.setText(selectedItem);
-                BuildingSearchView.setText(selectedItem, false);/*Set the autocomplete query without submitting it*/
-            });
-        }
+        buildingSearch.setAdapter(adapter);
+        buildingSearch.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedBuilding = adapter.getItem(position);
+            buildingSearch.setText(selectedBuilding, false);
+        });
     }
+
 
     private void onclick(){
         binding.RemoveButton.setOnClickListener(v->

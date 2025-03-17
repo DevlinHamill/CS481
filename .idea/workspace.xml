@@ -107,9 +107,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="950b0777-e56e-4d5b-9060-68c3bc7b0973" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CatMap/app/src/main/java/edu/cwu/catmap/activities/ScheduleDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/CatMap/app/src/main/java/edu/cwu/catmap/activities/ScheduleDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CatMap/app/src/main/res/layout/activity_schedule_details.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CatMap/app/src/main/res/layout/activity_schedule_details.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CatMap/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CatMap/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
