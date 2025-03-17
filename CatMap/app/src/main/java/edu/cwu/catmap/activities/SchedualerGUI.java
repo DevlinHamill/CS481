@@ -173,10 +173,12 @@ public class SchedualerGUI extends AppCompatActivity {
                     adapter = new SchedulerAdapter(EventList);
                     schedualer.eventRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     schedualer.eventRecyclerView.setAdapter(adapter);
+                    schedualer.eventRecyclerView.setVisibility(View.VISIBLE);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Failed to load daily events", Toast.LENGTH_SHORT).show();
                 });
+
     }
 
 
@@ -185,12 +187,15 @@ public class SchedualerGUI extends AppCompatActivity {
                 adding()
         );
 
-        schedualer.WeekButton.setOnClickListener(v ->
-                weekView()
+        schedualer.WeekButton.setOnClickListener(v -> {
+                    schedualer.eventRecyclerView.setVisibility(View.INVISIBLE);
+                    weekView();
+                }
         );
 
         schedualer.MonthButton.setOnClickListener(v->
                 {
+                    schedualer.eventRecyclerView.setVisibility(View.INVISIBLE);
                     schedualer.calendarView.setVisibility(View.VISIBLE);
                     schedualer.AddMeeting.setVisibility(View.VISIBLE);
                     populateEvents();
@@ -324,11 +329,12 @@ public class SchedualerGUI extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Failed to load weekly events", Toast.LENGTH_SHORT).show();
                 });
+        schedualer.eventRecyclerView.setVisibility(View.VISIBLE);
     }
 
 
     private void weekView() {
-
+        EventList.clear();
         schedualer.calendarView.setVisibility(View.GONE);
         schedualer.AddMeeting.setVisibility(View.GONE);
 
@@ -442,16 +448,18 @@ public class SchedualerGUI extends AppCompatActivity {
                         }
                     } else {
                         EventList.add(new ScheduleListItem.SectionHeader("No events this week"));
-                        grabSuggestions();
+
                     }
 
                     adapter = new SchedulerAdapter(EventList);
                     schedualer.eventRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     schedualer.eventRecyclerView.setAdapter(adapter);
+                    schedualer.eventRecyclerView.setVisibility(View.VISIBLE);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getApplicationContext(), "Failed to load weekly events", Toast.LENGTH_SHORT).show();
                 });
+
     }
 
     private void adding() {

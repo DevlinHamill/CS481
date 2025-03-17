@@ -6,8 +6,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -101,7 +103,7 @@ public class ScheduleDetails extends AppCompatActivity {
         checkbuildings(binding.buildingresult);
 
         if(repeatingCondition){
-            showToast(repeatingCondition+"");
+
             binding.RepeatEventSelector.setChecked(true);
             binding.Weeklayout.setVisibility(View.VISIBLE);
             binding.RepeatEventSelector.setSelected(true);
@@ -210,37 +212,7 @@ public class ScheduleDetails extends AppCompatActivity {
                 edit()
         );
         binding.colorResult.setOnClickListener(view -> {
-            ColorDrawable backgroundColor = (ColorDrawable) binding.colorbackground.getBackground();
-            int backgroundColorInt = backgroundColor.getColor();
-
-            ColorPickerDialogBuilder
-                    .with(this)
-                    .setTitle("Choose a color")
-                    .initialColor(backgroundColorInt)
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(12)
-                    .showAlphaSlider(false)
-                    .setOnColorSelectedListener(new OnColorSelectedListener() {
-                        @Override
-                        public void onColorSelected(int selectedColor) {
-                            showToast(context, "selected color " + selectedColor);
-                        }
-                    })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            showToast(context, "Select color canceled");
-                        }
-                    })
-                    .setPositiveButton("confirm", new ColorPickerClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
-                            binding.colorResult.setBackgroundColor(lastSelectedColor);
-                            colorPreference = ""+lastSelectedColor;
-                        }
-                    })
-                    .build()
-                    .show();
+            showColorPicker();
         });
 
         binding.RepeatEventSelector.setOnClickListener(v ->
@@ -302,6 +274,30 @@ public class ScheduleDetails extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void showColorPicker() {
+        Drawable background = binding.colorbackground.getBackground();
+
+        int backgroundColorInt = Color.WHITE;
+
+        if (background instanceof ColorDrawable) {
+            backgroundColorInt = ((ColorDrawable) background).getColor();
+        }
+        ColorPickerDialogBuilder
+                .with(this)
+                .setTitle("Choose a color")
+                .initialColor(backgroundColorInt)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .showAlphaSlider(false)
+                .setPositiveButton("Confirm", (dialog, lastSelectedColor, allColors) -> {
+                    binding.colorResult.setBackgroundColor(lastSelectedColor);
+                    colorPreference = String.valueOf(lastSelectedColor);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> showToast("Color selection canceled"))
+                .build()
+                .show();
+    }
+
     private void showTimePicker() {
 
         final Calendar calendar = Calendar.getInstance();
@@ -350,7 +346,10 @@ public class ScheduleDetails extends AppCompatActivity {
                 .collection("Events")
                 .document(binding.idresult.getText().toString())
                 .delete();
-        onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), SchedualerGUI.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void edit() {

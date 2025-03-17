@@ -1,4 +1,6 @@
 <resources>
+    <string name="default_web_client_id">259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com</string>
+
     <string name="app_name">CatMap</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="default_web_client_id">259536456281-rglh4niksebkkqpmv8kusilacqncpout.apps.googleusercontent.com</string>
@@ -72,5 +74,12 @@
     <string name="month">Month</string>
     <string name="week">Week</string>
     <string name="end_date">End Date:</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="end_navigation">End Navigation</string>
+    <string name="classes">Classes</string>
+    <string name="add_event">Add Event</string>
+    <string name="delete_class">Delete Class</string>
+    <string name="class_manager">Class Manager</string>
+    <string name="manage_classes_qmark">Manage classes?</string>
 
 </resources>

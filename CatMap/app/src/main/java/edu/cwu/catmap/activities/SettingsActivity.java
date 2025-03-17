@@ -1,5 +1,6 @@
 package edu.cwu.catmap.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -9,25 +10,36 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import edu.cwu.catmap.R;
+import edu.cwu.catmap.utilities.Constants;
+import edu.cwu.catmap.utilities.GeneralUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private MaterialSwitch switchDarkMode, switchHighContrast, switchLeftHand, switchAdaAccessible, switchNotifications;
+    private MaterialSwitch switchDarkMode, switchHighContrast, switchAdaAccessible, switchNotifications;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Apply the correct theme before setting content view
         super.onCreate(savedInstanceState);
+
+        //get sharedPrefs
+        sharedPreferences = getSharedPreferences(Constants.KEY_SHARED_PREFRENCES_NAME, MODE_PRIVATE);
+
+        applyTheme();
+        setTheme(GeneralUtils.getSavedTheme(this));
         setContentView(R.layout.settings_activity);
+
 
         // Initialize UI components
         switchDarkMode = findViewById(R.id.switch_dark_mode);
         switchHighContrast = findViewById(R.id.switch_high_contrast_mode);
-        switchLeftHand = findViewById(R.id.switch_left_hand);
         switchAdaAccessible = findViewById(R.id.switch_ada_accessible);
         switchNotifications = findViewById(R.id.switch_notifications);
 
@@ -37,30 +49,47 @@ public class SettingsActivity extends AppCompatActivity {
         // Assign event listeners
         switchDarkMode.setOnCheckedChangeListener(this::onSwitchToggled);
         switchHighContrast.setOnCheckedChangeListener(this::onSwitchToggled);
-        switchLeftHand.setOnCheckedChangeListener(this::onSwitchToggled);
         switchAdaAccessible.setOnCheckedChangeListener(this::onSwitchToggled);
         switchNotifications.setOnCheckedChangeListener(this::onSwitchToggled);
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        super.onBackPressed();
+
+        finish();
+    }
+
+    /**
+     * Applies the saved theme before setting the UI.
+     */
+    private void applyTheme() {
+        boolean isDarkMode = sharedPreferences.getBoolean(Constants.KEY_SHARED_PREFRENCES_DARK_MODE, false);
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
 
     /**
      * Loads saved preferences and updates the switches accordingly.
      */
     private void loadSettings() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        switchDarkMode.setChecked(preferences.getBoolean("dark_mode", false));
-        switchHighContrast.setChecked(preferences.getBoolean("high_contrast", false));
-        switchLeftHand.setChecked(preferences.getBoolean("left_hand", false));
-        switchAdaAccessible.setChecked(preferences.getBoolean("ada_accessible", false));
-        switchNotifications.setChecked(preferences.getBoolean("notifications", true));
+        switchDarkMode.setChecked(sharedPreferences.getBoolean("dark_mode", false));
+        switchHighContrast.setChecked(sharedPreferences.getBoolean("high_contrast", false));
+        switchAdaAccessible.setChecked(sharedPreferences.getBoolean("ada_accessible", false));
+        switchNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
 
         // Get references
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
         LinearLayout alertRow = findViewById(R.id.alert_option_container);
 
-        boolean notificationsEnabled = preferences.getBoolean("notifications", true);
-        String alertOption = preferences.getString("alert_option", "10 minutes before"); // Default
+        boolean notificationsEnabled = sharedPreferences.getBoolean("notifications", true);
+        String alertOption = sharedPreferences.getString("alert_option", "10 minutes before");
 
         if (notificationsEnabled) {
             textSelectedAlert.setText(alertOption);
@@ -71,17 +100,13 @@ public class SettingsActivity extends AppCompatActivity {
             alertRow.setEnabled(false);
             alertRow.setAlpha(0.5f);
         }
-
-        // REMOVE THIS LISTENER (since it's already set in onCreate)
-        // switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> toggleNotifications(null));
     }
 
-
     /**
-     * Saves preference when a switch is toggled.
+     * Saves preference when a switch is toggled and updates the UI dynamically.
      */
     private void onSwitchToggled(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (buttonView.getId() == R.id.switch_dark_mode) {
             editor.putBoolean("dark_mode", isChecked);
@@ -90,6 +115,9 @@ public class SettingsActivity extends AppCompatActivity {
                 switchHighContrast.setChecked(false);
                 editor.putBoolean("high_contrast", false);
             }
+            editor.apply();
+            restartActivity(); // Restart activity to apply theme
+
         } else if (buttonView.getId() == R.id.switch_high_contrast_mode) {
             editor.putBoolean("high_contrast", isChecked);
             if (isChecked) {
@@ -97,10 +125,12 @@ public class SettingsActivity extends AppCompatActivity {
                 switchDarkMode.setChecked(false);
                 editor.putBoolean("dark_mode", false);
             }
-        } else if (buttonView.getId() == R.id.switch_left_hand) {
-            editor.putBoolean("left_hand", isChecked);
+            editor.apply();
+            restartActivity(); // Restart activity to apply theme
+
         } else if (buttonView.getId() == R.id.switch_ada_accessible) {
             editor.putBoolean("ada_accessible", isChecked);
+
         } else if (buttonView.getId() == R.id.switch_notifications) {
             editor.putBoolean("notifications", isChecked);
 
@@ -110,8 +140,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (isChecked) {
                 // Restore last alert selection
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                String lastAlert = preferences.getString("alert_option", "10 minutes before");
+                String lastAlert = sharedPreferences.getString("alert_option", "10 minutes before");
                 textSelectedAlert.setText(lastAlert);
                 alertRow.setEnabled(true);
                 alertRow.setAlpha(1f);
@@ -123,33 +152,17 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        editor.apply(); // Save the preference
+        editor.apply();
     }
 
-
-    public void toggleDarkMode(View view) {
-        MaterialSwitch switchDarkMode = findViewById(R.id.switch_dark_mode);
-        switchDarkMode.toggle(); // Toggle the switch manually
+    /**
+     * Restarts the activity to apply theme changes.
+     */
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
-
-    //need to make so if high contrast mode is on, then dark mode is off, and if dark mode is turned on then high contrast mode is turned off.
-    public void toggleHighContrast(View view) {
-        MaterialSwitch switchHighContrast = findViewById(R.id.switch_high_contrast_mode);
-        switchHighContrast.toggle();
-
-    }
-
-    public void toggleLeftHandMode(View view) {
-        MaterialSwitch switchLeftHand = findViewById(R.id.switch_left_hand);
-        switchLeftHand.toggle();
-    }
-
-    public void toggleAdaAccessible(View view) {
-        MaterialSwitch switchAda = findViewById(R.id.switch_ada_accessible);
-        switchAda.toggle();
-    }
-
-
 
     public void toggleNotifications(View view) {
         MaterialSwitch switchNotifications = findViewById(R.id.switch_notifications);
@@ -158,15 +171,14 @@ public class SettingsActivity extends AppCompatActivity {
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
         LinearLayout alertRow = findViewById(R.id.alert_option_container);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         boolean isChecked = switchNotifications.isChecked();
         editor.putBoolean("notifications", isChecked);
 
         if (isChecked) {
             // Restore last selected alert option or default to "10 minutes before"
-            String lastAlert = preferences.getString("alert_option", "10 minutes before");
+            String lastAlert = sharedPreferences.getString("alert_option", "10 minutes before");
             textSelectedAlert.setText(lastAlert);
             alertRow.setEnabled(true);
             alertRow.setAlpha(1f);
@@ -182,10 +194,8 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     public void showAlertDialog(View view) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Prevent dialog from opening if notifications are disabled
-        if (!preferences.getBoolean("notifications", true)) {
+        if (!sharedPreferences.getBoolean("notifications", true)) {
             return;
         }
 
@@ -196,7 +206,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView textSelectedAlert = findViewById(R.id.text_selected_alert);
 
         // Load the currently selected alert option
-        String currentSelection = preferences.getString("alert_option", "10 minutes before");
+        String currentSelection = sharedPreferences.getString("alert_option", "10 minutes before");
 
         // Find the index of the current selection
         int checkedItem = 2; // Default to "10 minutes before"
@@ -215,7 +225,7 @@ public class SettingsActivity extends AppCompatActivity {
                     textSelectedAlert.setText(alertOptions[which]);
 
                     // Save selection in SharedPreferences
-                    SharedPreferences.Editor editor = preferences.edit();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("alert_option", alertOptions[which]);
                     editor.apply();
 

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnSurface"
         android:text="@string/test"
         />
 </LinearLayout>

@@ -2,7 +2,6 @@ package edu.cwu.catmap.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +21,7 @@ public class SchedulerOptions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_scheduler_options);
-        scheduleroptions = edu.cwu.catmap.databinding.ActivitySchedulerOptionsBinding.inflate(getLayoutInflater());
+        scheduleroptions = ActivitySchedulerOptionsBinding.inflate(getLayoutInflater());
         setContentView(scheduleroptions.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -44,8 +43,6 @@ public class SchedulerOptions extends AppCompatActivity {
     }
 
     private void updatetext(String text){
-
-
         if(text.equals("Event")) {
 
             Intent intent = new Intent(getApplicationContext(), NewEvent.class);
@@ -54,9 +51,7 @@ public class SchedulerOptions extends AppCompatActivity {
             startActivity(intent);
 
         }else{
-            Intent intent = new Intent(getApplicationContext(), NewEvent.class);
-            intent.putExtra("header", "Class");
-            intent.putExtra("SELECTED_DATE", getIntent().getStringExtra("SELECTED_DATE"));
+            Intent intent = new Intent(getApplicationContext(), ClassManagerActivity.class);
             startActivity(intent);
         }
     }

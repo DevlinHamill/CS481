@@ -1,36 +1,22 @@
 package edu.cwu.catmap.activities;
 
 import android.content.Intent;
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.BeginSignInResult;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,15 +27,12 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
 
 import edu.cwu.catmap.R;
 import edu.cwu.catmap.databinding.ActivityLoginBinding;
 import edu.cwu.catmap.manager.UserManager;
+import edu.cwu.catmap.utilities.ToastHelper;
+import edu.cwu.catmap.utilities.ImageDownloader;
 
 /**
  * Handles user login authentication, including validation, error handling,
@@ -60,7 +43,6 @@ public class Login extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private ActivityLoginBinding binding;
     private UserManager userManager;
-    private SignInClient signInClient;
     private FirebaseAuth mAuth;
 
     /**
@@ -77,6 +59,13 @@ public class Login extends AppCompatActivity {
         userManager = UserManager.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setListeners();
+
+        if(UserManager.getInstance().isLoggedIn()) {
+            ToastHelper.showToast(this, "User session still valid");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -90,59 +79,9 @@ public class Login extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // failure
-                showToast("Failed to authenticate with Google.");
+                showToast("Google sign in request failed.");
             }
         }
-    }
-
-    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        int height = options.outHeight;
-        int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            int halfHeight = height / 2;
-            int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    private Bitmap scaleImage(Uri imageUri) {
-        try {
-            // Download the image
-            InputStream inputStream = new URL(imageUri.toString()).openStream();
-
-            // Decode the image size without loading the full bitmap into memory
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
-
-            // Calculate optimal inSampleSize
-            int targetWidth = 150; // Target size
-            int targetHeight = 150;
-            options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
-
-            // Decode with inSampleSize to get a scaled-down version
-            inputStream = new URL(imageUri.toString()).openStream();
-            Bitmap scaledBitmap = BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
-
-            return scaledBitmap;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private String encodeImage(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream); // Compression for storage efficiency
-        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -157,14 +96,7 @@ public class Login extends AppCompatActivity {
                             if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 Uri imageUri = user.getPhotoUrl();
                                 Log.d("Login", "imageUri: " + imageUri);
-                                Bitmap scaledBitmap = scaleImage(imageUri);
-                                String encodedProfilePicture = "";
-                                if (scaledBitmap != null) {
-                                    encodedProfilePicture = encodeImage(scaledBitmap);
-                                } else {
-                                    showToast("Failed to retrieve Google Accounts profile picture.");
-                                }
-                                userManager.signUpWithGoogle(user.getUid(), user.getEmail(), user.getDisplayName(), encodedProfilePicture,  // Save Base64 image
+                                userManager.signUpWithGoogle(user.getUid(), user.getEmail(), user.getDisplayName(), "",  // Save Base64 image
                                         signuptask -> {
                                             if (signuptask.isSuccessful()) {
                                                 DocumentSnapshot userDocument = signuptask.getResult();
@@ -180,6 +112,12 @@ public class Login extends AppCompatActivity {
                                                 showToast("Google sign in registration failed");
                                             }
                                         });
+                                if (imageUri != null) {
+                                    ImageDownloader imageDownloader = new ImageDownloader(user.getUid(), userManager, imageUri);
+                                    imageDownloader.downloadAndProcessImage();
+                                } else {
+                                    showToast("Failed to retrieve Google Accounts profile picture.");
+                                }
                             }
                         }
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

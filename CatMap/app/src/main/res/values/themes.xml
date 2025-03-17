@@ -1,19 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.CatMap" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary Colors -->
-        <item name="colorPrimary">@color/lightScheme_Dark</item>
+    <!-- Default (Light) Theme -->
+    <style name="Theme.CatMap" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue_600</item>
         <item name="colorSecondary">@color/white</item>
         <item name="colorTertiary">@color/black</item>
+        <item name="backgroundColor">@color/gray_100</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnBackground">@color/black</item>
+        <item name="backgroundStacked">@color/gray_100_transparent</item>
+    </style>
 
-        <!-- Background Colors -->
-        <item name="backgroundColor">@color/lightScheme_Light</item>
+    <!-- Dark Theme -->
+    <style name="Theme.CatMap.Dark" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorSecondary">@color/gray_900</item>
+        <item name="colorTertiary">@color/gray_700</item>
+        <item name="backgroundColor">@color/gray_800</item>
+        <item name="colorOnPrimary">@color/gray_100</item>
+        <item name="colorOnBackground">@color/gray_100</item>
+    </style>
 
-        <!-- Text Colors -->
+    <!-- High Contrast Mode -->
+    <style name="Theme.CatMap.HighContrast" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/yellow_700</item>
+        <item name="colorSecondary">@color/black</item>
+        <item name="colorTertiary">@color/white</item>
+        <item name="backgroundColor">@color/yellow_100</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorOnBackground">@color/black</item>
 
     </style>
-
-    <style name="Theme.CatMap" parent="Base.Theme.CatMap" />
 </resources>

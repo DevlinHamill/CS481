@@ -82,6 +82,10 @@ public class LocationsManager {
         return getLocations().get(locationName);
     }
 
+    public boolean hasLocation(String locationName) {
+        return getLocationNames().contains(locationName);
+    }
+
     public HashMap<String, Location> getLocationsMinus(HashMap<String, Location> locations) {
         HashMap<String, Location> difference = getLocations();
         difference.keySet().removeAll(locations.keySet());
