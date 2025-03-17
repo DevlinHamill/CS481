@@ -15,9 +15,8 @@
         android:background="?attr/colorSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/icon_back_arrow"
-        app:navigationIconTint="@color/black"
+        app:navigationIconTint="?attr/colorOnSurface"
         app:title="Edit Event"
-        app:titleTextColor="@color/black"
         app:titleCentered="true"/>
 
     <!-- ScrollView for better UI handling -->

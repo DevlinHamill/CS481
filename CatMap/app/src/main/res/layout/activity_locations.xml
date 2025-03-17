@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.LocationsActivity"
-    android:background="@drawable/activity_background">
+    android:background="@drawable/activity_background"
+    android:backgroundTint="?attr/colorPrimary">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/header"
@@ -38,6 +39,7 @@
         android:paddingEnd="20dp"
         android:elevation="4dp"
         android:background="@drawable/activity_background"
+        android:backgroundTint="?attr/colorSurface"
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
