@@ -57,7 +57,7 @@
                 android:focusable="false"
                 android:clickable="true"
                 android:inputType="none"
-                android:hint="Edit Date"/>
+                android:hint="Start Date"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
