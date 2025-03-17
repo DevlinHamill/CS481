@@ -29,6 +29,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -43,6 +44,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class ScheduleDetails extends AppCompatActivity {
 
+    private String Event_type;
     private String colorPreference;
 
     private String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
@@ -93,9 +95,9 @@ public class ScheduleDetails extends AppCompatActivity {
 //        binding.buildingresult.setIconified(false);
 //        binding.buildingresult.setQuery(map.get("Building_Name"), false);
         binding.buildingresult.setText(map.get("Building_Name"));
-
         binding.roomresult.setText(map.get("Room_Number"));
-        binding.typeresult.setText(map.get("Event_Type"));
+        Event_type = map.get("Event_Type");
+        binding.layoutHeader.setTitle("Edit "+ Event_type);
         binding.colorResult.setBackgroundColor(Integer.parseInt(map.get("Color_Preference")));
         binding.endresult.setText(map.get("End_Date"));
         colorPreference = map.get("Color_Preference");
@@ -106,6 +108,7 @@ public class ScheduleDetails extends AppCompatActivity {
         if(repeatingCondition){
 
             binding.RepeatEventSelector.setChecked(true);
+            binding.RepeatEventSelector.setSelected(true);
             binding.Weeklayout.setVisibility(View.VISIBLE);
             binding.RepeatEventSelector.setSelected(true);
             String repeatedEventsString = map.get("Repeated_Events");
@@ -322,21 +325,18 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private void setWeekVisible(){
 
-        if(binding.Weeklayout.getVisibility() == View.INVISIBLE){
-            binding.Weeklayout.setVisibility(VISIBLE);
-            binding.RepeatEventSelector.setSelected(true);
-        }else{
-            binding.Weeklayout.setVisibility(View.INVISIBLE);
-            binding.RepeatEventSelector.setSelected(false);
-        }
+        boolean isChecked = binding.RepeatEventSelector.isChecked();
+        binding.Weeklayout.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
 
     }
 
-    private void setselecteddays(TextView button){
+    private void setselecteddays( com.google.android.material.button.MaterialButton button){
         if(!button.isSelected()) {
             button.setSelected(true);
+            button.setChecked(true);
         }else{
             button.setSelected(false);
+            button.setChecked(false);
         }
     }
 
@@ -371,12 +371,12 @@ public class ScheduleDetails extends AppCompatActivity {
             tempmap.put("Event_Time", binding.timeresult.getText().toString());
             tempmap.put("Building_Name", binding.buildingresult.getText().toString());
             tempmap.put("Room_Number", binding.roomresult.getText().toString());
-            tempmap.put("Event_Type", binding.typeresult.getText().toString());
+            tempmap.put("Event_Type", Event_type);
             tempmap.put("Color_Preference", colorPreference);
             tempmap.put("End_Date", binding.endresult.getText().toString());
 
 
-            if (binding.RepeatEventSelector.isSelected()) {
+            if (binding.RepeatEventSelector.isChecked()) {
                 if (binding.sunbutton.isSelected()) {
                     repeatingevents[0] = 1;
                 } else {
