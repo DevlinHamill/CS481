@@ -65,11 +65,11 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (viewType == TYPE_SECTION_HEADER) {
             view = inflater.inflate(R.layout.item_container_schedule, parent, false);
-            viewHolder = new SchedulerAdapter.SectionHeaderViewHolder(view);
+            viewHolder = new SectionHeaderViewHolder(view);
         }
         else if (viewType == TYPE_EVENT) {
             view = inflater.inflate(R.layout.item_container_event, parent, false);
-            viewHolder = new SchedulerAdapter.EventViewHolder(view);
+            viewHolder = new EventViewHolder(view);
         }
         else {
             Log.e("FavoriteLocationsAdapter", "viewType cannot be determined, give type of " + viewType);
@@ -84,7 +84,7 @@ public class SchedulerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ScheduleListItem item = filteredItems.get(position);
 
         if (holder instanceof SectionHeaderViewHolder) {
-            ((SchedulerAdapter.SectionHeaderViewHolder) holder).bind((ScheduleListItem.SectionHeader) item);
+            ((SectionHeaderViewHolder) holder).bind((ScheduleListItem.SectionHeader) item);
         }
         else if (holder instanceof EventViewHolder) {
             EventViewHolder eventHolder = (EventViewHolder) holder;
