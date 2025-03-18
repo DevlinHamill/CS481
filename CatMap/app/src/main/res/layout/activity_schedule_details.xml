@@ -349,8 +349,8 @@
             android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:text="@string/remove"
-            android:backgroundTint="?attr/colorError"
-            android:textColor="?attr/colorOnError"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="18sp"
             app:cornerRadius="5dp"/>
     </LinearLayout>
