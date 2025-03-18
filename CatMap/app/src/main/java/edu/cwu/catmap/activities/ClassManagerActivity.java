@@ -224,10 +224,10 @@ public class ClassManagerActivity extends AppCompatActivity {
 
             // Fetch the colors from theme using TypedValue
             TypedValue typedValue = new TypedValue();
-            itemContext.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+            itemContext.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
             int colorOnPrimary = typedValue.data;
 
-            itemContext.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true);
+            itemContext.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
             int colorOnBackground = typedValue.data;
 
             //if this class is selected, reflect that in its background and text color
