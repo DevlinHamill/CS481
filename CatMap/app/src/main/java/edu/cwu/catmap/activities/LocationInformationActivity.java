@@ -39,13 +39,13 @@ public class LocationInformationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_location_information);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
+        });*/
 
         Log.i("Location info controller", "onCreate for Location Information Running!");
 
@@ -64,7 +64,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         binding.locationInfo.setText(location.getDescription());
 
         // Load image if applicable
-        loadLocationImage();
+        loadLocationImage(location.getImagePath());
 
         // Disable favorite button while checking Firestore
         disableFavoriteButton();
@@ -73,10 +73,10 @@ public class LocationInformationActivity extends AppCompatActivity {
         setListeners();
     }
 
-    private void loadLocationImage() {
+    private void loadLocationImage(String imagePath) {
         Log.i("Location info controller", "attempt to load image");
         AssetManager assetManager = getAssets();
-        String filePath = "images/" + location.getImagePath();
+        String filePath = "images/" + imagePath;
         try (InputStream inputStream = assetManager.open(filePath)) {
             Log.i("Location info controller", "attempt to load image");
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
@@ -125,6 +125,11 @@ public class LocationInformationActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(Constants.KEY_LOCATION_NAME, location.getName());
             startActivity(intent);
+        });
+        binding.locationImage.setOnClickListener(v -> {
+            if(location.getName().equals("Wahle Apartment Complex")) {
+                loadLocationImage("wahle_alt.jpg");
+            }
         });
     }
 

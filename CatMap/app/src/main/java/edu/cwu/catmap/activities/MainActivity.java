@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         hub = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(hub.getRoot());
 

@@ -35,13 +35,13 @@ public class LocationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLocationsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        EdgeToEdge.enable(this);
+        //EdgeToEdge.enable(this);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
+        });*/
 
         ArrayList<FavoriteLocationsListItem> locationsList = new ArrayList<>();
         populateLocations(locationsList);
