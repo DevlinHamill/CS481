@@ -231,7 +231,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_calender_today">
+                app:endIconDrawable="@drawable/ic_calender_today"
+                android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/EndResult"
@@ -242,7 +243,8 @@
                     android:inputType="none"
                     android:textSize="16sp"
                     android:padding="12dp"
-                    android:hint="Select End Date"/>
+                    android:hint="Select End Date"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Event Time Selection -->
