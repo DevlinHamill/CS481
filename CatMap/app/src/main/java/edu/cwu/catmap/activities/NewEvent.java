@@ -106,6 +106,7 @@ public class NewEvent extends AppCompatActivity {
 
         binding.RepeatEventSelector.setOnCheckedChangeListener((buttonView, isChecked) -> {
             binding.repeatOptionsContainer.setVisibility(isChecked ? VISIBLE : View.GONE);
+            binding.endDateLayout.setVisibility(isChecked ? VISIBLE : View.GONE);
         });
 
         binding.colorPickerButton.setOnClickListener(view -> showColorPicker());
@@ -125,23 +126,29 @@ public class NewEvent extends AppCompatActivity {
         String eventType = getIntent().getStringExtra(Constants.KEY_NEW_EVENT_TYPE);
         boolean isExistingClass = getIntent().getBooleanExtra(Constants.KEY_NEW_EVENT_IS_EXISTING_CLASS, false);
 
-        if(eventType != null
-                && eventType.equals(Constants.VALUE_EVENT_TYPE_CLASS)
-                && isExistingClass) {
-            //set the event title
-            binding.eventTitle.setText(getIntent().getStringExtra(Constants.KEY_NEW_EVENT_CLASS_NAME));
-            binding.eventTitle.setEnabled(false);
+        if(eventType != null && eventType.equals(Constants.VALUE_EVENT_TYPE_CLASS)) {
+            if(isExistingClass) {
+                //set the event title
+                binding.eventTitle.setText(getIntent().getStringExtra(Constants.KEY_NEW_EVENT_CLASS_NAME));
+                binding.eventTitle.setEnabled(false);
 
-            //set the event color
-            int providedColor = getIntent().getIntExtra(Constants.KEY_NEW_EVENT_CLASS_COLOR, Color.BLACK);
-            binding.colorPickerButton.setBackgroundColor(providedColor);
-            binding.colorPickerButton.setText("Class Color");
-            binding.colorPickerButton.setClickable(false);
+                //set the event color
+                int providedColor = getIntent().getIntExtra(Constants.KEY_NEW_EVENT_CLASS_COLOR, Color.BLACK);
+                binding.colorPickerButton.setBackgroundColor(providedColor);
+                binding.colorPickerButton.setText("Class Color");
+                binding.colorPickerButton.setClickable(false);
 
-            colorPreference = String.valueOf(providedColor);
+                colorPreference = String.valueOf(providedColor);
 
-            //set the header to include more context
-            binding.layoutHeader.setTitle("Add to Existing Class");
+                //set the header to include more context
+                binding.layoutHeader.setTitle("Add to Existing Class");
+            }
+            else {
+                binding.layoutHeader.setTitle("Create New Class");
+            }
+        }
+        else {
+            binding.layoutHeader.setTitle("Create New Event");
         }
     }
 
