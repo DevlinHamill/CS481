@@ -12,12 +12,13 @@
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
+        android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/icon_back_arrow"
-        app:navigationIconTint="?attr/colorOnSurface"
+        app:navigationIconTint="?attr/colorOnPrimary"
         app:title="Edit Event"
-        app:titleCentered="true"/>
+        app:titleCentered="true"
+        app:titleTextColor="?attr/colorOnPrimary"/>
 
     <!-- ScrollView for better UI handling -->
     <androidx.core.widget.NestedScrollView
