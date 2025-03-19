@@ -34,15 +34,27 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
-/**
- * @author BT&T
- * CS 460
- */
+
 public class NewEvent extends AppCompatActivity {
+    /**
+     * activity binding
+     */
     private @NonNull ActivityNewEventBinding binding;
+    /**
+     * string values that are being saved on the firebase
+     */
     private String date, Title, time, RoomNum, colorPreference, Building, Event_Type, EndDate;
+    /**
+     * stores the events as an array list from sunday - saturday
+     */
     private int[] repeatingevents = new int[7];
+    /**
+     * the current app instance
+     */
     private Context context;
+    /**
+     * a boolean condition that tells if the event is repeating or not
+     */
     private boolean repeatingCondition;
 
     @Override
@@ -67,6 +79,9 @@ public class NewEvent extends AppCompatActivity {
         setupBuildingSearch(binding.BuildingSearch);
     }
 
+    /**
+     * sets on click listeners
+     */
     private void setListeners() {
         binding.EndResult.setOnClickListener(v->
                 showDatePicker()
@@ -122,6 +137,9 @@ public class NewEvent extends AppCompatActivity {
         });
     }
 
+    /**
+     * updates the UI more effectively when the class is added
+     */
     private void updateGUIIfAddingToClass() {
         String eventType = getIntent().getStringExtra(Constants.KEY_NEW_EVENT_TYPE);
         boolean isExistingClass = getIntent().getBooleanExtra(Constants.KEY_NEW_EVENT_IS_EXISTING_CLASS, false);
@@ -152,6 +170,10 @@ public class NewEvent extends AppCompatActivity {
         }
     }
 
+    /**
+     * sets the buttons for specific days to reflect repeating events
+     * @param button button being selected
+     */
     private void setselecteddays( com.google.android.material.button.MaterialButton button){
         if(!button.isSelected()) {
             button.setSelected(true);
@@ -160,10 +182,19 @@ public class NewEvent extends AppCompatActivity {
         }
     }
 
+    /**
+     * shows the date picker to retrieve the end date selection
+     */
     private void showDatePicker() {
+        /**
+         * creates the calender object to retreive the current selected date
+         */
         final Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) -> {
+                    /**
+                     * formats the date properly
+                     */
                     String formattedDate = String.format("%02d/%02d/%d", month + 1, dayOfMonth, year);
                     binding.EndResult.setText(formattedDate);
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -171,12 +202,27 @@ public class NewEvent extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /**
+     * shows the time picker
+     */
     private void showTimePicker() {
+        /**
+         * Creates a calender object to retrieve the selected time
+         */
         final Calendar calendar = Calendar.getInstance();
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
+                    /**
+                     * Sets the am pm string based on the selected hours
+                     */
                     String amPm = (hourOfDay >= 12) ? "PM" : "AM";
+                    /**
+                     * sets hours to a 12 hour interval
+                     */
                     int hour12 = (hourOfDay == 0) ? 12 : (hourOfDay > 12 ? hourOfDay - 12 : hourOfDay);
+                    /**
+                     * sets the time selected to the proper formate
+                     */
                     String formattedTime = String.format("%d:%02d %s", hour12, minute, amPm);
                     binding.EventTime.setText(formattedTime);
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
@@ -184,10 +230,19 @@ public class NewEvent extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * shows the color picker
+     */
     private void showColorPicker() {
 
+        /**
+         * Retreieves the background layout color of the app
+         */
         Drawable background = binding.createMeetingLayout.getBackground();
 
+        /**
+         * grabs a basic white color to edit later with the color picker
+         */
         int backgroundColorInt = Color.WHITE;
 
         if (background instanceof ColorDrawable) {
@@ -210,6 +265,10 @@ public class NewEvent extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Recommends buildings based on location manager methods
+     * @param buildingSearch building textfield being checked
+     */
     private void setupBuildingSearch(AutoCompleteTextView buildingSearch) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line,
@@ -222,6 +281,9 @@ public class NewEvent extends AppCompatActivity {
         });
     }
 
+    /**
+     * grabs the new info
+     */
     private void saveEventDetails() {
         Title = binding.eventTitle.getText().toString();
         RoomNum = binding.EventRoom.getText().toString();
@@ -243,6 +305,9 @@ public class NewEvent extends AppCompatActivity {
         addMeetingToFirebase();
     }
 
+    /**
+     * adds the new info to the firebase
+     */
     private void addMeetingToFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         HashMap<String, String> meetings = new HashMap<>();
@@ -262,6 +327,10 @@ public class NewEvent extends AppCompatActivity {
                 meetings, task -> ToastHelper.showToast(context, "Event Saved Successfully"));
     }
 
+    /**
+     * Checks for valid event details
+     * @return if the event inputs are valid
+     */
     private boolean validateEventDetails() {
         if (binding.EventRoom.getText().toString().trim().isEmpty()) {
             showToast("Please enter a room number");
@@ -290,10 +359,18 @@ public class NewEvent extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * adds a title to the header
+     * @param str string updating the title
+     */
     private void addTitle(String str) {
         binding.layoutHeader.setTitle(str);
     }
 
+    /**
+     * shows an toast message
+     * @param message message being displayed
+     */
     private void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }

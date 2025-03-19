@@ -44,8 +44,18 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class ScheduleDetails extends AppCompatActivity {
 
+    /**
+     * stores the event type
+     */
     private String Event_type;
+    /**
+     * stores the color preference
+     */
     private String colorPreference;
+
+    /**
+     * used to check if the building exists
+     */
 
     private String[] buildingNames = {"Alford-Montgomery Hall", "Anderson Hall", "Aquatic Center", "Avation Training Center",
             "Barge Hall", "Barto Hall", "Beck Hall", "Black Hall", "Bouillon Hall", "Breeze Thru Caf", "Brook Lane Village Apartments",
@@ -65,25 +75,30 @@ public class ScheduleDetails extends AppCompatActivity {
 
     private Context context;
 
+    /**
+     * activitiy binding
+     */
     ActivityScheduleDetailsBinding binding;
 
+    /**
+     * the repeating event locations from sunday - saturday
+     */
     private int[] repeatingevents = new int[7];
 
+    /**
+     * keeps track of if the event is repeating or not
+     */
     private boolean repeatingCondition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
+
 
         binding = ActivityScheduleDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });*/
+
 
         HashMap<String, String> map = (HashMap<String, String>)getIntent().getSerializableExtra("Map");
 
@@ -91,9 +106,6 @@ public class ScheduleDetails extends AppCompatActivity {
         binding.nameresult.setText(map.get("Event_Title"));
         binding.DateResult.setText(map.get("Event_Date"));
         binding.timeresult.setText(map.get("Event_Time"));
-//        binding.buildingresult.setIconifiedByDefault(false);
-//        binding.buildingresult.setIconified(false);
-//        binding.buildingresult.setQuery(map.get("Building_Name"), false);
         binding.buildingresult.setText(map.get("Building_Name"));
         binding.roomresult.setText(map.get("Room_Number"));
         Event_type = map.get("Event_Type");
@@ -189,6 +201,10 @@ public class ScheduleDetails extends AppCompatActivity {
         }
     }
 
+    /**
+     * checks the building with the getlocations method
+     * @param buildingSearch the text view that is being checked
+     */
     private void checkbuildings(AutoCompleteTextView buildingSearch) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line,
@@ -202,6 +218,9 @@ public class ScheduleDetails extends AppCompatActivity {
     }
 
 
+    /**
+     * sets on click listeners
+     */
     private void onclick(){
         binding.RemoveButton.setOnClickListener(v->
                 remove()
@@ -263,9 +282,18 @@ public class ScheduleDetails extends AppCompatActivity {
 
     }
 
+    /**
+     * shows the color picker UI
+     */
     private void showColorPicker() {
+        /**
+         * tracks the intial color background
+         */
         Drawable background = binding.colorbackground.getBackground();
 
+        /**
+         * will be used to updated the color background later on
+         */
         int backgroundColorInt = Color.WHITE;
 
         if (background instanceof ColorDrawable) {
@@ -287,17 +315,36 @@ public class ScheduleDetails extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * shows the date picker and saves relevant info
+     */
     private void showDatePicker() {
 
+        /**
+         * saves the calender object
+         */
         final Calendar calendar = Calendar.getInstance();
+        /**
+         * keeps track of the year
+         */
         int year = calendar.get(Calendar.YEAR);
+        /**
+         * keeps track of the month
+         */
         int month = calendar.get(Calendar.MONTH);
+        /**
+         * keeps track of the day
+         */
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-
+        /**
+         * creates the date picker object
+         */
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (DatePicker view, int selectedYear, int selectedMonth, int selectedDay) -> {
-
+                    /**
+                     * formates the proper date based on the selected day from the date picker
+                     */
                     String formattedDate = String.format("%02d/%02d/%d", selectedMonth + 1, selectedDay, selectedYear);
                     binding.endresult.setText(formattedDate);
                 }, year, month, day);
@@ -305,17 +352,41 @@ public class ScheduleDetails extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /**
+     * shows the time picker and saves relevant info
+     */
     private void showTimePicker() {
 
+        /**
+         * gets a calender object
+         */
         final Calendar calendar = Calendar.getInstance();
+        /**
+         * creates the current hour of the day from the calender object
+         */
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        /**
+         * gets the current minute from the calender
+         */
         int minute = calendar.get(Calendar.MINUTE);
 
+        /**
+         * creates the timepicker
+         */
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (TimePicker view, int selectedHour, int selectedMinute) -> {
 
+                    /**
+                     * sets the time to PM AM time based on the selected time
+                     */
                     String propertime = (selectedHour >= 12) ? "PM" : "AM";
+                    /**
+                     * converts the hour and minutes to 12 hours instead of military time
+                     */
                     int hour12 = (selectedHour == 0) ? 12 : (selectedHour > 12 ? selectedHour - 12 : selectedHour);
+                    /**
+                     * formates the selected time properly
+                     */
                     String formattedTime = String.format("%d:%02d %s", hour12, selectedMinute, propertime);
                     binding.timeresult.setText(formattedTime);
 
@@ -324,6 +395,9 @@ public class ScheduleDetails extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * sets the repeated event visability
+     */
     private void setWeekVisible(){
 
         boolean isChecked = binding.RepeatEventSelector.isChecked();
@@ -331,6 +405,10 @@ public class ScheduleDetails extends AppCompatActivity {
 
     }
 
+    /**
+     * sets a specific repeating day button visability
+     * @param button the button day button being selected
+     */
     private void setselecteddays( com.google.android.material.button.MaterialButton button){
         if(!button.isSelected()) {
             button.setSelected(true);
@@ -341,6 +419,9 @@ public class ScheduleDetails extends AppCompatActivity {
         }
     }
 
+    /**
+     * removes the event
+     */
     private void remove(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("user_collection")
@@ -355,6 +436,9 @@ public class ScheduleDetails extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * edits a specific event
+     */
     private void edit() {
 
         if(isValidateMeetingDetails()) {
