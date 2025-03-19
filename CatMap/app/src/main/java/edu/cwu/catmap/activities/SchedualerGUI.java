@@ -44,30 +44,32 @@ import edu.cwu.catmap.adapters.SchedulerAdapter;
 
 public class SchedualerGUI extends AppCompatActivity {
 
+    /**
+     * holds the binding for the schedualer
+     */
     private ActivitySchedualerBinding schedualer;
 
+    /**
+     * adapter for the recycle view
+     */
     private SchedulerAdapter adapter;
-
+    /**
+     * holds the recycle view items
+     */
     private List<ScheduleListItem> EventList;
 
+    /**
+     * stores the selected date milli secounds from the calender
+     */
     private long selectedDateMillis;
-
-    private boolean weekviewcond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
+
         schedualer = ActivitySchedualerBinding.inflate(getLayoutInflater());
         setContentView(schedualer.getRoot());
 
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });*/
-
-        weekviewcond = false;
 
         Calendar calendar = Calendar.getInstance();
         selectedDateMillis = calendar.getTimeInMillis();
@@ -85,6 +87,7 @@ public class SchedualerGUI extends AppCompatActivity {
         ArrayList<FloatingActionButton> fabList = new ArrayList<>();
         TypedValue typedValue = new TypedValue();
         this.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+
         int color = typedValue.data;
 
         fabList.add(schedualer.AddMeeting);
@@ -98,16 +101,36 @@ public class SchedualerGUI extends AppCompatActivity {
         }
     }
 
+    /**
+     * populates the day current events and classes
+     */
     private void populateEvents() {
         EventList.clear();
+        /**
+         * grabs the current formated date from the calender
+         */
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        /**
+         * creates a calender object to retrieve the current selected date later on
+         */
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(selectedDateMillis);
+        /**
+         * grabs the selected based on the current day of the week
+         */
         int selectedDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
+        /**
+         * formates the date to the proper string formate being saved on the firebase
+         */
         String formattedDate = sdf.format(calendar.getTime());
-
+        /**
+         * creates the firebase object to pinpoint the collection we are trying to read later on
+         */
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /**
+         * creates refrence to the firebase
+         */
         CollectionReference eventsRef = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events");
@@ -115,27 +138,70 @@ public class SchedualerGUI extends AppCompatActivity {
         eventsRef.whereGreaterThanOrEqualTo("End_Date", formattedDate)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    /**
+                     * used to check if it has events later on
+                     */
                     boolean hasEvents = false;
                     List<ScheduleListItem.Event> tempEventList = new ArrayList<>();
 
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        /**
+                         * stores the event name aka the title from the firebase document
+                         */
                         String eventName = document.getString("Event_Title");
+                        /**
+                         * stores the event time from the firebase document
+                         */
                         String eventTime = document.getString("Event_Time");
+                        /**
+                         * stores the event creation date from the firebase document
+                         */
                         String eventDate = document.getString("Event_Date");
+                        /**
+                         * stores the building name from the firebase document
+                         */
                         String buildingName = document.getString("Building_Name");
+                        /**
+                         * stores the users color prefrence for the current event
+                         */
                         String colorPreference = document.getString("Color_Preference");
+                        /**
+                         * stores the event type from the firebase document
+                         */
                         String eventType = document.getString("Event_Type");
+                        /**
+                         * stores the event id number from the firebase document
+                         */
                         String id = document.getId();
+                        /**
+                         * stores the room number from the firebase document
+                         */
                         String roomNum = document.getString("Room_Number");
-                        String repeatedEvent = document.getString("Repeated_Events"); // Stored as string
-                        String repeatingCondition = document.getString("Repeating_Condition"); // Stored as string
+                        /**
+                         * stores the repeated event to check which days have a repeated event day
+                         */
+                        String repeatedEvent = document.getString("Repeated_Events");
+                        /**
+                         * stores the repeated event condition that tells weither it is a repeating event or not
+                         */
+                        String repeatingCondition = document.getString("Repeating_Condition");
+                        /**
+                         * stores the end date for the current event to see when the event ends.
+                         */
                         String End_Date = document.getString("End_Date");
 
+                        /**
+                         * used to check if the current viewed event is repeating
+                         */
                         boolean isRepeatingEvent = false;
 
                         if ("true".equalsIgnoreCase(repeatingCondition) && repeatedEvent != null) {
                             try {
                                 repeatedEvent = repeatedEvent.replace("[", "").replace("]", "").trim();
+                                /**
+                                 * Splits the repeated events string into an actual array to see if
+                                 * an the current selected day is an actual repeating event
+                                 */
                                 String[] daysArray = repeatedEvent.split(",\\s*");
 
                                 if (daysArray.length == 7 && "1".equals(daysArray[selectedDayOfWeek])) {
@@ -146,9 +212,11 @@ public class SchedualerGUI extends AppCompatActivity {
                             }
                         }
 
-
                         if (formattedDate.equals(eventDate) || isRepeatingEvent) {
                             hasEvents = true;
+                            /**
+                             * stores the events that will stored acrossed views
+                             */
                             HashMap<String, String> map = new HashMap<>();
                             map.put("Event_Title", eventName);
                             map.put("Event_Time", eventTime);
@@ -168,10 +236,22 @@ public class SchedualerGUI extends AppCompatActivity {
                         }
                     }
 
+                    /**
+                     * Gets the formate of the time that will be used to sort based on time
+                     */
                     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                    /**
+                     * Sorts event one with event two
+                     */
                     Collections.sort(tempEventList, (e1, e2) -> {
                         try {
+                            /**
+                             * Saves the first event time and compares the time on both events saving it as date objects
+                             */
                             Date time1 = timeFormat.parse(e1.getTime());
+                            /**
+                             * Saves the seccound event time and compares the time on both events saving it as date objects
+                             */
                             Date time2 = timeFormat.parse(e2.getTime());
                             return time1.compareTo(time2);
                         } catch (ParseException e) {
@@ -203,8 +283,14 @@ public class SchedualerGUI extends AppCompatActivity {
 
     }
 
+    /**
+     *  Creates a selected date String set to null that will used to pass the currently selected date on the calender
+     */
     private String selectedDate = null;
 
+    /**
+     * declares the onclick listeners
+     */
     private void onclick() {
         schedualer.AddMeeting.setOnClickListener(v -> {
             // If no date is selected, default to today's date dynamically
@@ -212,7 +298,9 @@ public class SchedualerGUI extends AppCompatActivity {
                 selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
             }
 
-
+            /**
+             * creates a popup at the bottom when the addmeeting button is pressed
+             */
             AddMeetingBottomSheet bottomSheet = AddMeetingBottomSheet.newInstance(selectedDate);
             bottomSheet.show(getSupportFragmentManager(), "AddMeetingBottomSheet");
         });
@@ -233,10 +321,22 @@ public class SchedualerGUI extends AppCompatActivity {
         );
 
         schedualer.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            /**
+             * Will be used to see what the current calender
+             */
             Calendar calendar = Calendar.getInstance();
+            /**
+             * sets the calender to the new date
+             */
             calendar.set(year, month, dayOfMonth);
 
-            selectedDateMillis = calendar.getTimeInMillis();  //  Store the selected date
+            /**
+             * updates the new selected millisecounds from the calender
+             */
+            selectedDateMillis = calendar.getTimeInMillis();
+            /**
+             * formates the selected date string
+             */
             selectedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(calendar.getTime());
             populateEvents();
         });
@@ -244,22 +344,48 @@ public class SchedualerGUI extends AppCompatActivity {
         schedualer.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
+    /**
+     * pulls suggestions for the week
+     */
     private void grabSuggestions() {
+        /**
+         * creates a calender object to retrieve the current selected date info later on
+         */
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(selectedDateMillis);
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
 
+        /**
+         * retrieves the start of the week info
+         */
         long startOfWeekMillis = calendar.getTimeInMillis();
         calendar.add(Calendar.DAY_OF_WEEK, 6);
+        /**
+         * retrieves the end of the week info
+         */
         long endOfWeekMillis = calendar.getTimeInMillis();
 
+        /**
+         * formates the string to the proper date
+         */
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        /**
+         * properly formates the start of the week
+         */
         String startOfWeek = sdf.format(new Date(startOfWeekMillis));
+        /**
+         * properly formates the end of the week
+         */
         String endOfWeek = sdf.format(new Date(endOfWeekMillis));
 
 
-
+        /**
+         * creates a firebase object
+         */
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /**
+         * creates a target reference to access the subcollection collection information from the firebase
+         */
         CollectionReference eventsRef = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events");
@@ -268,21 +394,60 @@ public class SchedualerGUI extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        Map<String, List<ScheduleListItem.Event>> eventsByDate = new HashMap<>();
+                        /**
+                         * Holds the event documents that will be passed through the recycle later on
+                         */
+                        Map<String, List<ScheduleListItem.Event>> events = new HashMap<>();
 
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            /**
+                             * contains the event title of the currently viewed document
+                             */
                             String eventName = document.getString("Event_Title");
+                            /**
+                             * contains the event time from the currently viewed document
+                             */
                             String eventTime = document.getString("Event_Time");
+                            /**
+                             * contains the current creation date/ start date of the event
+                             */
                             String eventDate = document.getString("Event_Date");
+                            /**
+                             * holds the building name of the event
+                             */
                             String buildingName = document.getString("Building_Name");
+                            /**
+                             * Holds the color prefrences for the current event
+                             */
                             String colorPreference = document.getString("Color_Preference");
+                            /**
+                             * holds the event type of the document
+                             */
                             String eventType = document.getString("Event_Type");
+                            /**
+                             * contains the event ID of the document
+                             */
                             String id = document.getId();
+                            /**
+                             * contains the room number from the document
+                             */
                             String roomNum = document.getString("Room_Number");
+                            /**
+                             * contains an array as a string of all repeated events for this current event sunday - saturday
+                             */
                             String repeatedEvent = document.getString("Repeated_Events");
+                            /**
+                             * contains the repeating event condition that will tell if the event is repeating or not
+                             */
                             String repeatingCondition = document.getString("Repeating_Condition");
+                            /**
+                             * holds the end date of the event
+                             */
                             String End_Date = document.getString("End_Date");
 
+                            /**
+                             * contains all info that will stored acrossed views
+                             */
                             HashMap<String, String> map = new HashMap<>();
                             map.put("Event_Title", eventName);
                             map.put("Event_Time", eventTime);
@@ -296,15 +461,23 @@ public class SchedualerGUI extends AppCompatActivity {
                             map.put("Repeating_Condition", repeatingCondition);
                             map.put("End_Date", End_Date);
 
-                            boolean isRepeatingEvent = false;
+                            /**
+                             * contains a list of all the repeating event dates to be displayed as a header later on
+                             */
                             List<String> repeatingDates = new ArrayList<>();
 
                             if ("true".equalsIgnoreCase(repeatingCondition) && repeatedEvent != null) {
                                 try {
                                     repeatedEvent = repeatedEvent.replace("[", "").replace("]", "").trim();
+                                    /**
+                                     * splits the string up to view the actual repeating event days.
+                                     */
                                     String[] daysArray = repeatedEvent.split(",\\s*");
 
                                     if (daysArray.length == 7) {
+                                        /**
+                                         * creates a calender to check each day of the week starting from sunday
+                                         */
                                         Calendar weekCalendar = Calendar.getInstance();
                                         weekCalendar.setTimeInMillis(startOfWeekMillis);
 
@@ -322,23 +495,31 @@ public class SchedualerGUI extends AppCompatActivity {
 
 
                             if (eventDate != null && eventTime != null && (eventDate.compareTo(startOfWeek) >= 0 && eventDate.compareTo(endOfWeek) <= 0)) {
-                                eventsByDate.putIfAbsent(eventDate, new ArrayList<>());
+                                events.putIfAbsent(eventDate, new ArrayList<>());
 
                             }
 
 
                             for (String repeatDate : repeatingDates) {
-                                eventsByDate.putIfAbsent(repeatDate, new ArrayList<>());
+                                events.putIfAbsent(repeatDate, new ArrayList<>());
 
                             }
                         }
 
-
+                        /**
+                         * formates the time properly to the correct String formate
+                         */
                         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
-                        for (List<ScheduleListItem.Event> eventList : eventsByDate.values()) {
+                        for (List<ScheduleListItem.Event> eventList : events.values()) {
                             Collections.sort(eventList, (e1, e2) -> {
                                 try {
+                                    /**
+                                     * gets the time from event 1
+                                     */
                                     Date time1 = timeFormat.parse(e1.getTime());
+                                    /**
+                                     * gets the time from event 2
+                                     */
                                     Date time2 = timeFormat.parse(e2.getTime());
                                     return time1.compareTo(time2);
                                 } catch (ParseException e) {
@@ -348,9 +529,9 @@ public class SchedualerGUI extends AppCompatActivity {
                             });
                         }
 
-                        for (String eventDate : new TreeSet<>(eventsByDate.keySet())) {
+                        for (String eventDate : new TreeSet<>(events.keySet())) {
                             EventList.add(new ScheduleListItem.SectionHeader(eventDate));
-                            EventList.addAll(eventsByDate.get(eventDate));
+                            EventList.addAll(events.get(eventDate));
                         }
                     } else {
                         EventList.add(new ScheduleListItem.SectionHeader("No events this week"));
@@ -367,24 +548,51 @@ public class SchedualerGUI extends AppCompatActivity {
     }
 
 
+    /**
+     * gets the week view from the calender
+     */
     private void weekView() {
         EventList.clear();
         schedualer.calendarView.setVisibility(View.GONE);
         schedualer.AddMeeting.setVisibility(View.GONE);
 
+        /**
+         * recreates the calender to retrieve the current day data
+         */
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(selectedDateMillis);
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
 
+        /**
+         * retrieves the start of the week
+         */
         long startOfWeekMillis = calendar.getTimeInMillis();
         calendar.add(Calendar.DAY_OF_WEEK, 6);
+        /**
+         * retrieves the end of the week
+         */
         long endOfWeekMillis = calendar.getTimeInMillis();
 
+        /**
+         * formates the date properly
+         */
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        /**
+         * formates the start of the week properly
+         */
         String startOfWeek = sdf.format(new Date(startOfWeekMillis));
+        /**
+         * starts the end of the week properly
+         */
         String endOfWeek = sdf.format(new Date(endOfWeekMillis));
 
+        /**
+         * creates the firebase object
+         */
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /**
+         * creates a refrence to the subcollection
+         */
         CollectionReference eventsRef = db.collection("user_collection")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("Events");
@@ -393,21 +601,60 @@ public class SchedualerGUI extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        Map<String, List<ScheduleListItem.Event>> eventsByDate = new HashMap<>();
+                        /**
+                         * Holds the items that will be displayed on the recycle view
+                         */
+                        Map<String, List<ScheduleListItem.Event>> events = new HashMap<>();
 
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            /**
+                             * Holds the event title
+                             */
                             String eventName = document.getString("Event_Title");
+                            /**
+                             * holds the event time for the current event
+                             */
                             String eventTime = document.getString("Event_Time");
+                            /**
+                             * holds the current time for the event
+                             */
                             String eventDate = document.getString("Event_Date");
+                            /**
+                             * holds the building name that will be used for navigation
+                             */
                             String buildingName = document.getString("Building_Name");
+                            /**
+                             * holds the users color prefrence for the specific event
+                             */
                             String colorPreference = document.getString("Color_Preference");
+                            /**
+                             * holds the event type info
+                             */
                             String eventType = document.getString("Event_Type");
+                            /**
+                             * holds the event id information
+                             */
                             String id = document.getId();
+                            /**
+                             * holds the room number for the event
+                             */
                             String roomNum = document.getString("Room_Number");
+                            /**
+                             * holds the list of repeated events as a string formated as an array
+                             */
                             String repeatedEvent = document.getString("Repeated_Events");
+                            /**
+                             * grabs the repeating condition from the document to see if the even is actually repeating or not
+                             */
                             String repeatingCondition = document.getString("Repeating_Condition");
+                            /**
+                             * retrieves the end date from the document
+                             */
                             String End_Date = document.getString("Repeating_Condition");
 
+                            /**
+                             * Attaches the data to a temp hash map to be sorted
+                             */
                             HashMap<String, String> map = new HashMap<>();
                             map.put("Event_Title", eventName);
                             map.put("Event_Time", eventTime);
@@ -420,15 +667,24 @@ public class SchedualerGUI extends AppCompatActivity {
                             map.put("Repeated_Events", repeatedEvent);
                             map.put("Repeating_Condition", repeatingCondition);
                             map.put("End_Date", End_Date);
-                            boolean isRepeatingEvent = false;
+
+                            /**
+                             * contains all repeating event dates
+                             */
                             List<String> repeatingDates = new ArrayList<>();
 
                             if ("true".equalsIgnoreCase(repeatingCondition) && repeatedEvent != null) {
                                 try {
                                     repeatedEvent = repeatedEvent.replace("[", "").replace("]", "").trim();
+                                    /**
+                                     * converts the repeating event string to an actual array and check if their is a 1 in the proper locaiton
+                                     */
                                     String[] daysArray = repeatedEvent.split(",\\s*");
 
                                     if (daysArray.length == 7) {
+                                        /**
+                                         * creates a calender view starting at the starting of the week sunday - saturday
+                                         */
                                         Calendar weekCalendar = Calendar.getInstance();
                                         weekCalendar.setTimeInMillis(startOfWeekMillis);
 
@@ -446,25 +702,33 @@ public class SchedualerGUI extends AppCompatActivity {
 
 
                             if (eventDate != null && eventTime != null && (eventDate.compareTo(startOfWeek) >= 0 && eventDate.compareTo(endOfWeek) <= 0)) {
-                                eventsByDate.putIfAbsent(eventDate, new ArrayList<>());
+                                events.putIfAbsent(eventDate, new ArrayList<>());
                                 if (!repeatingDates.contains(eventDate)) {
-                                    eventsByDate.get(eventDate).add(new ScheduleListItem.Event(eventName, eventTime, map));
+                                    events.get(eventDate).add(new ScheduleListItem.Event(eventName, eventTime, map));
                                 }
                             }
 
 
                             for (String repeatDate : repeatingDates) {
-                                eventsByDate.putIfAbsent(repeatDate, new ArrayList<>());
-                                eventsByDate.get(repeatDate).add(new ScheduleListItem.Event(eventName, eventTime, map));
+                                events.putIfAbsent(repeatDate, new ArrayList<>());
+                                events.get(repeatDate).add(new ScheduleListItem.Event(eventName, eventTime, map));
                             }
                         }
 
-
+                        /**
+                         * gets the formated string for the time.
+                         */
                         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
-                        for (List<ScheduleListItem.Event> eventList : eventsByDate.values()) {
+                        for (List<ScheduleListItem.Event> eventList : events.values()) {
                             Collections.sort(eventList, (e1, e2) -> {
                                 try {
+                                    /**
+                                     * gets the event 1 time as a date object
+                                     */
                                     Date time1 = timeFormat.parse(e1.getTime());
+                                    /**
+                                     * gets the event 2 time as a date object
+                                     */
                                     Date time2 = timeFormat.parse(e2.getTime());
                                     return time1.compareTo(time2);
                                 } catch (ParseException e) {
@@ -476,9 +740,9 @@ public class SchedualerGUI extends AppCompatActivity {
 
 
                         EventList.clear();
-                        for (String eventDate : new TreeSet<>(eventsByDate.keySet())) {
+                        for (String eventDate : new TreeSet<>(events.keySet())) {
                             EventList.add(new ScheduleListItem.SectionHeader(eventDate));
-                            EventList.addAll(eventsByDate.get(eventDate));
+                            EventList.addAll(events.get(eventDate));
                         }
                     } else {
                         EventList.add(new ScheduleListItem.SectionHeader("No events this week"));
